@@ -1,5 +1,5 @@
 ![Frogger 2 Logo](/_repo/Frogger2Logo.png)
-# Frogger 2: Swampy's Revenge (Dreamcast)  
+# Frogger 2: Swampy's Revenge (PC)  
 This is a backup of Frogger 2's official PC source code from the [VSS repository](https://github.com/HighwayFrogs/frogger2-vss).  
 It does not build a byte for byte match of the retail PC version because 
 **Developer:** Blitz Games  
