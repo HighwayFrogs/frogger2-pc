@@ -44,7 +44,7 @@ RSC=rc.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /YX /FD /c
-# ADD CPP /nologo /w /W0 /GX /O2 /Ob2 /I "pc" /I "common" /I "editor" /I "\sdk\bink" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "PC_VERSION" /D "FINAL_MASTER" /D "USE_BINK_VIDEO" /YX /FD /c
+# ADD CPP /nologo /w /W0 /GX /O2 /Ob2 /I "pc" /I "common" /I "editor" /I "bink" /I "gelf" /I "mdx" /I "softstation" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "PC_VERSION" /D "FINAL_MASTER" /D "USE_BINK_VIDEO" /YX /FD /c
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD BASE RSC /l 0x809 /d "NDEBUG"
@@ -54,7 +54,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /machine:I386
-# ADD LINK32 dxguid.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib uuid.lib gelf.lib mdx.lib softstation.lib ddraw.lib d3dim.lib dsound.lib dinput.lib winmm.lib comctl32.lib softstation.lib libc.lib libci.lib msvcrt.lib oldnames.lib binkw32.lib dplay.lib /nologo /subsystem:windows /machine:I386 /nodefaultlib /out:"Release/Frogger2.exe" /libpath:"..\mdx" /libpath:"\sdk\bink"
+# ADD LINK32 dxguid.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib uuid.lib gelf.lib mdx.lib softstation.lib ddraw.lib d3dim.lib dsound.lib dinput.lib winmm.lib comctl32.lib softstation.lib libc.lib libci.lib msvcrt.lib oldnames.lib binkw32.lib dplay.lib /nologo /subsystem:windows /machine:I386 /nodefaultlib /out:"Release/Frogger2.exe" /libpath:"mdx" /libpath:"bink" /libpath:"gelf" /libpath:"softstation"
 # SUBTRACT LINK32 /verbose /debug
 
 !ELSEIF  "$(CFG)" == "FroggerProject - Win32 Debug"
@@ -71,7 +71,7 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /YX /FD /GZ /c
-# ADD CPP /nologo /MTd /W2 /Gm /GX /ZI /Od /I "pc" /I "common" /I "editor" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "PC_VERSION" /FR /YX /FD /GZ /c
+# ADD CPP /nologo /MTd /W2 /Gm /GX /ZI /Od /I "pc" /I "common" /I "editor" /I "gelf" /I "mdx" /I "softstation" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "PC_VERSION" /FR /YX /FD /GZ /c
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD BASE RSC /l 0x809 /d "_DEBUG"
@@ -81,7 +81,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 dsound.lib winmm.lib dxguid.lib ddraw.lib dinput.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib comctl32.lib gelf.debug.lib mdx.lib softstation.lib /nologo /subsystem:windows /debug /machine:I386 /nodefaultlib:"libc" /nodefaultlib:"libcd" /libpath:"..\mdx\Blank_Library___Win32_Debug"
+# ADD LINK32 dsound.lib winmm.lib dxguid.lib ddraw.lib dinput.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib comctl32.lib gelf.debug.lib mdx.lib softstation.lib /nologo /subsystem:windows /debug /machine:I386 /nodefaultlib:"libc" /nodefaultlib:"libcd" /libpath:"mdx\Debug" /libpath:"gelf" /libpath:"softstation"
 # SUBTRACT LINK32 /profile
 
 !ELSEIF  "$(CFG)" == "FroggerProject - Win32 Debug with Bink Video"
@@ -98,8 +98,8 @@ LINK32=link.exe
 # PROP Intermediate_Dir "DebugBink"
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /Gm /GX /ZI /Od /I "pc" /I "common" /I "editor" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "PC_VERSION" /FR /YX /FD /GZ /c
-# ADD CPP /nologo /MTd /W3 /Gm /GX /ZI /Od /I "pc" /I "common" /I "editor" /I "\sdk\bink" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "PC_VERSION" /D "USE_BINK_VIDEO" /FR /YX /FD /GZ /c
+# ADD BASE CPP /nologo /Gm /GX /ZI /Od /I "pc" /I "common" /I "editor" /I "gelf" /I "mdx" /I "softstation" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "PC_VERSION" /FR /YX /FD /GZ /c
+# ADD CPP /nologo /MTd /W3 /Gm /GX /ZI /Od /I "pc" /I "common" /I "editor" /I "bink" /I "gelf" /I "mdx" /I "softstation" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "PC_VERSION" /D "USE_BINK_VIDEO" /FR /YX /FD /GZ /c
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD BASE RSC /l 0x809 /d "_DEBUG"
@@ -108,9 +108,9 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 dsound.lib winmm.lib dxguid.lib ddraw.lib dinput.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib comctl32.lib gelf.debug.lib mdx.lib softstation.lib /nologo /subsystem:windows /debug /machine:I386 /nodefaultlib:"libc" /libpath:"..\mdx\Blank_Library___Win32_Debug"
+# ADD BASE LINK32 dsound.lib winmm.lib dxguid.lib ddraw.lib dinput.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib comctl32.lib gelf.debug.lib mdx.lib softstation.lib /nologo /subsystem:windows /debug /machine:I386 /nodefaultlib:"libc" /libpath:"gelf" /libpath:"mdx\Debug" /libpath:"softstation"
 # SUBTRACT BASE LINK32 /profile
-# ADD LINK32 dsound.lib winmm.lib dxguid.lib ddraw.lib dinput.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib comctl32.lib gelf.debug.lib mdx.lib softstation.lib binkw32.lib /nologo /subsystem:windows /debug /machine:I386 /nodefaultlib:"libc" /nodefaultlib:"libcd" /libpath:"..\mdx\Blank_Library___Win32_Debug" /libpath:"\sdk\bink"
+# ADD LINK32 dsound.lib winmm.lib dxguid.lib ddraw.lib dinput.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib comctl32.lib gelf.debug.lib mdx.lib softstation.lib binkw32.lib /nologo /subsystem:windows /debug /machine:I386 /nodefaultlib:"libc" /nodefaultlib:"libcd" /libpath:"bink" /libpath:"gelf" /libpath:"mdx\Debug" /libpath:"softstation"
 # SUBTRACT LINK32 /profile
 
 !ENDIF 
