@@ -363,7 +363,7 @@ BOOL CALLBACK dlgProvider(HWND hdlg, UINT msg, WPARAM wParam, LPARAM lParam)
 
 bool SelectProvider(HWND hwnd)
 {
-	return DialogBox(mdxWinInfo.hInstance, MAKEINTRESOURCE(IDD_MULTI_CONNECT), hwnd, dlgProvider);
+	return DialogBox(mdxWinInfo.hInstance, MAKEINTRESOURCE(IDD_MULTI_CONNECT), hwnd, (DLGPROC) dlgProvider);
 }
 
 
@@ -644,7 +644,7 @@ BOOL CALLBACK dlgSession( HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam )
 
 bool FindNetGame(HWND hwnd)
 {
-	return (DialogBox(mdxWinInfo.hInstance, MAKEINTRESOURCE(IDD_MULTI_GAMES), hwnd, dlgSession) == 0);
+	return (DialogBox(mdxWinInfo.hInstance, MAKEINTRESOURCE(IDD_MULTI_GAMES), hwnd, (DLGPROC) dlgSession) == 0);
 }
 
 /*	--------------------------------------------------------------------------------
@@ -742,7 +742,7 @@ HRESULT CreateNetGame(HWND hwnd)
     DPNAME			dpname;
 	HRESULT			res;
 
-	if (DialogBox(mdxWinInfo.hInstance, MAKEINTRESOURCE(IDD_MULTI_CREATE), hwnd, dlgCreate) != 0)
+	if (DialogBox(mdxWinInfo.hInstance, MAKEINTRESOURCE(IDD_MULTI_CREATE), hwnd, (DLGPROC) dlgCreate) != 0)
 		return -1;
 
     ZeroMemory( &dpsd, sizeof(dpsd) );

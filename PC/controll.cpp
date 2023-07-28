@@ -1458,7 +1458,7 @@ int GetButtonDialog(LPDIRECTINPUTDEVICE lpDID, HWND hParent)
 {
 	int button = -1;
 
-	DialogBoxParam(mdxWinInfo.hInstance, MAKEINTRESOURCE(IDD_KEYPRESS), hParent, ButtonDialogProc, (LPARAM)&button);
+	DialogBoxParam(mdxWinInfo.hInstance, MAKEINTRESOURCE(IDD_KEYPRESS), hParent, (DLGPROC) ButtonDialogProc, (LPARAM)&button);
 
 	return button;
 }

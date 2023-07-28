@@ -25,6 +25,7 @@
 #include "layout.h"
 #include "define.h"
 #include "game.h"
+#include "training.h"
 
 #ifdef PC_VERSION
 #include <mdx.h>

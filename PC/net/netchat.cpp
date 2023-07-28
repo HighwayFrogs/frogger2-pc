@@ -365,7 +365,7 @@ int RunNetChatWindow(HWND parent)
 	dplay->SetSessionDesc(&dpsd, 0);
 
 	NetInstallMessageHandler(ChatHandler);
-	res = DialogBox(mdxWinInfo.hInstance, MAKEINTRESOURCE(IDD_MULTI_START), parent, dialogProc);
+	res = DialogBox(mdxWinInfo.hInstance, MAKEINTRESOURCE(IDD_MULTI_START), parent, (DLGPROC) dialogProc);
 	return res == 0;
 }
 

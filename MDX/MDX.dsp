@@ -1,5 +1,5 @@
 # Microsoft Developer Studio Project File - Name="Blank Library" - Package Owner=<4>
-# Microsoft Developer Studio Generated Build File, Format Version 6.00
+# Microsoft Developer Studio Generated Build File, Format Version 5.00
 # ** DO NOT EDIT **
 
 # TARGTYPE "Win32 (x86) Static Library" 0x0104
@@ -17,16 +17,15 @@ CFG=Blank Library - Win32 Debug
 !MESSAGE 
 !MESSAGE Possible choices for configuration are:
 !MESSAGE 
-!MESSAGE "Blank Library - Win32 Release" (based on "Win32 (x86) Static Library")
+!MESSAGE "Blank Library - Win32 Release" (based on\
+ "Win32 (x86) Static Library")
 !MESSAGE "Blank Library - Win32 Debug" (based on "Win32 (x86) Static Library")
 !MESSAGE 
 
 # Begin Project
-# PROP AllowPerConfigDependencies 0
 # PROP Scc_ProjName ""$/teamSpirit/MDX Library", TLNBAAAA"
 # PROP Scc_LocalPath "."
 CPP=cl.exe
-RSC=rc.exe
 
 !IF  "$(CFG)" == "Blank Library - Win32 Release"
 
@@ -40,10 +39,11 @@ RSC=rc.exe
 # PROP Output_Dir "Release"
 # PROP Intermediate_Dir "Release"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /YX /FD /c
-# ADD CPP /nologo /GX /O2 /Ob2 /I "." /I "..\common" /I "..\pc" /I "..\gelf" /I "..\softstation" /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /YX /FD /c
+RSC=rc.exe
 # ADD BASE RSC /l 0x809 /d "NDEBUG"
 # ADD RSC /l 0x809 /d "NDEBUG"
+# ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /YX /FD /c
+# ADD CPP /nologo /GX /O2 /Ob2 /I "." /I "..\common" /I "..\pc" /I "..\gelf" /I "..\softstation" /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /YX /FD /c
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
@@ -63,10 +63,11 @@ LIB32=link.exe -lib
 # PROP Output_Dir "Debug"
 # PROP Intermediate_Dir "Debug"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /YX /FD /GZ /c
-# ADD CPP /nologo /MTd /W3 /GX /Zi /Od /I "." /I "..\common" /I "..\pc" /I "..\gelf" /I "..\softstation" /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /FAcs /Fr /YX /FD /c
+RSC=rc.exe
 # ADD BASE RSC /l 0x809 /d "_DEBUG"
 # ADD RSC /l 0x809 /d "_DEBUG"
+# ADD BASE CPP /nologo /W3 /GX /Od /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /YX /FD /ZI /GZ /c
+# ADD CPP /nologo /MTd /W3 /GX /Zi /Od /I "." /I "..\common" /I "..\pc" /I "..\gelf" /I "..\softstation" /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /FAcs /Fr /YX /FD /c
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
@@ -271,14 +272,6 @@ SOURCE=.\mgeReport.h
 # Begin Source File
 
 SOURCE=.\resource.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\SoftStation.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\SoftStation.lib
 # End Source File
 # End Target
 # End Project
