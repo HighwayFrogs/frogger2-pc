@@ -14,10 +14,11 @@
 #include <ddraw.h>
 #include <d3d.h>
 #include <stdio.h>
-#include <fstream.h>
+#include <fstream>
 #include <islutil.h>
-#include <dplay.h>
-#include <dplobby.h>
+#include "..\DirectPlay\dplay.h"
+#include "..\DirectPlay\dplobby.h"
+#define DIRECTINPUT_VERSION 0x0700
 #include <dinput.h>
 #include "..\resource.h"
 
@@ -300,7 +301,8 @@ void KeyboardDump(HKEY hkey, bool write)
 		{
 			*(p++) = keymap[i].player;
 			
-			for (int b=0;b<16;b++)
+			int b;
+			for (b=0;b<16;b++)
 				if ((1<<b) == keymap[i].button) break;
 
 			*(p++) = b;
@@ -1340,8 +1342,8 @@ BOOL CALLBACK DLGKeyMapDialogue(HWND hDlg,UINT msg,WPARAM wParam,LPARAM lParam)
 
 				case IDCANCEL:
 				{
-					ifstream in;
-					in.open( keyFileName, ios::nocreate, filebuf::sh_read );
+					std::ifstream in;
+					in.open( keyFileName, ios::nocreate, std::filebuf::sh_read );
 					if( in.is_open() )
 					{
 						for( i=0; i<56; i++ )

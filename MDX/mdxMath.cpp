@@ -546,7 +546,7 @@ float mdxFindShortestAngle(float val1, float val2)
 {
 	float temp;
 
-	if(abs(val1-val2) > 0.5)
+	if(fabs(val1-val2) > 0.5)
 	{
 		if(val1 > val2)
 			temp = val2 - val1;
@@ -558,7 +558,7 @@ float mdxFindShortestAngle(float val1, float val2)
 	}
 	else
 	{
-	   return abs(val1 - val2);
+	   return fabs(val1 - val2);
 	}
 }
 

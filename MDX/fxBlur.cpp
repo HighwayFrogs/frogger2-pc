@@ -144,7 +144,7 @@ D3DTLVERTEX *InitScreenVertexList(void)
 		
 	}
 
-	i = 0;
+	int i = 0;
 
 	for (rect.top = 0, rect.bottom = SCREENTEX_SIZE; rect.top < BLUR_Y; rect.top += SCREENTEX_SIZE, rect.bottom += SCREENTEX_SIZE)
 		for (rect.left = 0, rect.right = SCREENTEX_SIZE; rect.left < BLUR_X; rect.left += SCREENTEX_SIZE, rect.right += SCREENTEX_SIZE)
