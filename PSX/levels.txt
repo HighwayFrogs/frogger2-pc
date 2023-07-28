@@ -1,0 +1,18 @@
+Garden 1			Working
+
+Ancients 1			ok, needs scripting for button
+Ancients 3			x
+Ancients Boss		incomplete at end
+
+Space 1				ok, weird level
+Space 2				x
+Space 2				x
+
+City 1				working
+City 2				x
+City 3				breaks around the lift
+
+Sub 1				can't get onto carts easily
+Sub 2				ok, no respot on death
+Sub 3				x
+Sub Boss			x

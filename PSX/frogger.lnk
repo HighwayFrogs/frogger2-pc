@@ -1,0 +1,228 @@
+
+
+        org     $00010000
+		regs    pc=__SN_ENTRY_POINT
+
+text    group
+dcache	group	obj(0x1f800000),size(0x400)
+bss     group   bss
+
+
+video	group	file("video.bin")
+game	group	over(video),file("game.bin")
+lang	group	over(video),file("lang.bin")
+
+	section video.*,video
+	section videoecachedata,dcache
+
+	section game.*,game
+	section gamecachedata,dcache
+
+	section lang.*,lang
+	section langcachedata,dcache
+
+
+
+
+
+	section.4096 align4k.text,text
+   	section align4k.*,text
+   	section align4k.bss,bss
+   	section align4k.sbss,bss
+
+
+	section .*,text
+	section	.sdata,text
+	section	.sbss,bss
+	section	.bss,bss
+	section	cachedata,dcache
+
+;	include "timer.obj"
+;        include "actor.obj"
+
+
+
+	include "main.obj"
+	include "font.obj"
+	include "actor2.obj"
+	include "backdrop.obj"
+	include "babyfrog.obj"
+	include "bff_load.obj"
+	include "cam.obj"
+	include "collect.obj"
+;	include "crc32.obj"
+	;include "custom.obj"
+	;include "defdata.obj"
+	include "enemies.obj"
+	include "evenfunc.obj"
+	include "event.obj"
+	include "fixed.obj"
+	include "frogger.obj"
+	include "frogmove.obj"
+	include "frontend.obj"
+	include "game.obj"
+	include "general.obj"
+	include "hud.obj"
+	;include "language.obj"
+	include "layout.obj"
+	include "levplay.obj"
+	include "map.obj"
+	include "menus.obj"
+	include "multi.obj"
+	;include "newpsx.obj"
+	include "path.obj"
+	include "psiactor.obj"
+	include "script.obj"
+	;include "sndview.obj"
+	include "specfx.obj"
+	include "textures.obj"
+	include "tongue.obj"
+	include "types.obj"
+	;include "water.obj"
+	include "world.obj"
+	;include "bbtimer.obj"
+	include "temp_psx.obj"
+	include "acostab.obj"
+	include "waterbin.obj"
+
+	include "audio.obj"
+	include "psxsprite.obj"
+	include "ptexture.obj"
+	include "story.obj"
+	include "timer.obj"
+	;include "e3_demo.obj"
+	include "psi.obj"
+	;include "bbpsiani.obj"
+	include "loadingbar.obj"
+	include "islfile.obj"
+	include "objviewer.obj"
+	include "options.obj"
+	include "snapshot.obj"
+	include "training.obj"
+	include "fadeout.obj"
+	include "isltex.obj"
+	include "savegame.obj"
+	include "flatpack.obj"
+	include "islmem.obj"
+
+;	include "ANIM.obj"
+;	include "TEXTOVER.obj"
+;	include "CRC32.obj"
+;	include "FROGMOVE.obj"
+;	include "JALLOC.obj"
+;	include "OVERLAYS.obj"
+;	include "SPECFX.obj"
+;	include "ACTOR.obj"
+;	include "ACTOR2.obj"
+;	include "PSIACTOR.obj"
+;	include "BABYFROG.obj"
+;	include "EVENTFUN.obj"
+;	include "DECOMP.obj"      
+;	include "FRONTEND.obj"    
+;	include "LANGUAGE.obj"    
+;	include "PATH.obj"        
+;	include "SPRITE.obj"      
+;	include "MINEDIT.obj"
+;	include "LEVPROG.obj"     
+;	include "CAM.obj"       
+;	include "ENEMIES.obj"     
+;	include "GAME.obj"        
+;	include "MATHS.obj"       
+;	include "PLATFORM.obj"    
+;	include "TITLE.obj"       
+;	include "LAYOUT.obj"     
+;	include "COLLECT.obj"
+;	include "EVENT.obj"      
+;	include "GENERAL.obj"    
+;	include "MEMLOAD.obj"    
+;	include "SCRIPT.obj" 
+;	include "TONGUE.obj" 
+;	include "LEVPLAY.obj"
+;	include "FROGGER.obj"
+;	include "HUD.obj" 
+;	include "MENUS.obj"
+;	include "fixed.obj"
+;	include "main.obj"
+;	include "PC_PSX.obj"
+;	include "types.obj"
+;	include "screen.obj"
+;	include "main2.obj"
+;	include "TEXTURE.OBJ"
+;	include "OBJECTS.OBJ"
+
+;	include "world.obj"
+;	include "debug.obj"
+
+;	include "DEBUG.OBJ"
+;	include "DBERROR.OBJ"
+
+
+	include "islpad.obj"
+;	include "map_draw.obj"
+;	include "bff_load.obj"
+;	include "quatern.obj"
+;	include "psi.obj"
+	include "asm.obj"
+;	include "custom.obj"
+;	include "custom2.obj"
+
+	;inclib  "islpsi.lib"
+;    inclib  "islmem.lib"
+;    inclib  "islfile.lib"
+;    inclib  "isltex.lib"
+;	inclib  "islfont.lib"
+    inclib  "isllocal.lib"
+;    inclib  "islpad.lib"
+;	inclib  "islsound.lib"
+	inclib	"islsfx2.lib"
+    inclib  "islutil.lib"
+    inclib  "islxa.lib"
+    inclib  "islcard.lib"
+
+	inclib  "libsn.lib"
+	inclib  "libapi.lib"
+	inclib  "libpad.lib"
+	inclib	"libmcrd.lib"
+	inclib	"libcard.lib"
+	inclib  "libgpu.lib"
+	inclib  "libgs.lib"
+	inclib  "libgte.lib"
+	inclib  "libcd.lib"
+	inclib  "libetc.lib"
+	inclib  "libspu.lib"
+	inclib	"libsnd.lib"
+	inclib  "libc2.lib"
+    inclib  "libds.lib"
+
+    inclib  "libmath.lib"
+;	inclib	"libcrypt.lib"
+
+
+
+
+
+
+
+
+	include "islvideo.obj",video
+    inclib  "libpress.lib",video
+
+	include "memload.obj",game
+	include "maths.obj",game		   
+	include "memcard.obj",game
+	include "anim.obj",game
+	include "custom2.obj",game
+	include "eff_draw.obj",game
+	include "map_draw.obj",game
+	include "particle.obj",game
+	include "objects.obj",game
+	include "psxtongue.obj",game
+	include "quatern.obj",game
+	include "world_eff.obj",game
+	include "textover.obj",game
+	include "sprite.obj",game
+	include "overlays.obj",game
+	include "platform.obj",game
+
+	include "cr_lang.obj",lang
+

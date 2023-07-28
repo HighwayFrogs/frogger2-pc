@@ -1,0 +1,136 @@
+######################################################################
+#
+# FROGGER PS MAKEFILE
+#
+######################################################################
+
+#
+# MACROS
+#
+
+
+# the "unused" warning flags our PRINTF macros, so I've disabled it
+# (as well as reporting loads of unused variables, byt WTH?)
+
+#OPT =  -comments-c++ -Wall -Wno-unused -DMAKE_GOLDCD=NO -DWHACK -c -O2 -g -mgpopt -G32 -X0$18000
+#OPT0 =  -comments-c++ -Wall -Wno-unused -DMAKE_GOLDCD=NO -DWHACK -c -O2 -g -mgpopt -G16 -X0$18000
+
+
+# sony examples use 8-high for whatever reason (both are i-cache ok)
+# the extra 8000 is only necessary for coverdisk demos
+
+#OPT =  -comments-c++ -Wall -Wno-unused -DMAKE_GOLDCD=NO -c -O2 -g -mgpopt -G32 -X0$80010000
+#OPT =  -comments-c++ -Wall -Wno-unused -DMAKE_GOLDCD=NO -DPALMODE -c -O0 -g -mgpopt -G32 -X0$80010000
+#OPT =  -comments-c++ -Wall -Wno-unused -DMAKE_GOLDCD=NO -DPALMODE=1 -c -O2 -g -mgpopt -G32 -X0$80010000
+
+#pal master
+!if $(PAL) == 1
+!if $(MASTER) == 1
+OPT = -DPSX_VERSION -DPALMODE=1 -DGOLDCD=1 -c -O2 -mgpopt -G0 -X0$00010000 -comments-c++ 
+LIBISL = c:\ps\psx\library\lib\release
+!endif
+!endif
+
+#pal debug
+!if $(PAL) == 1
+!if $(MASTER) == 0
+#OPT = -DPSX_VERSION -DPALMODE=1 -DGOLDCD=0 -c -O2 -mgpopt -G32 -g -X0$00018000 -comments-c++ -Wall -Wno-unused 
+OPT = -D_DEBUG -DPSX_VERSION -DPALMODE=1 -DGOLDCD=0 -c -O2 -mgpopt -G0 -g -X0$00018000 -comments-c++
+LIBISL = c:\ps\psx\library\lib\debug
+!endif
+!endif
+
+#ntsc master
+!if $(PAL) == 0
+!if $(MASTER) == 1
+OPT = -DPSX_VERSION -DPALMODE=0 -DGOLDCD=1 -c -O2 -mgpopt -G0 -X0$00018000 -comments-c++
+LIBISL = c:\ps\psx\library\lib\release
+!endif
+!endif
+
+#ntsc debug	
+!if $(PAL) == 0
+!if $(MASTER) == 0
+#OPT = -DPSX_VERSION -DDEBUG -DPALMODE=0 -DGOLDCD=0 -c -O0 -mgpopt -G0 -g -X0$00018000 -comments-c++ -Wall -Wno-unused
+#OPT = -DPSX_VERSION -DPALMODE=0 -O0 -mgpopt -c -G0 -g -X0$00018000 -comments-c++ -Wall -Wno-unused
+#OPT = -DPSX_VERSION -DPALMODE=0 -DE3_DEMO -O0 -mgpopt -c -G0 -g -X0$00018000 -comments-c++ -Wno-unused
+#OPT = -DPSX_VERSION -DPALMODE=0 -DGOLDCD=0 -c -O2 -mgpopt -G0 -X0$00018000 -comments-c++
+OPT = -D_DEBUG -DPSX_VERSION -DPALMODE=0 -DGOLDCD=0 -c -g -O2 -mgpopt -G0 -X0$00010000 -comments-c++
+#OPT = -DPSX_VERSION -DPALMODE=0 -DGOLDCD=0 -c -O2 -mgpopt -G0 -g -X0$00018000 -comments-c++
+LIBISL = c:\ps\psx\library\lib\debug
+!endif
+!endif
+
+
+#
+# DEFAULT BUILD RULES
+#
+
+.c.obj:
+	ccpsx32 $(OPT) $&.c -o$&.obj
+	dmpsx -b $&.obj			
+
+#
+# MAIN TARGET
+# 
+
+frogger.cpe:    actor2.obj anim.obj babyfrog.obj bff_load.obj cam.obj collect.obj\
+				custom.obj custom2.obj audio.obj\
+				defdata.obj enemies.obj event.obj evenfunc.obj fixed.obj frogger.obj frogmove.obj \
+				frontend.obj game.obj general.obj hud.obj language.obj layout.obj \
+				levplay.obj maths.obj map_draw.obj memload.obj menus.obj multi.obj overlays.obj \
+				path.obj platform.obj psiactor.obj script.obj sndview.obj specfx.obj sprite.obj textover.obj \
+				tongue.obj types.obj newpsx.obj map.obj objects.obj textures.obj main.obj world.obj water.obj \
+				bbtimer.obj backdrop.obj eff_draw.obj temp_psx.obj world_eff.obj acostab.obj particle.obj \
+				psxsprite.obj ptexture.obj cr_lang.obj story.obj timer.obj psxtongue.obj \
+				e3_demo.obj bbpsiani.obj quatern.obj asm.obj loadingbar.obj font.obj \
+				objviewer.obj options.obj snapshot.obj training.obj fadeout.obj isltex.obj savegame.obj \
+				memcard.obj flatpack.obj islvideo.obj frogger.lnk \
+				waterbin.obj islmem.obj psi.obj islfile.obj islpad.obj
+
+			
+#                slink /psx /c /strip /nostriplib @frogger.lnk,frogger.cpe,frogger.sym,frogger.map
+#                slink /l $(LIBISL) /psx /c /nostriplib @frogger.lnk,frogger.cpe,frogger.sym,frogger.map
+#				 slink /l $(LIBISL) /psx /c /wo /v /strip /nostriplib @frogger.lnk,frogger.cpe
+
+
+
+#				 slink /l $(LIBISL) /psx /c /wo /v /nostriplib @frogger.lnk,frogger.cpe,frogger.sym,frogger.map
+
+				 slink /l $(LIBISL) /psx /c /wo /v /strip @frogger.lnk,frogger.cpe,frogger.sym,frogger.map
+
+
+
+#
+# SECONDARY TARGET - download and run
+#
+
+#run: whack.cpe
+#	resetps /p
+#	run whack.cpe
+#	testmess
+
+#
+# SECONDARY TARGET - download and debug
+#
+#debug: whack.cpe
+#	resetps /p
+#        dbugpsx whack /e
+
+
+#
+# GAME COMPONENTS
+#
+
+waterbin.obj:	waterbin.s water.spt
+		asmpsx /zd /l waterbin.s,waterbin.obj
+
+acostab.obj:	acostab.s acostab.bin mpl0.pal mpl1.pal mpl2.pal mpl3.pal mpl4.pal mpl5.pal mpl6.pal mpl7.pal
+		asmpsx /zd /l acostab.s,acostab.obj
+
+#incbins.obj:	incbins.s
+#		asmpsx /zd /l incbins.s,incbins.obj
+
+asm.obj:	asm.s
+		asmpsx /zd /l asm.s,asm.obj
+

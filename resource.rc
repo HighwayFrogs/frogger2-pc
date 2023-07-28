@@ -1,0 +1,331 @@
+//Microsoft Developer Studio generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.K.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENG)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_UK
+#pragma code_page(1252)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_VIDEODEVICE DIALOGEX 0, 0, 269, 124
+STYLE DS_MODALFRAME | DS_CENTER | DS_CENTERMOUSE | WS_POPUP | 
+    WS_CLIPSIBLINGS | WS_CLIPCHILDREN | WS_CAPTION | WS_SYSMENU
+CAPTION "Frogger2 - Swampy's Revenge"
+FONT 8, "Comic Sans MS", 0, 0, 0x1
+BEGIN
+    GROUPBOX        "Video card",IDC_TXT_VIDEO,5,6,189,113,0,
+                    WS_EX_TRANSPARENT
+    CONTROL         "List1",IDC_LIST2,"SysListView32",LVS_REPORT | 
+                    LVS_SINGLESEL | LVS_SHOWSELALWAYS | LVS_ALIGNLEFT | 
+                    LVS_NOCOLUMNHEADER | WS_BORDER | WS_TABSTOP,11,16,177,68,
+                    WS_EX_STATICEDGE
+    CONTROL         "Run &Windowed",IDC_WINDOW,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,104,103,84,10
+    PUSHBUTTON      "Controls...",IDC_CONTROLS,213,6,50,14
+    DEFPUSHBUTTON   "Start Game",IDOK,213,89,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,213,106,50,14
+    RTEXT           "Screen Resolution:",IDC_TXT_RESOLUTION,11,90,88,8
+    COMBOBOX        IDC_SCREENRES,104,88,84,57,CBS_DROPDOWNLIST | WS_VSCROLL | 
+                    WS_TABSTOP
+END
+
+IDD_CONTROLS DIALOG DISCARDABLE  0, 0, 302, 113
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Control setup"
+FONT 8, "MS Sans Serif"
+BEGIN
+    GROUPBOX        "Controls",IDC_TXT_CONTROLS,7,7,227,99
+    LTEXT           "Player &1",IDC_P1,17,24,26,8
+    COMBOBOX        IDC_PLAYER1,50,23,171,51,CBS_DROPDOWNLIST | WS_VSCROLL | 
+                    WS_TABSTOP
+    LTEXT           "Player &2",IDC_P2,17,43,26,8
+    COMBOBOX        IDC_PLAYER2,50,41,171,53,CBS_DROPDOWNLIST | WS_VSCROLL | 
+                    WS_TABSTOP
+    LTEXT           "Player &3",IDC_P3,17,63,26,8
+    COMBOBOX        IDC_PLAYER3,50,61,171,45,CBS_DROPDOWNLIST | WS_VSCROLL | 
+                    WS_TABSTOP
+    LTEXT           "Player &4",IDC_P4,17,84,26,8
+    COMBOBOX        IDC_PLAYER4,50,82,171,42,CBS_DROPDOWNLIST | WS_VSCROLL | 
+                    WS_TABSTOP
+    DEFPUSHBUTTON   "OK",IDOK,245,7,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,245,24,50,14
+    PUSHBUTTON      "&Setup...",ID_SETUP,245,92,50,14,WS_DISABLED
+    PUSHBUTTON      "Defaults",ID_DEFAULT,245,73,50,14
+END
+
+IDD_KEYPRESS DIALOG DISCARDABLE  0, 0, 137, 76
+STYLE DS_MODALFRAME | DS_CENTER | WS_POPUP
+FONT 8, "MS Sans Serif"
+BEGIN
+    CTEXT           "Press your desired key, or click Cancel to return",
+                    IDC_PRESSKEY,7,7,123,32
+    PUSHBUTTON      "Cancel",IDCANCEL,41,47,50,14
+END
+
+IDD_KEYMAPBOX DIALOG DISCARDABLE  0, 0, 166, 206
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Keyboard setup"
+FONT 8, "MS Sans Serif"
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,55,185,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,109,185,50,14
+    LISTBOX         IDC_KEYMAPLIST,7,7,152,173,LBS_SORT | LBS_USETABSTOPS | 
+                    LBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_TABSTOP
+END
+
+IDD_MULTI_CONNECT DIALOG DISCARDABLE  0, 0, 274, 129
+STYLE DS_MODALFRAME | WS_CAPTION | WS_SYSMENU
+CAPTION "Frogger2 Multiplayer: Choose connection type"
+FONT 8, "MS Sans Serif"
+BEGIN
+    LTEXT           "(Player Name)",IDC_PLAYERLABEL,7,7,260,8
+    EDITTEXT        IDC_PLAYERNAME,7,18,260,14,ES_AUTOHSCROLL
+    LTEXT           "(Connection Type)",IDC_CONNECTIONLABEL,7,40,260,8
+    LISTBOX         IDC_CONNECTIONLIST,7,51,260,51,LBS_SORT | 
+                    LBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_TABSTOP
+    DEFPUSHBUTTON   "(OK)",IDOK,163,108,50,14,WS_DISABLED
+    PUSHBUTTON      "(Cancel)",IDCANCEL,217,108,50,14
+END
+
+IDD_MULTI_GAMES DIALOG DISCARDABLE  0, 0, 249, 119
+STYLE DS_MODALFRAME | WS_CAPTION | WS_SYSMENU
+CAPTION "Frogger2 Multiplayer: Join a game"
+FONT 8, "MS Sans Serif"
+BEGIN
+    LISTBOX         IDC_GAMELIST,7,28,235,64,LBS_SORT | LBS_NOINTEGRALHEIGHT | 
+                    WS_VSCROLL | WS_TABSTOP
+    PUSHBUTTON      "(&Join)",IDC_JOIN,7,98,50,14,WS_DISABLED
+    DEFPUSHBUTTON   "(&Create)",IDC_CREATE,64,98,50,14
+    PUSHBUTTON      "(Cancel)",IDCANCEL,192,98,50,14
+    LTEXT           "(Select a game and click 'Join':)",IDC_SELECTA,7,18,100,
+                    8
+    CONTROL         "(Search for games)",IDC_SEARCH,"Button",BS_AUTOCHECKBOX | 
+                    BS_PUSHLIKE | WS_TABSTOP,137,7,105,16
+END
+
+IDD_MULTI_START DIALOG DISCARDABLE  0, 0, 333, 180
+STYLE DS_MODALFRAME | WS_MINIMIZEBOX | WS_CAPTION | WS_SYSMENU
+CAPTION "Frogger2 Multiplayer: Start the game!"
+FONT 8, "MS Sans Serif"
+BEGIN
+    EDITTEXT        IDC_CHATENTER,7,158,141,14,ES_AUTOHSCROLL
+    CONTROL         "",IDC_RICHCHAT,"RICHEDIT",ES_MULTILINE | ES_AUTOVSCROLL | 
+                    ES_READONLY | ES_NUMBER | WS_BORDER | WS_VSCROLL,7,7,156,
+                    149
+    DEFPUSHBUTTON   "!",ID_SEND,151,158,11,14
+    CONTROL         "&Ready!",IDC_START,"Button",BS_AUTOCHECKBOX | 
+                    BS_PUSHLIKE | WS_TABSTOP,213,129,60,14
+    GROUPBOX        "Players",IDC_PLAYERSLABEL,169,18,157,68
+    LISTBOX         IDC_PLAYERLIST,175,28,145,51,LBS_SORT | 
+                    LBS_NOINTEGRALHEIGHT | LBS_NOSEL | WS_VSCROLL | 
+                    WS_TABSTOP
+    COMBOBOX        IDC_LEVEL,177,107,145,83,CBS_DROPDOWNLIST | CBS_SORT | 
+                    WS_DISABLED | WS_VSCROLL | WS_TABSTOP
+    PUSHBUTTON      "Cancel",IDCANCEL,262,158,64,14
+END
+
+IDD_MULTI_CREATE DIALOG DISCARDABLE  0, 0, 212, 66
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Frogger2 Multiplayer: Start a game"
+FONT 8, "MS Sans Serif"
+BEGIN
+    LTEXT           "Game name:",IDC_GAMENAME_LABEL,7,7,198,8
+    EDITTEXT        IDC_NAME,7,18,198,14,ES_AUTOHSCROLL
+    DEFPUSHBUTTON   "OK",IDOK,98,45,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,155,45,50,14
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO DISCARDABLE 
+BEGIN
+    IDD_VIDEODEVICE, DIALOG
+    BEGIN
+        LEFTMARGIN, 5
+        RIGHTMARGIN, 263
+        TOPMARGIN, 6
+        BOTTOMMARGIN, 119
+    END
+
+    IDD_CONTROLS, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 295
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 106
+    END
+
+    IDD_KEYPRESS, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 130
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 69
+    END
+
+    IDD_KEYMAPBOX, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 159
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 199
+    END
+
+    IDD_MULTI_CONNECT, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 267
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 122
+    END
+
+    IDD_MULTI_GAMES, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 242
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 112
+    END
+
+    IDD_MULTI_START, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 326
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 172
+    END
+
+    IDD_MULTI_CREATE, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 205
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 59
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDI_FROGGER2            ICON    DISCARDABLE     "frogger2.ico"
+IDI_BLITZ               ICON    DISCARDABLE     "blitz.ico"
+IDI_HASBROI             ICON    DISCARDABLE     "hasbroi.ico"
+IDI_GAMES               ICON    DISCARDABLE     "games.ico"
+IDI_FROGGER2SITE        ICON    DISCARDABLE     "frogger2site.ico"
+
+#ifndef _MAC
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 1,0,0,1
+ PRODUCTVERSION 1,0,0,1
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x40004L
+ FILETYPE 0x1L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "080904b0"
+        BEGIN
+            VALUE "Comments", "\0"
+            VALUE "CompanyName", "Hasbro Interactive\0"
+            VALUE "FileDescription", "Frogger2 - Swampy's Revenge\0"
+            VALUE "FileVersion", "1, 0, 0, 1\0"
+            VALUE "InternalName", "Frogger2\0"
+            VALUE "LegalCopyright", "Copyright © 2000 Hasbro Interactive\0"
+            VALUE "LegalTrademarks", "KONAMI and FROGGER is a trademark of KONAMI CO, LTD (c) All Rights Reserved\0"
+            VALUE "OriginalFilename", "Frogger2.exe\0"
+            VALUE "PrivateBuild", "\0"
+            VALUE "ProductName", "Frogger2\0"
+            VALUE "ProductVersion", "1, 0, 0, 1\0"
+            VALUE "SpecialBuild", "\0"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x809, 1200
+    END
+END
+
+#endif    // !_MAC
+
+#endif    // English (U.K.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+
