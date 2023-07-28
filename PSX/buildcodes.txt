@@ -1,9 +1,0 @@
-
-MS#5_PreCon1.0		MS#5, Pre Concept Approval 1.0		End of Jan 00
-MS#5_PreCon2.0		MS#5, Pre Concept Approval 2.0		03/03/00 --- 01/03? ---
-MS#5_PreCon2.1		MS#5, Pre Concept Approval 2.1		03/03/00
-MS#5_Con1.0			MS#5, Concept Approval Submit 1.0	07/03/00
-MS#5_1.0			MS#5, 1.0							05/04/00
-E3_1.0				E3 submit 1.0						19/04/00
-E3_1.1				E3 submit 1.1 (SLUS!)
-E3_1.2				E3 submit 1.1 (music fixed)
