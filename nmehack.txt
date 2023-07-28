@@ -1,0 +1,52 @@
+/* ---------------  Animation hacks ---------------
+
+In a similar fashion to the reactive animations, here's a little file
+telling which model to do which little stupid animation hack.
+
+Flags we have right now are:
+
+NME_RUMBLE		The enemy rumbles as it moves, like a van or chicken on a skateboard
+NME_BOB			The enemy bobs up and down in sinusoidal fashion, a la floaty things 
+NME_GALLOP		The enemy gallops in an exciting squash and stretch kind of way
+NME_BOUNCY		Bounce and roll, yay
+NME_ROLL		Roll along the direction of the path (set enemy to FACE FORWARD)
+
+You can put an extension on if you like, but I'll just ignore it. Efficient, like.
+
+/*--- Name --------- ersatz 'animation' -------*/
+	
+	"moa",		NME_RUMBLE,			// for example
+	"roll",		NME_RUMBLE,			
+	"beetle",	NME_RUMBLE,	
+	"warthog",	NME_GALLOP,
+	"stnwheel",	NME_ROLL_Z,
+	"boulder",	NME_ROLL,
+	"labspy",	NME_BOB,
+	"pkin",		NME_BOUNCY,
+	"cnut",		NME_BOUNCY,
+	"ghostie",	NME_GALLOP,
+	"snet",		NME_BOB,
+	"firb",		NME_ROLL,
+	"sbbb",		NME_BOB,
+	"sir",		NME_BOB,
+	"sbast",	NME_BOB,
+	"fly",		NME_ROLL,
+	"asteroid",	NME_ROLL2,
+
+/*---------------------------------------------
+
+           (,,)            o
+  (,,)      -@ /\/\ zap . /  .
+   .o   ___/ -\        .o . 
+  /- \_/_  \__/ _____ ./ _       \|/
+  \_./ ##\   l /   (o)  / \x/    -*-
+   l ___ l\LLl l ___ l  .  x      |
+   LLl LLl     LLl LLl  \_/ \    \|/
+
+           \|/
+  \|/               \|/
+         \|/
+
+*/
+0,0	// change this to crash the game
+#pragma message("(Enemy hacks included from nmehack.txt)")

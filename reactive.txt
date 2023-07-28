@@ -1,0 +1,145 @@
+// Reactive animations
+//
+// "no.obe",10,20, 0,
+//
+// Name, Character_Anim, Frog_Anim, Type 
+// 0 = Nothing,
+// ANI_CENTRE = Center,
+// ANI_FACE = Face,
+// ANI_ANTIFACE = Face away
+// ANI_FACECAMERA = Face camera
+// ANI_FIXED = Stop
+// ANI_REACTIVE = Reactive animation - the ones at the top
+//
+// Put them here /////////////////////////////////// 
+
+/*
+Name		C-Anim	F-Anim	Type 
+*****************************************/
+
+//"vac.obe",	1,	39,	ANI_ANTIFACE | ANI_CENTRE | ANI_FIXED | ANI_REACTIVE,
+//"mole.obe",	1,	21,	ANI_FACE | ANI_CENTRE | ANI_FIXED | ANI_REACTIVE,
+//"crokhed.obe",	1,	44,	ANI_FACE | ANI_FIXED | ANI_REACTIVE,
+
+/*
+These are the non-reactive but special death anims for the frog
+
+Types are:
+0	DEATHBY_NORMAL,				// Cutting, prodding
+1	DEATHBY_RUNOVER,			// Roller, car, bus
+2	DEATHBY_DROWNING,			// Water, seminal fluid
+3	DEATHBY_SQUASHED,			// Big fat rock star, piano
+4	DEATHBY_FIRE,				// Hot plate, camp fire, jacket potato up jacksy
+5	DEATHBY_ELECTRICSHOCK,		// Zappy turrets, faulty vibrator
+6	DEATHBY_FALLING,			// Splat from a height
+7	DEATHBY_WHACKING,			// Big fast things hitting froggy against screen
+8	DEATHBY_INFLATION,			// Floating in space, blowpipe
+9	DEATHBY_POISON,				// Wasps and other stingie thingies
+10	DEATHBY_SLICING,			// Frogs with axes, spinning blades etc,
+11	DEATHBY_EXPLOSION,			// Gibs rain down from the sky, and the very sun goes cold...
+12	DEATHBY_GIBBING,			// Like an explosion but smaller
+13  DEATHBY_INCINERATE,			// Pile of ash
+14	DEATHBY_BURSTING,			// Inflate then explode - sequential
+15	DEATHBY_SPIKED,				// Big stick up the ass
+16  DEATHBY_LIGHTNING			// Explode in a shower of sparks
+
+
+Name		C-Anim	F-Anim	Type
+*****************************************/
+"null_fire.obe",	-1,     4,	0,
+"null_elec.obe",	-1,	16,	ANI_FACECAMERA,
+"electric.obe",	        -1,	5,	0,
+"dobi.obe",		-1,	0,	ANI_ANTIFACE,
+"null_kick.obe",	-1,	7,	0,
+"null_pist.obe",	-1,     3,	0,
+"null_gib.obe",		-1,	12,	0,
+"NME.obe",		-1,	7,	0,
+"null_splat.obe",	-1,	7,	0,
+
+//Garden
+
+"moa.obe",		-1,     12,	0,
+"bee.obe",		 1,	 14,	0,
+"moae.obe",		-1,	12,	0,
+"roll.obe",             -1,      3,     ANI_ANTIFACE,
+
+
+//Ancients
+
+"roach.obe",		-1,	 9,	0,
+"mummy.obe",            -1,      7,     ANI_ANTIFACE,
+"ancspike.obe",         -1,      15,     0,
+"ancspikea.obe",        -1,      15,     0,
+"spike.obe",            -1,     10,	ANI_ANTIFACE,
+"beetle.obe", 	        -1,	 9,	ANI_ANTIFACE,
+"cball.obe", 	        -1,	 0,	ANI_ANTIFACE,
+"cnut.obe", 	        -1,	 6,	0,
+"warthog.obe",		-1,     1,	ANI_ANTIFACE,
+"vult.obe",		-1,     12,	ANI_ANTIFACE,
+
+//Sub
+
+"firb.obe",			-1,	16,	0,
+"imp.obe",			-1,	13,	0,
+"slug.obe",			-1,	9,	0,
+"antfly.obe",		-1,	9,	0,
+"louse.obe",		-1,	10,	0,
+"leech.obe",		-1,	9,	0,
+"lilant.obe",		-1,	9,	0,
+"sarge.obe",		-1,	14,	0,
+"antsnap.obe",		-1,	9,	0,
+
+//Lab
+
+"copter.obe",           -1,      16,     0,
+"ape.obe",              -1,     11,     0,
+"fly.obe",              -1,      5,     0,
+"stomp.obe",             -1,      1,     0,
+"vac.obe",             -1,      14,     0,
+"stomp.obe",             -1,      3,     0,
+"Labspy.obe",             -1,      11,     0,
+
+//Space
+
+"smine.obe",		-1,	11,	0,
+"smineB.obe",		-1,	11,	0,
+"smineR.obe",		-1,	11,	0,
+"smineY.obe",		-1,	11,	0,
+"missle.obe",           -1,     11,     0,
+"missleC.obe",           -1,     11,     0,
+"missleR.obe",           -1,     11,     0,
+"missleY.obe",           -1,     11,     0,
+"missleb.obe",          -1,     11,     0,
+"misslebC.obe",          -1,     11,     0,
+"misslebR.obe",          -1,     11,     0,
+"misslebY.obe",          -1,     11,     0,
+"snet.obe",             -1,      11,     0,
+"sbast.obe",             -1,      16,     0,
+"sir.obe",             -1,      16,     0,
+"sbbb.obe",             -1,      15,     0,
+
+//Halloween
+
+"knight.obe",	        -1,	10,	ANI_ANTIFACE,
+"taran.obe",	        -1,      9,	0,
+"hand.obe",		-1,	12,	0,
+"foot.obe",		-1,	3,	ANI_ANTIFACE,
+"pkin.obe",		-1,	1,	ANI_FACE,
+"ghostie.obe",		-1,	8,	0,
+"ghost.obe",		-1,	7,	0,
+"rat.obe",		-1,	0,	ANI_ANTIFACE,
+"pistona.obe",        -1,      3,     ANI_ANTIFACE,
+"pistonb.obe",        -1,      3,     ANI_ANTIFACE,
+"pistonc.obe",        -1,      3,     ANI_ANTIFACE,
+"pistond.obe",        -1,      3,     ANI_ANTIFACE,
+"pistonaa.obe",        -1,      3,     ANI_ANTIFACE,
+"Grinder.obe",		-1,	12,	0,
+
+//Retro
+
+
+
+////////////////////////////////////////////////////
+// Leave this here please (And ignore it!)
+"",0,0,0
+#pragma message("(Reactive anims included from reactive.txt)")
