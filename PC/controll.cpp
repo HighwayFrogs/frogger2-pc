@@ -306,6 +306,7 @@ void KeyboardDump(HKEY hkey, bool write)
 			*(p++) = b;
 			*(p++) = keymap[i].key;
 		}
+		// these are binary values I dont know if we should store those in an ini
 
 		RegSetValueEx(hkey, "Keymap", NULL, REG_BINARY, (unsigned char*)buffer, 56*3);
 	}
@@ -328,6 +329,8 @@ void KeyboardDump(HKEY hkey, bool write)
 				}
 				success = true;
 			}
+
+			RegCloseKey(hkey);
 		}
 
 		if (!success)
@@ -382,6 +385,8 @@ int GetControllerSetup(void)
 				{
 					controllers[pl] = KEYBOARD;					
 				}
+
+				RegCloseKey(hkey);
 			}
 
 			KeyboardDump(hkey, 0);

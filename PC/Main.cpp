@@ -87,6 +87,9 @@ char baseDirectory[MAX_PATH] = "";
 char baseDirectory[MAX_PATH] = "X:\\TeamSpirit\\pcversion\\";
 #endif
 
+char iniFilePath[MAX_PATH];
+const char* iniFileName = "frogger2.ini";
+
 char cdromDrive[4] = "";
 
 char lButton = 0, rButton = 0;
@@ -98,7 +101,7 @@ long resolution = (640<<16) + 480;
 long slideSpeeds[4] = {0,16,32,64};
 
 long fogEnable = 0;
-bool configDialog = false;
+bool configDialog = true;
 
 void GetArgs(char *arglist);
 
@@ -140,6 +143,130 @@ int FindFrogger2CD(void)
 	}
 
 	utilPrintf("Couldn't find Frogger2 CD.. failing!\n");
+	return 0;
+}
+
+/*	--------------------------------------------------------------------------------
+	Function		: CheckAndCreateIni(void)
+	Parameters		: 
+	Returns			: int - 0 indicating success
+	Info			: Gets setup stuff (e.g. install dir) from the local (if not accessible %USERPROFILE%)/frogger2.ini
+*/
+
+int GetOrCreateIni(void)
+{
+	GetModuleFileName(NULL, baseDirectory, MAX_PATH);
+
+	// gets path to file
+	// ex.: "C:\mullard\is\my\daddy.exe" => "C:\mullard\is\my\"
+	// maybe move this to the utils file
+	int n;
+	char *c;
+	for (c=baseDirectory,n=0; *c; c++,n++);
+	for (c--;n;n--,c--)
+		if (*c == '\\') break;
+	*(c++) = '\\'; *c = 0;
+
+	utilPrintf("Base Directory: %s\n", baseDirectory);
+	
+	strcpy(iniFilePath, baseDirectory);
+	strcat(iniFilePath, iniFileName);
+
+	// DUPLICATE: Could be extracted to a function
+	utilPrintf("Trying iniFilePath: %s\n", iniFilePath);
+	// create if not exists or check if writable
+	HANDLE f = CreateFile(iniFilePath, GENERIC_WRITE, 0, NULL, CREATE_NEW, FILE_ATTRIBUTE_NORMAL, NULL);
+	// WTF: Why do I have to cast these to an int to work
+	if (f != INVALID_HANDLE_VALUE || (int) GetLastError() == (int) ERROR_FILE_EXISTS)
+	{
+		utilPrintf("Using path: %s\n", iniFilePath);
+		CloseHandle(f);
+		return 0;
+	}
+
+	GetEnvironmentVariable("USERPROFILE", iniFilePath, MAX_PATH);
+	strcat(iniFilePath, "\\");
+	strcat(iniFilePath, iniFileName);
+
+	utilPrintf("Trying iniFilePath: %s\n", iniFilePath);
+	// create if %USERPROFILE%\frogger2.ini not exists or check if writable
+	f = CreateFile(iniFilePath, GENERIC_WRITE, 0, NULL, CREATE_NEW, FILE_ATTRIBUTE_NORMAL, NULL);
+	if (f != INVALID_HANDLE_VALUE || (int) GetLastError() == (int) ERROR_FILE_EXISTS)
+	{
+		utilPrintf("Using path: %s\n", iniFilePath);
+		CloseHandle(f);
+		return 0;
+	}
+
+	MessageBox(NULL, "Could not find place to put the ini file", "Frogger2",
+			MB_ICONEXCLAMATION|MB_OK);
+	return -1;
+}
+
+/*	--------------------------------------------------------------------------------
+	Function		: ParseResolution(const unsigned char *resolutionStr)
+	Parameters		: resolutionStr: A resolution in the format of [width]x[height]
+	Returns			: long - a resolution where the top 16 bits are the width and lower 16 bits are the height
+	Info			: 
+*/
+
+long ParseResolution(const char *resolutionStr)
+{
+	char tempStr[16];
+	int width = 640;
+	int height = 480;
+
+	strcpy(tempStr, resolutionStr);
+	char* token = strtok(tempStr, "x");
+	width = strtol(token, (char**)NULL, 10);
+	token = strtok(NULL, "x");
+	if (token == NULL)
+		return resolution;
+	height = strtol(token, (char**)NULL, 10);
+	// This is probably not necessary, but I am not sure on how strtok works and am afraid if it's not drained than it could affect other places
+	while (strtok(NULL, "x") != NULL);
+
+	return (width << 16) + height;
+}
+
+/*	--------------------------------------------------------------------------------
+	Function		: GetIniInformation(void)
+	Parameters		: 
+	Returns			: int - 0 indicating success
+	Info			: Gets setup stuff (e.g. install dir) from the local (if not accessible %USERPROFILE%)/frogger2.ini
+*/
+
+int GetIniInformation(void)
+{
+	char tempStr[16] = "640x480";
+	GetPrivateProfileString("Graphics", "resolution", "", tempStr, 16, iniFilePath);
+	if (*tempStr == '\0')
+	{
+		utilPrintf("resolution not found in ini file using default\n");
+		strcpy(tempStr, "680x480");
+	}
+	resolution = ParseResolution(tempStr);
+	utilPrintf("using resolution: %s, integer value: %i\n", tempStr, resolution);
+
+	GetPrivateProfileString("Graphics", "fullscreen", "", tempStr, 16, iniFilePath);
+	rFullscreen = stricmp(tempStr, "False") != 0;
+
+	GetPrivateProfileString("Graphics", "video_device", "", rVideoDevice, 255, iniFilePath);
+
+	GetPrivateProfileString("Graphics", "language", "English", tempStr, 16, iniFilePath);
+	// I dont know what encoding this is but for me the Francais c shows up as a question mark - raq
+	const char* languages[LANG_NUMLANGS] = { "English", "Franï¿½ais", "Deutsch", "Italiano", "US" };
+	int lang;
+
+	for (lang=0; lang<LANG_NUMLANGS; lang++)
+		if (stricmp(tempStr, languages[lang]) == 0)
+		{
+			gameTextLang = lang;
+			break;
+		}
+
+	utilPrintf("Using language: %s\n", languages[gameTextLang]);
+
 	return 0;
 }
 
@@ -196,7 +323,8 @@ int GetRegistryInformation(void)
 		len = 16;
 		if (RegQueryValueEx(hkey, "Language", NULL, NULL, (unsigned char*)regLanguage, &len) == ERROR_SUCCESS)
 		{
-			const char* languages[LANG_NUMLANGS] = { "English", "Français", "Deutsch", "Italiano", "US" };
+			// I dont know what encoding this is but for me the Francais c shows up as a question mark - raq
+			const char* languages[LANG_NUMLANGS] = { "English", "Franï¿½ais", "Deutsch", "Italiano", "US" };
 			int lang;
 
 			for (lang=0; lang<LANG_NUMLANGS; lang++)
@@ -212,6 +340,8 @@ int GetRegistryInformation(void)
 
 	return 1;
 }
+
+// TODO: SetIniInformation()
 
 int SetRegistryInformation(void)
 {
@@ -900,13 +1030,17 @@ int PASCAL WinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance,LPSTR lpCmdLine,i
 
 	msgAutoplayDisable = RegisterWindowMessage(TEXT("QueryCancelAutoPlay")); 
 	
-	GetRegistryInformation();
+	// GetRegistryInformation();
+	if (GetOrCreateIni() == -1)
+		return -1;
+	GetIniInformation();
 	GetArgs(lpCmdLine);
 	gameTextInit("MAPS\\LANGUAGE.FLA", LANG_NUM_STRINGS, LANG_NUMLANGS, gameTextLang);
 
 	// Load the game here, mostly for network mode - ds
 	LoadGame();
 
+	// Consideration: This could be removed entirely
 #ifndef PC_DEMO
 #ifdef FINAL_MASTER
 	while (!FindFrogger2CD())
@@ -916,7 +1050,7 @@ int PASCAL WinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance,LPSTR lpCmdLine,i
 			return -1;
 	}
 #else
-	FindFrogger2CD();
+	// FindFrogger2CD();
 #endif
 #endif
 
@@ -977,6 +1111,8 @@ int PASCAL WinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance,LPSTR lpCmdLine,i
 
 		xRes = (resolution & 0xFFFF0000) >> 16;
 		yRes = (resolution & 0xFFFF);
+
+		utilPrintf("xRes: %ld, yRes: %ld", xRes, yRes);
 
 		OVERLAY_X = xRes/4096.0;
 		OVERLAY_Y = yRes/4096.0;

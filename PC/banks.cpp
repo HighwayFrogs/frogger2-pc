@@ -24,11 +24,7 @@
 
 char saveName[32];
 
-#ifdef FINAL_MASTER
 int compressedTexBanks = 1;
-#else 
-int compressedTexBanks = 0;
-#endif
 
 TextureBankType *textureBanks [ MAX_TEXTURE_BANKS ];
 

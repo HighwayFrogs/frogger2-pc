@@ -87,6 +87,7 @@ bool SetupNetworking()
 		return false;
 	}
 
+	// TODO: move to ini
 	if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, REGISTRY_KEY, 0, KEY_READ, &hkey) == ERROR_SUCCESS)
 	{
 		DWORD len;
@@ -96,6 +97,8 @@ bool SetupNetworking()
 
 		len = 128;
 		RegQueryValueEx(hkey, "netgame", NULL, NULL, (unsigned char*)sessionName, &len);
+
+		RegCloseKey(hkey);
 	}
 
     // Setup the g_DPSIHead circular linked list
