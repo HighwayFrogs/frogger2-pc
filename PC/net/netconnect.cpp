@@ -87,19 +87,8 @@ bool SetupNetworking()
 		return false;
 	}
 
-	// TODO: move to ini
-	if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, REGISTRY_KEY, 0, KEY_READ, &hkey) == ERROR_SUCCESS)
-	{
-		DWORD len;
-
-		len = 16;
-		RegQueryValueEx(hkey, "netplayer", NULL, NULL, (unsigned char*)playerName, &len);
-
-		len = 128;
-		RegQueryValueEx(hkey, "netgame", NULL, NULL, (unsigned char*)sessionName, &len);
-
-		RegCloseKey(hkey);
-	}
+	GetPrivateProfileString("Multiplayer", "player_name", "Player", playerName, 16, iniFilePath);
+	GetPrivateProfileString("Multiplayer", "session_name", "Frogger2", sessionName, 256, iniFilePath);
 
     // Setup the g_DPSIHead circular linked list
     ZeroMemory( &DPSIHead, sizeof( DPSessionInfo ) );
@@ -136,11 +125,8 @@ void SaveNetgameSetup()
 	HKEY hkey;
 	HRESULT res;
 
-	if ((res = RegCreateKeyEx(HKEY_LOCAL_MACHINE, REGISTRY_KEY, 0, 0, 0, KEY_WRITE, NULL, &hkey, NULL)) == ERROR_SUCCESS)
-	{
-		RegSetValueEx(hkey, "netplayer", NULL, REG_SZ, (unsigned char*)playerName, strlen(playerName) + 1);
-		RegSetValueEx(hkey, "netgame", NULL, REG_SZ, (unsigned char*)sessionName, strlen(sessionName) + 1);
-	}
+	WritePrivateProfileString("Multiplayer", "player_name", playerName, iniFilePath);
+	WritePrivateProfileString("Multiplayer", "session_name", sessionName, iniFilePath);
 }
 
 /*	--------------------------------------------------------------------------------
