@@ -102,6 +102,9 @@ long slideSpeeds[4] = {0,16,32,64};
 
 long fogEnable = 0;
 
+// I dont know what encoding this is but for me the Francais c shows up as a question mark - raq
+const char* languages[LANG_NUMLANGS] = { "English", "Fran�ais", "Deutsch", "Italiano", "US" };	
+
 void GetArgs(char *arglist);
 
 /*	--------------------------------------------------------------------------------
@@ -251,8 +254,7 @@ int GetIniInformation(void)
 	GetPrivateProfileString("Graphics", "video_device", "", rVideoDevice, 255, iniFilePath);
 
 	GetPrivateProfileString("Graphics", "language", "English", tempStr, 16, iniFilePath);
-	// I dont know what encoding this is but for me the Francais c shows up as a question mark - raq
-	const char* languages[LANG_NUMLANGS] = { "English", "Fran�ais", "Deutsch", "Italiano", "US" };
+
 	int lang;
 
 	for (lang=0; lang<LANG_NUMLANGS; lang++)
@@ -268,109 +270,29 @@ int GetIniInformation(void)
 }
 
 /*	--------------------------------------------------------------------------------
-	Function		: GetRegistryInformation(void)
+	Function		: SetIniInformation(void)
 	Parameters		: 
 	Returns			: int
-	Info			: Gets setup stuff (e.g. install dir) from the registry
+	Info			: Saves information into the ini file
 */
 
-int GetRegistryInformation(void)
+int SetIniInformation(void)
 {
-	HKEY hkey;
-	DWORD val, len = MAX_PATH;
+	char tempStr[16];
+	long xRes = (resolution & 0xFFFF0000) >> 16;
+	long yRes = (resolution & 0xFFFF);
 
-	if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, REGISTRY_KEY, 0, KEY_READ, &hkey) != ERROR_SUCCESS)
-	{
-		// If demo install (no default reg settings) then try to get current directory as base
-#ifdef PC_DEMO
-		int n;
-		char *c;
+	sprintf(tempStr, "%ix%i", xRes, yRes);
+	WritePrivateProfileString("Graphics", "resolution", tempStr, iniFilePath);
 
-		// Set up the base directory to be the location of the executable
-		GetModuleFileName(NULL, baseDirectory, MAX_PATH);
+	sprintf(tempStr, rFullscreen ? "True" : "False");
+	WritePrivateProfileString("Graphics", "fullscreen", tempStr, iniFilePath);
 
-		for (c=baseDirectory,n=0; *c; c++,n++);
-		for (c--;n;n--,c--)	if (*c == '\\') break;
-		*(c++) = '\\'; *c = 0;
-#endif
-		utilPrintf("Couldn't open registry key\n"); return 0;
-	}
-	else
-	{
-		if (RegQueryValueEx(hkey, "InstallDir", NULL, NULL, (unsigned char*)baseDirectory, &len) == ERROR_SUCCESS)
-		{
-			if (baseDirectory[strlen(baseDirectory) - 1] != '\\')
-				strcat(baseDirectory, "\\");
+	WritePrivateProfileString("Graphics", "video_device", rVideoDevice, iniFilePath);
 
-			utilPrintf("Using base directory: %s\n", baseDirectory);
-		}
-		else
-			utilPrintf("Couldn't read InstallDir value from registry\n");
-
-		if (RegQueryValueEx(hkey, "Resolution", NULL, NULL, (unsigned char*)&val, &len) == ERROR_SUCCESS)
-			resolution = val;
-
-		if (RegQueryValueEx(hkey, "Fullscreen", NULL, NULL, (unsigned char*)&val, &len) == ERROR_SUCCESS)
-			rFullscreen = val;
-
-		len = 255;
-		RegQueryValueEx(hkey, "VideoDevice", NULL, NULL, (unsigned char*)rVideoDevice, &len);
-
-		char regLanguage[16];
-		len = 16;
-		if (RegQueryValueEx(hkey, "Language", NULL, NULL, (unsigned char*)regLanguage, &len) == ERROR_SUCCESS)
-		{
-			// I dont know what encoding this is but for me the Francais c shows up as a question mark - raq
-			const char* languages[LANG_NUMLANGS] = { "English", "Fran�ais", "Deutsch", "Italiano", "US" };
-			int lang;
-
-			for (lang=0; lang<LANG_NUMLANGS; lang++)
-				if (stricmp(regLanguage, languages[lang]) == 0)
-				{
-					gameTextLang = lang;
-					break;
-				}
-		}
-
-		RegCloseKey(hkey);
-	}
-
-	return 1;
-}
-
-// TODO: SetIniInformation()
-
-int SetRegistryInformation(void)
-{
-	HKEY hkey;
-	char temp[MAX_PATH];
-	DWORD val;
-	HRESULT res;
-
-	if ((res = RegCreateKeyEx(HKEY_LOCAL_MACHINE, REGISTRY_KEY, 0, 0, 0, KEY_WRITE, NULL, &hkey, NULL)) != ERROR_SUCCESS)
-	{
-		utilPrintf("Couldn't create registry key %s\n", temp); return 0;
-	}
-	else
-	{
-		// Save base directory
-		RegSetValueEx(hkey, "InstallDir", NULL, REG_SZ, (unsigned char*)baseDirectory, strlen(baseDirectory) + 1);
-
-		// Save working resolution
-		val = resolution;
-		RegSetValueEx(hkey, "Resolution", NULL, REG_DWORD, (unsigned char*)&val, sizeof(DWORD));
-
-		// Save "fullscreen?"
-		val = rFullscreen;
-		RegSetValueEx(hkey, "Fullscreen", NULL, REG_DWORD, (unsigned char*)&val, sizeof(DWORD));
-
-		// Save video device
-		RegSetValueEx(hkey, "VideoDevice", NULL, REG_SZ, (unsigned char*)rVideoDevice, strlen(rVideoDevice)+1);
-
-		RegCloseKey(hkey);
-	}
-
-	return 1;
+	WritePrivateProfileString("Graphics", "language", languages[gameTextLang], iniFilePath);
+	utilPrintf("Successfully saved ini information to %s\n", iniFilePath);
+	return 0;
 }
 
 /*	--------------------------------------------------------------------------------
@@ -539,8 +461,6 @@ LRESULT CALLBACK MyInitProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 					
 					if (sel >= 0)
 						resolution = SendMessage(hres, CB_GETITEMDATA, (WPARAM)sel, 0);
-					else
-						resolution = (640<<16) + 480;
 
 					rFullscreen = !SendMessage(GetDlgItem(hWnd,IDC_WINDOW),BM_GETCHECK,0,0);
 
@@ -988,7 +908,7 @@ int GameShutdown()
 	ShutDownDirectSound( );
 	gelfShutdown();
 
-	SetRegistryInformation();
+	SetIniInformation();
 //	SystemParametersInfo( SPI_SETSCREENSAVERRUNNING, FALSE, NULL, 0 );
 
 	return 0;
@@ -1018,7 +938,6 @@ int PASCAL WinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance,LPSTR lpCmdLine,i
 
 	msgAutoplayDisable = RegisterWindowMessage(TEXT("QueryCancelAutoPlay")); 
 	
-	// GetRegistryInformation();
 	if (GetOrCreateIni() == -1)
 		return -1;
 	GetIniInformation();
@@ -1028,7 +947,6 @@ int PASCAL WinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance,LPSTR lpCmdLine,i
 	// Load the game here, mostly for network mode - ds
 	LoadGame();
 
-	// Consideration: This could be removed entirely
 #ifndef PC_DEMO
 #ifdef FINAL_MASTER
 	while (!FindFrogger2CD())
