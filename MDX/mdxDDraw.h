@@ -46,7 +46,7 @@ extern LPDIRECTDRAWSURFACE7	backdrop;
 	Info		: 
 */
 
-unsigned long DDrawInitObject (int showDialog, DWORD resolution);
+unsigned long DDrawInitObject (DWORD resolution);
 
 /*	--------------------------------------------------------------------------------
 	Function	: DDrawInitObject

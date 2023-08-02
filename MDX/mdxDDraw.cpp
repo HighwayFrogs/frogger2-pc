@@ -481,7 +481,7 @@ BOOL CALLBACK HardwareProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lPara
 	Info		: 
 */
 
-unsigned long DDrawInitObject (int showDialog, DWORD resolution)
+unsigned long DDrawInitObject (DWORD resolution)
 {
 	HRESULT		res;
 	DDCAPS		ddCaps;
@@ -501,32 +501,22 @@ unsigned long DDrawInitObject (int showDialog, DWORD resolution)
 		dxDeviceList[dxNumDevices++].guid = (GUID *)-1;
 	}
 
-	if (!showDialog && rVideoDevice[0])
-	{
-		for (i=0; i<dxNumDevices; i++)
-			if ((strcmp(dxDeviceList[i].desc, rVideoDevice) == 0))
-				break;
+	for (i=0; i<dxNumDevices; i++)
+		if ((strcmp(dxDeviceList[i].desc, rVideoDevice) == 0))
+			break;
 		
-		if (i<dxNumDevices)
-			dp ("%s\n%s\n",dxDeviceList[i].name,dxDeviceList[i].desc);
-		else
-			showDialog = 1;
-	}
-	else
-		showDialog = 1;
-
-	if (showDialog)
-	{
-		if (!DialogBoxParam(mdxWinInfo.hInstance, MAKEINTRESOURCE(IDD_VIDEODEVICE),NULL,(DLGPROC)HardwareProc, resolution))
-			return -1;
-
-		for (i=0; i<dxNumDevices; i++)
-			if ((dxDeviceList[i].idx == selIdx) && ((dxDeviceList[i].caps.dwCaps & DDCAPS_3D) || (dxDeviceList[i].guid == (GUID *)-1)))
-				break;
+	if (i<dxNumDevices)
 		dp ("%s\n%s\n",dxDeviceList[i].name,dxDeviceList[i].desc);
 
-		strcpy(rVideoDevice, dxDeviceList[i].desc);
-	}
+	if (!DialogBoxParam(mdxWinInfo.hInstance, MAKEINTRESOURCE(IDD_VIDEODEVICE),NULL,(DLGPROC)HardwareProc, resolution))
+		return -1;
+
+	for (i=0; i<dxNumDevices; i++)
+		if ((dxDeviceList[i].idx == selIdx) && ((dxDeviceList[i].caps.dwCaps & DDCAPS_3D) || (dxDeviceList[i].guid == (GUID *)-1)))
+			break;
+	dp ("%s\n%s\n",dxDeviceList[i].name,dxDeviceList[i].desc);
+
+	strcpy(rVideoDevice, dxDeviceList[i].desc);
 
 	if (dxDeviceList[i].guid == (GUID *)-1)
 	{

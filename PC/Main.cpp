@@ -101,7 +101,6 @@ long resolution = (640<<16) + 480;
 long slideSpeeds[4] = {0,16,32,64};
 
 long fogEnable = 0;
-bool configDialog = true;
 
 void GetArgs(char *arglist);
 
@@ -160,12 +159,12 @@ int GetOrCreateIni(void)
 	// gets path to file
 	// ex.: "C:\mullard\is\my\daddy.exe" => "C:\mullard\is\my\"
 	// maybe move this to the utils file
-	int n;
-	char *c;
-	for (c=baseDirectory,n=0; *c; c++,n++);
-	for (c--;n;n--,c--)
-		if (*c == '\\') break;
-	*(c++) = '\\'; *c = 0;
+	int n = strlen(baseDirectory);
+	char *c = strrchr(baseDirectory, '\\');
+	if (c == NULL)
+		c = &baseDirectory[n];
+	*(c++) = '\\';
+	*c = 0;
 
 	utilPrintf("Base Directory: %s\n", baseDirectory);
 	
@@ -223,8 +222,6 @@ long ParseResolution(const char *resolutionStr)
 	if (token == NULL)
 		return resolution;
 	height = strtol(token, (char**)NULL, 10);
-	// This is probably not necessary, but I am not sure on how strtok works and am afraid if it's not drained than it could affect other places
-	while (strtok(NULL, "x") != NULL);
 
 	return (width << 16) + height;
 }
@@ -395,15 +392,6 @@ void GetArgs(char *arglist)
 			while (cmdMode)
 				switch(toupper(*(++arglist)))
 				{
-					case 'C':
-						configDialog = true;
-						break;
-
-/*
-						swingCam = !swingCam;
-						utilPrintf("Swinging camera %s\n",swingCam?"enabled":"disabled");
-						break;
-*/
 					case 'R':
 						rKeying = 1;
 						break;
@@ -1050,7 +1038,7 @@ int PASCAL WinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance,LPSTR lpCmdLine,i
 			return -1;
 	}
 #else
-	// FindFrogger2CD();
+	FindFrogger2CD();
 #endif
 #endif
 
@@ -1075,7 +1063,7 @@ int PASCAL WinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance,LPSTR lpCmdLine,i
 	while (1)
 	{
 		// Init DDraw Object
-		if (DDrawInitObject (configDialog, resolution) == -1)
+		if (DDrawInitObject (resolution) == -1)
 			return 1;
 
 /*
@@ -1139,8 +1127,6 @@ int PASCAL WinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance,LPSTR lpCmdLine,i
 		MessageBox(NULL,
 			GAMESTRING(STR_PCSETUP_BADVIDEO), "Frogger2",
 			MB_ICONEXCLAMATION|MB_OK);
-
-		configDialog = true;
 	}
 
 	GameStartup();
