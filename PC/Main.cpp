@@ -558,6 +558,49 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	case WM_KEYDOWN:
 		if (debugKeys)
 		{
+			if (wParam == VK_F5)
+			{
+				consoleDraw = !consoleDraw;
+				return 0;
+			}
+
+			if (wParam == VK_F6)
+			{
+				timerDraw++;
+				if (timerDraw>2)
+					timerDraw=0;
+
+				return 0;
+			}
+
+			if (wParam == VK_F7)
+			{
+				cDispTexture = NULL;
+				textureDraw = !textureDraw;
+				return 0;
+			}
+
+			if ( textureDraw )
+			{
+				if (wParam == VK_UP)
+				{
+					for (int i=0; i<8; i++)
+						if (cDispTexture->prev)
+							cDispTexture = cDispTexture->prev;
+
+					return 0;
+				}
+
+				if (wParam == VK_DOWN)
+				{
+					for (int i=0; i<8; i++)
+						if (cDispTexture->next)
+							cDispTexture = cDispTexture->next;
+
+					return 0;
+				}
+			}
+
 			if (wParam == VK_F11)
 			{
 				showSounds = !showSounds;
