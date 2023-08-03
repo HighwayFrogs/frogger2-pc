@@ -52,26 +52,32 @@ END
 // Dialog
 //
 
-IDD_VIDEODEVICE DIALOGEX 0, 0, 269, 124
+IDD_VIDEODEVICE DIALOGEX 0, 0, 269, 133
 STYLE DS_MODALFRAME | DS_CENTER | DS_CENTERMOUSE | WS_POPUP | 
     WS_CLIPSIBLINGS | WS_CLIPCHILDREN | WS_CAPTION | WS_SYSMENU
 CAPTION "Frogger2 - Swampy's Revenge"
-FONT 8, "Comic Sans MS", 0, 0, 0x1
+FONT 8, "Comic Sans MS"
 BEGIN
-    GROUPBOX        "Video card",IDC_TXT_VIDEO,5,6,189,113,0,
+    GROUPBOX        "Video card",IDC_TXT_VIDEO,5,6,189,121,0,
                     WS_EX_TRANSPARENT
     CONTROL         "List1",IDC_LIST2,"SysListView32",LVS_REPORT | 
                     LVS_SINGLESEL | LVS_SHOWSELALWAYS | LVS_ALIGNLEFT | 
                     LVS_NOCOLUMNHEADER | WS_BORDER | WS_TABSTOP,11,16,177,68,
                     WS_EX_STATICEDGE
     CONTROL         "Run &Windowed",IDC_WINDOW,"Button",BS_AUTOCHECKBOX | 
-                    WS_TABSTOP,104,103,84,10
-    PUSHBUTTON      "Controls...",IDC_CONTROLS,213,6,50,14
-    DEFPUSHBUTTON   "Start Game",IDOK,213,89,50,14
-    PUSHBUTTON      "Cancel",IDCANCEL,213,106,50,14
+                    WS_TABSTOP,15,102,84,10
+    PUSHBUTTON      "Controls...",IDC_CONTROLS,214,6,50,14
+    DEFPUSHBUTTON   "Start Game",IDOK,214,96,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,214,113,50,14
     RTEXT           "Screen Resolution:",IDC_TXT_RESOLUTION,11,90,88,8
     COMBOBOX        IDC_SCREENRES,104,88,84,57,CBS_DROPDOWNLIST | WS_VSCROLL | 
                     WS_TABSTOP
+    CONTROL         "Load &BMPs",IDC_LOADBMPS,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,15,114,84,10
+    CONTROL         "&Debug mode",IDC_DEBUGMODE,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,104,102,84,10
+    CONTROL         "Show in game timer",IDC_SHOWIGT,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,104,114,84,10
 END
 
 IDD_CONTROLS DIALOG DISCARDABLE  0, 0, 302, 113
@@ -194,7 +200,7 @@ BEGIN
         LEFTMARGIN, 5
         RIGHTMARGIN, 263
         TOPMARGIN, 6
-        BOTTOMMARGIN, 119
+        BOTTOMMARGIN, 127
     END
 
     IDD_CONTROLS, DIALOG
@@ -297,7 +303,7 @@ BEGIN
             VALUE "FileDescription", "Frogger2 - Swampy's Revenge\0"
             VALUE "FileVersion", "1, 0, 0, 1\0"
             VALUE "InternalName", "Frogger2\0"
-            VALUE "LegalCopyright", "Copyright © 2000 Hasbro Interactive\0"
+            VALUE "LegalCopyright", "Copyright ï¿½ 2000 Hasbro Interactive\0"
             VALUE "LegalTrademarks", "KONAMI and FROGGER is a trademark of KONAMI CO, LTD (c) All Rights Reserved\0"
             VALUE "OriginalFilename", "Frogger2.exe\0"
             VALUE "PrivateBuild", "\0"

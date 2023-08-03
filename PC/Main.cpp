@@ -426,6 +426,7 @@ LRESULT CALLBACK MyInitProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	{
 		case WM_INITDIALOG:
 		{
+			// Setting localization stings 
 			SetWindowText(GetDlgItem(hWnd, IDC_TXT_VIDEO), GAMESTRING(STR_PCSETUP_VIDEO));
 			SetWindowText(GetDlgItem(hWnd, IDC_CONTROLS), GAMESTRING(STR_PCSETUP_CONTROLS));
 			SetWindowText(GetDlgItem(hWnd, IDC_TXT_RESOLUTION), GAMESTRING(STR_PCSETUP_RESOLUTION));
@@ -433,6 +434,7 @@ LRESULT CALLBACK MyInitProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			SetWindowText(GetDlgItem(hWnd, IDOK), GAMESTRING(STR_PCSETUP_OK));
 			SetWindowText(GetDlgItem(hWnd, IDCANCEL), GAMESTRING(STR_PCSETUP_CANCEL));
 
+			// Setting checkmark defaults
 			SendMessage(GetDlgItem(hWnd,IDC_WINDOW),BM_SETCHECK,!rFullscreen,0);
 
 			if (!InstallChecker(hWnd))
@@ -462,6 +464,16 @@ LRESULT CALLBACK MyInitProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 					SendMessage ( GetDlgItem(hWnd,IDC_LIST3),WM_GETTEXT,16,(long)saveName);
 
 					return FALSE;				
+				}
+				case IDC_LOADBMPS:
+				{
+					if (SendMessage(GetDlgItem(hWnd,IDC_LOADBMPS), BM_GETCHECK, 0, 0) == BST_CHECKED)
+					{
+						MessageBox(NULL, "This will crash if you don't have .bmp files inside sub-directories of Textures, "
+							"You should read the debug log if the game crashes to see what textures were missing.", "Frogger2",
+							MB_ICONEXCLAMATION|MB_OK);
+					}
+					return FALSE;
 				}
 			}
 		}

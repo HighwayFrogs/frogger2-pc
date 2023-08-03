@@ -23,8 +23,11 @@
 #define IDC_LIST2                       1001
 #define IDC_WINDOW                      1002
 #define IDC_LANGUAGE                    1003
+#define IDC_DEBUGMODE                   1004
+#define IDC_SHOWIGT                     1005
 #define IDC_LIST3                       1010
 #define IDC_CONNECTION                  1012
+#define IDC_LOADBMPS                    1012
 #define IDC_SESSIONLIST                 1013
 #define IDC_JOINBUTTON                  1014
 #define IDC_HOSTBUTTON                  1015
