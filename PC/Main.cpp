@@ -469,7 +469,7 @@ LRESULT CALLBACK MyInitProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 				{
 					if (SendMessage(GetDlgItem(hWnd,IDC_LOADBMPS), BM_GETCHECK, 0, 0) == BST_CHECKED)
 					{
-						MessageBox(NULL, "This will crash if you don't have .bmp files inside sub-directories of Textures, "
+						MessageBox(NULL, "This will crash if you don't have .bmp files inside sub-directories of Textures.\n"
 							"You should read the debug log if the game crashes to see what textures were missing.", "Frogger2",
 							MB_ICONEXCLAMATION|MB_OK);
 					}
