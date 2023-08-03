@@ -66,6 +66,7 @@ That repository is also available in the development archives at `\Code Backups\
 
 **Folder Structure:**  
 Create a new empty folder. I recommend `frogger2-pc`, but you can call it anything. This will be your project folder.  
+IMPORTANT: Dev Studio requires \r\n (CRLF) line endings. If when opening a project it tries to load it as a makefile, check the line endings.  
 The names of everything from this point (file names, folders, etc) are important and if not followed may cause problems.  
 Inside your project folder:  
  - Create a folder called 'MDX', and fill with the contents of `$/teamSpirit/MDX Library`.  
@@ -76,6 +77,7 @@ Inside your project folder:
  - Copy all of the files from `$/teamSpirit/FroggerProject/` except `atari.ico`.
  - Create a folder called 'gELF', and fill with the contents of `\\BLITZONE\DATA\TeamSpirit\Dreamcast\Work\gELF` in the tape backup. Duplicate gelf.lib as gelf.debug.lib.  
  - Create a folder called 'Bink', it will be setup separately.  
+ - Create a folder called 'SoftStation', and move `SoftStation.h` and `SoftStation.lib` from the `MDX\` folder.  
  
 **The Bink Folder:**  
 This folder contains the utilities for the Bink video program.  
