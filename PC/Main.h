@@ -77,6 +77,8 @@ extern long keyInput;
 extern long drawLandscape;
 extern long drawGame;
 extern char	transparentSurf;
+extern int showIGT;
+extern int debugMode;
 extern char	xluSurf;
 extern char	aiSurf;
 extern char	UseAAMode;

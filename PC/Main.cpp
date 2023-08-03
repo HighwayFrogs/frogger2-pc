@@ -80,6 +80,8 @@ long textEntry = 0;
 char textString[255] = "---";
 int networkGame = 0;
 int winActive = 1;
+int showIGT = 0;
+int debugMode = 0;
 
 #ifdef FINAL_MASTER
 char baseDirectory[MAX_PATH] = "";
@@ -244,11 +246,20 @@ int GetIniInformation(void)
 	utilPrintf("using resolution: %s, integer value: %i\n", tempStr, resolution);
 
 	GetPrivateProfileString("Graphics", "windowed", "False", tempStr, 16, iniFilePath);
-	rFullscreen = stricmp(tempStr, "False") == 0;;
+	rFullscreen = stricmp(tempStr, "False") == 0;
 
 	GetPrivateProfileString("Graphics", "video_device", "", rVideoDevice, 255, iniFilePath);
 
 	GetPrivateProfileString("General", "language", "English", tempStr, 16, iniFilePath);
+
+	GetPrivateProfileString("General", "load_bmps", "False", tempStr, 16, iniFilePath);
+	compressedTexBanks = stricmp(tempStr, "False") == 0;
+
+	GetPrivateProfileString("General", "debug_mode", "False", tempStr, 16, iniFilePath);
+	debugMode = stricmp(tempStr, "True") == 0;
+
+	GetPrivateProfileString("General", "show_igt", "False", tempStr, 16, iniFilePath);
+	showIGT = stricmp(tempStr, "True") == 0;
 
 	int lang;
 
@@ -258,8 +269,6 @@ int GetIniInformation(void)
 			gameTextLang = lang;
 			break;
 		}
-
-	utilPrintf("Using language: %s\n", languages[gameTextLang]);
 
 	return 0;
 }
@@ -286,6 +295,16 @@ int SetIniInformation(void)
 	WritePrivateProfileString("Graphics", "video_device", rVideoDevice, iniFilePath);
 
 	WritePrivateProfileString("General", "language", languages[gameTextLang], iniFilePath);
+	
+	sprintf(tempStr, compressedTexBanks ? "False" : "True");
+	WritePrivateProfileString("General", "load_bmps", tempStr, iniFilePath);
+
+	sprintf(tempStr, debugMode ? "True" : "False");
+	WritePrivateProfileString("General", "debug_mode", tempStr, iniFilePath);
+
+	sprintf(tempStr, showIGT ? "True" : "False");
+	WritePrivateProfileString("General", "show_igt", tempStr, iniFilePath);
+
 	utilPrintf("Successfully saved ini information to %s\n", iniFilePath);
 	return 0;
 }
@@ -436,7 +455,9 @@ LRESULT CALLBACK MyInitProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
 			// Setting checkmark defaults
 			SendMessage(GetDlgItem(hWnd,IDC_WINDOW),BM_SETCHECK,!rFullscreen,0);
-
+			SendMessage(GetDlgItem(hWnd, IDC_LOADBMPS),BM_SETCHECK,!compressedTexBanks,0);
+			SendMessage(GetDlgItem(hWnd, IDC_DEBUGMODE),BM_SETCHECK,debugMode,0);
+			SendMessage(GetDlgItem(hWnd, IDC_SHOWIGT),BM_SETCHECK,showIGT,0);
 			if (!InstallChecker(hWnd))
 				EndDialog(hWnd, 0);
 
@@ -460,6 +481,9 @@ LRESULT CALLBACK MyInitProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 						resolution = SendMessage(hres, CB_GETITEMDATA, (WPARAM)sel, 0);
 
 					rFullscreen = !SendMessage(GetDlgItem(hWnd,IDC_WINDOW),BM_GETCHECK,0,0);
+					compressedTexBanks = !SendMessage(GetDlgItem(hWnd, IDC_LOADBMPS),BM_GETCHECK,0,0);
+					debugMode = SendMessage(GetDlgItem(hWnd, IDC_DEBUGMODE),BM_GETCHECK,0,0);
+					showIGT = SendMessage(GetDlgItem(hWnd, IDC_SHOWIGT),BM_GETCHECK,0,0);
 
 					SendMessage ( GetDlgItem(hWnd,IDC_LIST3),WM_GETTEXT,16,(long)saveName);
 
