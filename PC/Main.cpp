@@ -238,22 +238,17 @@ long ParseResolution(const char *resolutionStr)
 
 int GetIniInformation(void)
 {
-	char tempStr[16] = "640x480";
-	GetPrivateProfileString("Graphics", "resolution", "", tempStr, 16, iniFilePath);
-	if (*tempStr == '\0')
-	{
-		utilPrintf("resolution not found in ini file using default\n");
-		strcpy(tempStr, "680x480");
-	}
+	char tempStr[16] = "";
+	GetPrivateProfileString("Graphics", "resolution", "640x480", tempStr, 16, iniFilePath);
 	resolution = ParseResolution(tempStr);
 	utilPrintf("using resolution: %s, integer value: %i\n", tempStr, resolution);
 
-	GetPrivateProfileString("Graphics", "fullscreen", "", tempStr, 16, iniFilePath);
-	rFullscreen = stricmp(tempStr, "False") != 0;
+	GetPrivateProfileString("Graphics", "windowed", "False", tempStr, 16, iniFilePath);
+	rFullscreen = stricmp(tempStr, "False") == 0;;
 
 	GetPrivateProfileString("Graphics", "video_device", "", rVideoDevice, 255, iniFilePath);
 
-	GetPrivateProfileString("Graphics", "language", "English", tempStr, 16, iniFilePath);
+	GetPrivateProfileString("General", "language", "English", tempStr, 16, iniFilePath);
 
 	int lang;
 
@@ -285,12 +280,12 @@ int SetIniInformation(void)
 	sprintf(tempStr, "%ix%i", xRes, yRes);
 	WritePrivateProfileString("Graphics", "resolution", tempStr, iniFilePath);
 
-	sprintf(tempStr, rFullscreen ? "True" : "False");
-	WritePrivateProfileString("Graphics", "fullscreen", tempStr, iniFilePath);
+	sprintf(tempStr, rFullscreen ? "False" : "True");
+	WritePrivateProfileString("Graphics", "windowed", tempStr, iniFilePath);
 
 	WritePrivateProfileString("Graphics", "video_device", rVideoDevice, iniFilePath);
 
-	WritePrivateProfileString("Graphics", "language", languages[gameTextLang], iniFilePath);
+	WritePrivateProfileString("General", "language", languages[gameTextLang], iniFilePath);
 	utilPrintf("Successfully saved ini information to %s\n", iniFilePath);
 	return 0;
 }
@@ -1090,6 +1085,7 @@ int PASCAL WinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance,LPSTR lpCmdLine,i
 			MB_ICONEXCLAMATION|MB_OK);
 	}
 
+	SetIniInformation();
 	GameStartup();
 
 	if (networkGame)
