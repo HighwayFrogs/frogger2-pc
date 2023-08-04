@@ -28,7 +28,7 @@
 
 #define NUM_LANGUAGES 5
 
-const char *languageText[NUM_LANGUAGES] = {"English","Français","Deutsch","Italiano","Svierge"};
+const char *languageText[NUM_LANGUAGES] = {"English","Franï¿½ais","Deutsch","Italiano","Svierge"};
 const char *softwareString = "Software Rendering";
 const char *softwareDriver = "Blitz Games SoftStation";
 
@@ -148,35 +148,26 @@ HRESULT WINAPI VideoModeCallback(LPDDSURFACEDESC2 desc, LPVOID context)
 {
 	char mode[16];
 	//const SIZE testdim[4] = {{320,240},{640,480},{800,600},{1024,768}};
-	int index, selIndex = 0;
+	int index = 0;
 	DWORD videomode;
 	VIDEOMODEINFO *info = (VIDEOMODEINFO*)context;
 	
 	HWND hcmb = (HWND)info->hcombo;
 
-//	if ((desc->ddpfPixelFormat.dwFlags & DDPF_RGB) &&
-//		(desc->ddpfPixelFormat.dwFlags & DDPF_RGB) &&
-//		(desc->ddpfPixelFormat.dwRGBBitCount == 16))
-//	{
-//		for (int m=0; m<4; m++)
-//			if (testdim[m].cx==desc->dwWidth&&testdim[m].cy==desc->dwHeight) break;
-//		if (m==4) return DDENUMRET_OK;
+	DWORD bytes = (desc->dwWidth*desc->dwHeight*2)*3;
+	dp("%d x %d, ~%d bytes (%0.3fMB)\n", desc->dwWidth, desc->dwHeight, bytes, bytes*(1.0f/(1024*1024)));
 
-		DWORD bytes = (desc->dwWidth*desc->dwHeight*2)*3;
-		dp("%d x %d, ~%d bytes (%0.3fMB)\n", desc->dwWidth, desc->dwHeight, bytes, bytes*(1.0f/(1024*1024)));
+	if (bytes < info->totalVidMem)
+	{
+		sprintf(mode, "%dx%d", desc->dwWidth, desc->dwHeight);
+		videomode = (desc->dwWidth << 16)|(desc->dwHeight);
 
-		if (bytes < info->totalVidMem)
-		{
-			sprintf(mode, "%d×%d", desc->dwWidth, desc->dwHeight);
-			videomode = (desc->dwWidth << 16)|(desc->dwHeight);
+		index = SendMessage(hcmb, CB_ADDSTRING, 0, (LPARAM)mode);
+		SendMessage(hcmb, CB_SETITEMDATA, (WPARAM)index, (LPARAM)videomode);
 
-			index = SendMessage(hcmb, CB_ADDSTRING, 0, (LPARAM)mode);
-			SendMessage(hcmb, CB_SETITEMDATA, (WPARAM)index, (LPARAM)videomode);
-
-			if (videomode == info->wantedRes)
-				SendMessage(hcmb, CB_SETCURSEL, (WPARAM)index, 0);
-		}
-//	}
+		if (videomode == info->wantedRes)
+			SendMessage(hcmb, CB_SETCURSEL, (WPARAM)index, 0);
+	}
 
 	return DDENUMRET_OK;
 }
@@ -230,6 +221,22 @@ BOOL FillVideoModes(HWND hdlg, GUID *lpGUID, DWORD resolution)
 
 	lpDD->EnumDisplayModes(0, &ddsd, (LPVOID)&info, VideoModeCallback);
 
+	// Check if ini specified res is compatible with users display
+	// by checking if the desired resolution
+	// I found that most of them work on windowed mode even if not perfectly - raq
+	if (SendMessage(hctrl, CB_GETCURSEL, 0, 0) == CB_ERR)
+	{
+		char mode[32];
+		sprintf(mode, "%dx%d (incompatible)", testdim[4].cx, testdim[4].cy);
+		DWORD videomode = (testdim[4].cx << 16)|(testdim[4].cy);
+
+		int index = SendMessage(hctrl, CB_ADDSTRING, 0, (LPARAM)mode);
+		SendMessage(hctrl, CB_SETITEMDATA, (WPARAM)index, (LPARAM)videomode);
+		SendMessage(hctrl, CB_SETCURSEL, (WPARAM)index, 0);
+
+		MessageBox(hdlg, "Resolution specified in the ini file might not be compatible with your display's resolution.", "Display error", MB_ICONEXCLAMATION|MB_OK);
+	}
+
 	ZeroMemory(&ddc, sizeof(ddc));
 	ddc.dwSize = sizeof(ddc);
 	lpDD->GetCaps(&ddc, NULL);
@@ -267,7 +274,7 @@ BOOL FillVideoModes(HWND hdlg, GUID *lpGUID)
 		char mode[10];
 		DWORD videomode = (res[mode].x<<16)|(res[mode].y);
 
-		sprintf(mode, "%d×%d", desc->dwWidth, desc->dwHeight);
+		sprintf(mode, "%dï¿½%d", desc->dwWidth, desc->dwHeight);
 
 		int index = SendMessage(hcmb, CB_ADDSTRING, 0, (LPARAM)mode);
 		SendMessage(hcmb, CB_SETITEMDATA, videomode, (LPARAM)videomode);
