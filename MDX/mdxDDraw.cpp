@@ -219,6 +219,9 @@ BOOL FillVideoModes(HWND hdlg, GUID *lpGUID, DWORD resolution)
 	ddsd.ddpfPixelFormat.dwFlags = DDPF_RGB;
 	ddsd.ddpfPixelFormat.dwRGBBitCount = 16;
 
+	ddsd.dwWidth = (resolution & 0xFFFF0000)>>16;
+	ddsd.dwHeight = (resolution & 0xFFFF);
+
 	lpDD->EnumDisplayModes(0, &ddsd, (LPVOID)&info, VideoModeCallback);
 
 	// Check if ini specified res is compatible with users display
@@ -227,8 +230,8 @@ BOOL FillVideoModes(HWND hdlg, GUID *lpGUID, DWORD resolution)
 	if (SendMessage(hctrl, CB_GETCURSEL, 0, 0) == CB_ERR)
 	{
 		char mode[32];
-		sprintf(mode, "%dx%d (incompatible)", testdim[4].cx, testdim[4].cy);
-		DWORD videomode = (testdim[4].cx << 16)|(testdim[4].cy);
+		sprintf(mode, "%dx%d (incompatible)", ddsd.dwWidth, ddsd.dwHeight);
+		DWORD videomode = resolution;
 
 		int index = SendMessage(hctrl, CB_ADDSTRING, 0, (LPARAM)mode);
 		SendMessage(hctrl, CB_SETITEMDATA, (WPARAM)index, (LPARAM)videomode);
