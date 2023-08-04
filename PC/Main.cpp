@@ -157,17 +157,16 @@ int FindFrogger2CD(void)
 
 int GetOrCreateIni(void)
 {
-	GetModuleFileName(NULL, baseDirectory, MAX_PATH);
+	GetCurrentDirectory(MAX_PATH, baseDirectory);
 
-	// gets path to file
-	// ex.: "C:\mullard\is\my\daddy.exe" => "C:\mullard\is\my\"
-	// maybe move this to the utils file
+	// Ensures there is a trailing backslash at the end of a path.
 	int n = strlen(baseDirectory);
 	char *c = strrchr(baseDirectory, '\\');
-	if (c == NULL)
-		c = &baseDirectory[n];
-	*(c++) = '\\';
-	*c = 0;
+	if (c != &baseDirectory[n - 1])
+	{
+		baseDirectory[n - 1] = '\\';
+		baseDirectory[n] = 0;
+	}
 
 	utilPrintf("Base Directory: %s\n", baseDirectory);
 	
