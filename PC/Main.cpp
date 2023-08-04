@@ -159,13 +159,13 @@ int GetOrCreateIni(void)
 {
 	GetCurrentDirectory(MAX_PATH, baseDirectory);
 
-	// Ensures there is a trailing backslash at the end of a path.
+	// Ensures there is a trailing backslash at the end of the path.
 	int n = strlen(baseDirectory);
 	char *c = strrchr(baseDirectory, '\\');
-	if (c != &baseDirectory[n - 1])
+	if (baseDirectory[n - 1] != '\\')
 	{
-		baseDirectory[n - 1] = '\\';
-		baseDirectory[n] = 0;
+		baseDirectory[n] = '\\';
+		baseDirectory[n + 1] = 0;
 	}
 
 	utilPrintf("Base Directory: %s\n", baseDirectory);
