@@ -67,7 +67,7 @@ void CalcViewMatrix(long uDate)
 	guLookAtF (vMatrix.matrix,
 		currCamTarget.vx*CAMVECTSCALE, currCamTarget.vy*CAMVECTSCALE, currCamTarget.vz*CAMVECTSCALE,
 		currCamSource.vx*CAMVECTSCALE, currCamSource.vy*CAMVECTSCALE, currCamSource.vz*CAMVECTSCALE,
-		camVect.vx*CAMVECTSCALE, camVect.vy*CAMVECTSCALE, camVect.vz*CAMVECTSCALE,uDate);
+		camVect.vx*CAMVECTSCALE, camVect.vy*CAMVECTSCALE, camVect.vz*CAMVECTSCALE,uDate,aspectRatio);
 
 //	sheenCam.vx = currCamSource.vx*CAMVECTSCALE;
 //	sheenCam.vy = currCamSource.vy*CAMVECTSCALE;

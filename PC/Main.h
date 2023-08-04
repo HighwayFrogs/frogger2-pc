@@ -91,6 +91,7 @@ extern MDX_FONT *pcFont;
 extern MDX_FONT *pcFontSmall;
 extern long fogEnable;
 extern long turbo;
+extern float aspectRatio;
 void debugPrintf(int num);
 void Crash(char *mess);
 

@@ -98,6 +98,7 @@ int editorOk = 0;
 float camY = 100,camZ = 100;
 
 long resolution = (640<<16) + 480;
+float aspectRatio = .75f;
 long slideSpeeds[4] = {0,16,32,64};
 
 long fogEnable = 0;
@@ -1054,8 +1055,9 @@ int PASCAL WinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance,LPSTR lpCmdLine,i
 
 		xRes = (resolution & 0xFFFF0000) >> 16;
 		yRes = (resolution & 0xFFFF);
+		aspectRatio = (float) yRes / xRes;
 
-		utilPrintf("xRes: %ld, yRes: %ld", xRes, yRes);
+		utilPrintf("xRes: %ld, yRes: %ld, aspectRatio: %.3f\n", xRes, yRes, aspectRatio);
 
 		OVERLAY_X = xRes/4096.0;
 		OVERLAY_Y = yRes/4096.0;

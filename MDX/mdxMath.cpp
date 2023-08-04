@@ -133,7 +133,7 @@ void guMtxXFMF(float m[4][4],float srcX,float srcY,float srcZ,float *destX,float
 
 
 
-void guLookAtF (float m[4][4],float xEye, float yEye, float zEye,float xAt, float yAt, float zAt,float xUp, float yUp, float zUp, long updateView)
+void guLookAtF (float m[4][4],float xEye, float yEye, float zEye,float xAt, float yAt, float zAt,float xUp, float yUp, float zUp, long updateView, float aspectRatio)
 {
     MDX_VECTOR  up, right, view_dir,world_up,from;
 
@@ -181,7 +181,18 @@ void guLookAtF (float m[4][4],float xEye, float yEye, float zEye,float xAt, floa
     
     Normalise(&right);
     Normalise(&up);
+
+	// Apply aspect ratio modifier.
+	const float defaultAspectRatio = .75; // 4:3
+	float aspectRatioMultiple = (aspectRatio / defaultAspectRatio);
+	right.vx *= aspectRatioMultiple;
+	right.vy *= aspectRatioMultiple;
+	right.vz *= aspectRatioMultiple;
+	up.vx *= aspectRatioMultiple;
+	up.vy *= aspectRatioMultiple;
+	up.vz *= aspectRatioMultiple;
     
+	// Generate matrix.
     m[0][0] = right.vx;
     m[1][0] = right.vy;
     m[2][0] = right.vz;
