@@ -1120,6 +1120,9 @@ int PASCAL WinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance,LPSTR lpCmdLine,i
 			MB_ICONEXCLAMATION|MB_OK);
 	}
 
+	if (rFullscreen)
+		ShowCursor(0);
+
 	SetIniInformation();
 	GameStartup();
 
