@@ -98,7 +98,7 @@ extern SPRITEOVERLAY *blitzLogo;
 //extern SPRITEOVERLAY *flogo[];
 
 extern char playDemos;
-extern char debugKeys;
+extern char debugMode;
 extern long globalSoundVol;
 extern long globalMusicVol;
 extern FVECTOR storeCamSource;

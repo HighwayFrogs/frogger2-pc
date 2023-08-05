@@ -147,11 +147,14 @@ void GameLoop(void)
 
 
 #ifndef FINAL_MASTER
-	if(((padData.debounce[0] & PAD_TRIANGLE) && (padData.digital[0] & PAD_SELECT)) || ((padData.debounce[0] & PAD_SELECT) && (padData.digital[0] & PAD_TRIANGLE)))
-		camControlMode = 1 - camControlMode;
+	if (debugMode)
+	{
+		if(((padData.debounce[0] & PAD_TRIANGLE) && (padData.digital[0] & PAD_SELECT)) || ((padData.debounce[0] & PAD_SELECT) && (padData.digital[0] & PAD_TRIANGLE)))
+			camControlMode = 1 - camControlMode;
 
-	if(camControlMode)
-		ControlCamera();
+		if(camControlMode)
+			ControlCamera();
+	}
 #endif
 
 	UpdateCheatText();

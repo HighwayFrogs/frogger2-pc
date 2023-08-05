@@ -473,7 +473,7 @@ void GameProcessController(long pl)
 	}
 
 //#ifdef PC_VERSION
-	if( debugKeys )
+	if( debugMode )
 	{
 		if( !fixedPos && !fixedDir )
 		{

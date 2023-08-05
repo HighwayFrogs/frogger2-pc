@@ -861,7 +861,7 @@ void ProcessKeyboardInput()
 	}
 
 
-	if( debugKeys )
+	if( debugMode )
 	{
 		if (KEYPRESS(DIK_NUMPAD7))
 		{

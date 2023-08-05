@@ -1579,11 +1579,8 @@ void DoneOptionsMenu(void)
 
 
 //sbond - put in for GOLDCD
-#ifdef FINAL_MASTER
 int properMultiSelect = 1;
-#else
-int properMultiSelect = 0;
-#endif
+
 //-----------------------------------------------------------------------------------------------------------
 // Process the controller stuff.
 //-----------------------------------------------------------------------------------------------------------

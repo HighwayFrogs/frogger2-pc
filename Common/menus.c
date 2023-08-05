@@ -95,21 +95,8 @@ int fadingLogos = NO;
 void GameProcessController(long pl);
 
 
-#ifdef FINAL_MASTER
 char playDemos = 1;
-#else
-char playDemos = 0;
-#endif
-
-#ifdef PC_VERSION
- char debugKeys = 0;
-#else
- #if GOLDCD==0
-  char debugKeys = 1;
- #else
-  char debugKeys = 0;
- #endif
-#endif
+char debugMode = 0;
 
 extern psFont *font;
 extern psFont *fontSmall;
@@ -973,8 +960,14 @@ void RunFrontendGameLoop (void)
 #endif
 #else
 #ifndef FINAL_MASTER
-		if(cheatCombos[CHEAT_OPEN_ALL_LEVELS].state == 0)
-			ComboCheat(CHEAT_OPEN_ALL_LEVELS);
+		if (debugMode)
+		{
+			if (cheatCombos[CHEAT_OPEN_ALL_CHARS].state == 0)
+				ComboCheat(CHEAT_OPEN_ALL_CHARS);
+
+			if (cheatCombos[CHEAT_OPEN_ALL_LEVELS].state == 0)
+				ComboCheat(CHEAT_OPEN_ALL_LEVELS);
+		}
 #endif	
 #endif
 
@@ -1436,14 +1429,17 @@ void RunFrontendGameLoop (void)
 				titleHudText[2]->text = GAMESTRING(STR_MULTIPLAYER);
 				titleHudText[3]->text = GAMESTRING(STR_ARCADEMODE);
 				titleHud[2]->yPos = titleHud[2]->yPosTo = titleHud[3]->yPos = titleHud[3]->yPosTo = titleHudY[0][2];
-#ifdef FINAL_MASTER
-				if(doneTraining == 0)
+
+				if (!debugMode)
 				{
-					currTile[0]->tilePtrs[2] = NULL;
-					maxHud = 3;
+					if(doneTraining == 0)
+					{
+						currTile[0]->tilePtrs[2] = NULL;
+						maxHud = 3;
+					}
+					GTInit( &modeTimer, 5 );
 				}
-				GTInit( &modeTimer, 5 );
-#endif
+
 				hudNum = 2;
 				break;
 

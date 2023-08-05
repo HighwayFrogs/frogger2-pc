@@ -74,7 +74,6 @@ fixed pOIDistance = 20000<<12;
 // Display name, model name, icon filename minus extension
 
 //sb this table has the final 4 characters locked at game start
-#ifdef FINAL_MASTER
 FROGSTORE frogPool[FROG_NUMFROGS] = 
 {
 	{ "Frogger", 	"frogger.obe",	"mfrogger.obe",	"FROGGER",	1, FANIM_ALL,	80,	255,80 },
@@ -86,19 +85,6 @@ FROGSTORE frogPool[FROG_NUMFROGS] =
 	{ "Roobie", 	"roobie.obe",	"mhopper.obe",	"HOPPER",	0, FANIM_ALL,	220,220,30 },
 	{ "Swampy", 	"swampy.obe",	"mswampy.obe",	"SWAMPY",	0, FANIM_ALL,	0,	100,0 },
 };
-#else
-FROGSTORE frogPool[FROG_NUMFROGS] = 
-{
-	{ "Frogger",	"frogger.obe",	"mfrogger.obe",	"FROGGER",	1, FANIM_ALL,	80,	255,80 },
-	{ "Lillie", 	"lilli.obe",	"mlilli.obe",	"LILLIE",	1, FANIM_ALL,	255,80, 80 },
-	{ "Tad",		"tad.obe",		"mtad.obe",		"BABYFROG",	1, FANIM_ALL,	80,	80,	255 },
-	{ "Treeby", 	"twee.obe",		"mtwee.obe",	"TWEE",		1, FANIM_ALL,	0,	255,255 },
-	{ "Wart",		"toad.obe",		"mtoad.obe",	"WART",		1, FANIM_ALL,	110,60, 55 },
-	{ "Tank",		"tank.obe",		"mtank.obe",	"ROBOFROG",	1, FANIM_ALL,	220,220,220 },
-	{ "Roobie", 	"roobie.obe",	"mhopper.obe",	"HOPPER",	1, FANIM_ALL,	220,220,30 },
-	{ "Swampy", 	"swampy.obe",	"mswampy.obe",	"SWAMPY",	1, FANIM_ALL,	0,	100,0 },
-};
-#endif
 
 //----------------------------------------------------------------------------//
 //----- GLOBALS --------------------------------------------------------------//

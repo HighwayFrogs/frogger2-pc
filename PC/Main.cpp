@@ -81,7 +81,6 @@ char textString[255] = "---";
 int networkGame = 0;
 int winActive = 1;
 int showIGT = 0;
-int debugMode = 0;
 
 #ifdef FINAL_MASTER
 char baseDirectory[MAX_PATH] = "";
@@ -347,9 +346,8 @@ void GetArgs(char *arglist)
 						break;
 
 					case 'K':
-						debugKeys = !debugKeys;
-						displayDebugInfo = debugKeys;
-						utilPrintf("Debug keys %s\n",debugKeys?"enabled":"disabled");
+						debugMode = !debugMode;
+						utilPrintf("Debug mode %s\n",debugMode?"enabled":"disabled");
 						break;
 
 					case 'S':
@@ -587,7 +585,7 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
 	case WM_SYSKEYDOWN:
 	case WM_KEYDOWN:
-		if (debugKeys)
+		if (debugMode)
 		{
 			if (wParam == VK_F5)
 			{
