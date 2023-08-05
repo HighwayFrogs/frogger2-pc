@@ -787,10 +787,7 @@ void UnPauseAudio( )
 #else
 	if( mciDevice )
 	{
-		MCI_PLAY_PARMS mciPlayParms;
-
-		mciPlayParms.dwCallback = (DWORD)mdxWinInfo.hWndMain;
-		mciSendCommand(mciDevice, MCI_PLAY, MCI_NOTIFY, (DWORD)&mciPlayParms);
+		LoopSong();
 	}
 #endif
 }
