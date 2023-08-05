@@ -114,6 +114,7 @@ void ShutdownNetworkGame()
 	{
 		dplay->Close();
 		dplay->Release();
+		dplay = NULL;
 	}
 
 }

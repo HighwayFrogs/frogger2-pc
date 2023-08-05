@@ -229,11 +229,13 @@ LONG arccos(LONG cos)
 	//-4096->0 is upside down/mirrored
 	if(cos>=0)
 	{
-		return bb_acostable[cos];
+		//[ANDYE]	return bb_acostable[cos];
+		return 0;
 	}
 	else
 	{
-		return 2048-bb_acostable[-cos];
+		//[ANDYE]	return 2048-bb_acostable[-cos];
+		return 0;
 	}
 #endif
 }
@@ -1805,6 +1807,12 @@ BOOL SlideVectorToVectorFF(FVECTOR *vect,FVECTOR *dest,fixed speed)
 	}
 	else
 	{
+		if (m == 0)
+		{
+			SetVectorFF(vect, dest);
+			return TRUE;
+		}
+
 		m = FDiv(speed,m);
 		ScaleVectorFF(&tempVect,m);
 		AddToVectorFF(vect,&tempVect);

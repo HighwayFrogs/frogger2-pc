@@ -905,7 +905,7 @@ long GetTilesMatchingVector( SVECTOR *dir, GAMETILE *next)
 GAMETILE *GetNextTile(unsigned long *pdir,long pl)
 {
 	GAMETILE *dest = NULL;
-	long i, direction;
+	long i = *pdir, direction = *pdir;
 	fixed distance, t, t2, at2;
 	VECTOR vecUp;
 		
