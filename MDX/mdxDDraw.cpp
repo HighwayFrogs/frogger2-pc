@@ -28,7 +28,7 @@
 
 #define NUM_LANGUAGES 5
 
-const char *languageText[NUM_LANGUAGES] = {"English","Fran�ais","Deutsch","Italiano","Svierge"};
+const char *languageText[NUM_LANGUAGES] = {"English","Francais","Deutsch","Italiano","Svierge"};
 const char *softwareString = "Software Rendering";
 const char *softwareDriver = "Blitz Games SoftStation";
 
@@ -147,8 +147,7 @@ struct VIDEOMODEINFO
 HRESULT WINAPI VideoModeCallback(LPDDSURFACEDESC2 desc, LPVOID context)
 {
 	char mode[16];
-	//const SIZE testdim[4] = {{320,240},{640,480},{800,600},{1024,768}};
-	int index = 0;
+	int index;
 	DWORD videomode;
 	VIDEOMODEINFO *info = (VIDEOMODEINFO*)context;
 	
@@ -210,17 +209,14 @@ BOOL FillVideoModes(HWND hdlg, GUID *lpGUID, DWORD resolution)
 	}
 
 	DDSURFACEDESC2 ddsd;
-	
+
 	ZeroMemory(&ddsd, sizeof(ddsd));
 	ddsd.dwSize = sizeof(ddsd);
 	ddsd.dwFlags = DDSD_PIXELFORMAT;
-		
+
 	ddsd.ddpfPixelFormat.dwSize = sizeof(DDPIXELFORMAT);
 	ddsd.ddpfPixelFormat.dwFlags = DDPF_RGB;
 	ddsd.ddpfPixelFormat.dwRGBBitCount = 16;
-
-	ddsd.dwWidth = (resolution & 0xFFFF0000)>>16;
-	ddsd.dwHeight = (resolution & 0xFFFF);
 
 	lpDD->EnumDisplayModes(0, &ddsd, (LPVOID)&info, VideoModeCallback);
 
@@ -230,7 +226,7 @@ BOOL FillVideoModes(HWND hdlg, GUID *lpGUID, DWORD resolution)
 	if (SendMessage(hctrl, CB_GETCURSEL, 0, 0) == CB_ERR)
 	{
 		char mode[32];
-		sprintf(mode, "%dx%d (incompatible)", ddsd.dwWidth, ddsd.dwHeight);
+		sprintf(mode, "%dx%d (incompatible)", (resolution >> 16) & 0xFFFF, (resolution & 0xFFFF));
 		DWORD videomode = resolution;
 
 		int index = SendMessage(hctrl, CB_ADDSTRING, 0, (LPARAM)mode);
@@ -277,7 +273,7 @@ BOOL FillVideoModes(HWND hdlg, GUID *lpGUID)
 		char mode[10];
 		DWORD videomode = (res[mode].x<<16)|(res[mode].y);
 
-		sprintf(mode, "%d�%d", desc->dwWidth, desc->dwHeight);
+		sprintf(mode, "%dx%d", desc->dwWidth, desc->dwHeight);
 
 		int index = SendMessage(hcmb, CB_ADDSTRING, 0, (LPARAM)mode);
 		SendMessage(hcmb, CB_SETITEMDATA, videomode, (LPARAM)videomode);
@@ -528,6 +524,7 @@ unsigned long DDrawInitObject (DWORD resolution)
 		{
 			dp("Failed creating DirectDraw object.\n");
 			ddShowError(res);
+			ShowCursor(1);
 			return 1;
 		}
 		
@@ -542,6 +539,7 @@ unsigned long DDrawInitObject (DWORD resolution)
 		{
 			dp("Failed creating DirectDraw object.\n");
 			ddShowError(res);
+			ShowCursor(1);
 			return 1;
 		}
 	}
@@ -551,6 +549,7 @@ unsigned long DDrawInitObject (DWORD resolution)
 	{
 		dp("Failed getting DirectDraw4 caps.\n");
 		ddShowError(res);
+		ShowCursor(1);
 		return 1;
 	}
 	
@@ -1191,5 +1190,4 @@ void ScreenShot()
 
 	fclose(file);	
 }
-
 
