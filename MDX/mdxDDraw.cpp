@@ -208,17 +208,7 @@ BOOL FillVideoModes(HWND hdlg, GUID *lpGUID, DWORD resolution)
 		}
 	}
 
-	DDSURFACEDESC2 ddsd;
-
-	ZeroMemory(&ddsd, sizeof(ddsd));
-	ddsd.dwSize = sizeof(ddsd);
-	ddsd.dwFlags = DDSD_PIXELFORMAT;
-
-	ddsd.ddpfPixelFormat.dwSize = sizeof(DDPIXELFORMAT);
-	ddsd.ddpfPixelFormat.dwFlags = DDPF_RGB;
-	ddsd.ddpfPixelFormat.dwRGBBitCount = 16;
-
-	lpDD->EnumDisplayModes(0, &ddsd, (LPVOID)&info, VideoModeCallback);
+	lpDD->EnumDisplayModes(0, NULL, (LPVOID)&info, VideoModeCallback);
 
 	// Check if ini specified res is compatible with users display
 	// by checking if the desired resolution
@@ -369,6 +359,7 @@ BOOL CALLBACK HardwareProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lPara
 				EnableWindow(GetDlgItem(hwndDlg, IDC_320), FALSE);
 			}
 */
+			dp("Getting video modes for device %d.\n", index + 1);
 			FillVideoModes(hwndDlg, dxDeviceList[index].guid, resolution);
 
 			// initialised.. notifications valid
@@ -498,6 +489,9 @@ unsigned long DDrawInitObject (DWORD resolution)
 
 		dxDeviceList[dxNumDevices++].guid = (GUID *)-1;
 	}
+
+	for (i=0; i<=dxNumDevices; i++)
+		dp("Device #%d: %s (Driver: %s)\n", i + 1, dxDeviceList[i].desc, dxDeviceList[i].name);
 
 	for (i=0; i<dxNumDevices; i++)
 		if ((strcmp(dxDeviceList[i].desc, rVideoDevice) == 0))
