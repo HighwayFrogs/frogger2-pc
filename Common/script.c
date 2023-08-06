@@ -215,7 +215,7 @@ int EnumPlaceholderTiles(long id, int (*func)(PATHNODE*, int), int param)
 {
 	ENEMY *cur;
 	PATHNODE *p;
-	int n, count;
+	int n, count = 0;
 
 	for(cur = enemyList.head.next; cur != &enemyList.head; cur = cur->next, count++)
 	{
