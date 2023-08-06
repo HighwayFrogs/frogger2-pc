@@ -524,7 +524,6 @@ unsigned long DDrawInitObject (DWORD resolution)
 		{
 			dp("Failed creating DirectDraw object.\n");
 			ddShowError(res);
-			ShowCursor(1);
 			return 1;
 		}
 		
@@ -539,7 +538,6 @@ unsigned long DDrawInitObject (DWORD resolution)
 		{
 			dp("Failed creating DirectDraw object.\n");
 			ddShowError(res);
-			ShowCursor(1);
 			return 1;
 		}
 	}
@@ -549,12 +547,8 @@ unsigned long DDrawInitObject (DWORD resolution)
 	{
 		dp("Failed getting DirectDraw4 caps.\n");
 		ddShowError(res);
-		ShowCursor(1);
 		return 1;
 	}
-	
-	if (rFullscreen)
-		ShowCursor(0);
 
 	// We now have a valid object! zero for success!
 	return 0;
