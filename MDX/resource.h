@@ -2,7 +2,6 @@
 // Microsoft Developer Studio generated include file.
 // Used by resource.rc
 //
-#define IDOK2                           3
 #define ID_SETUP                        3
 #define ID_DEFAULT                      4
 #define IDD_VIDEODEVICE                 101
@@ -23,6 +22,11 @@
 #define IDC_LIST2                       1001
 #define IDC_WINDOW                      1002
 #define IDC_LANGUAGE                    1003
+#define IDC_DEBUGMODE                   1004
+#define IDC_SHOWIGT                     1005
+#define IDC_LOADBMPS                    1006
+#define IDC_ALTZBUFFER                  1007
+
 #define IDC_LIST3                       1010
 #define IDC_CONNECTION                  1012
 #define IDC_SESSIONLIST                 1013
@@ -64,6 +68,7 @@
 #define IDC_P2                          1059
 #define IDC_P3                          1060
 #define IDC_P4                          1061
+#define IDC_TXT_EXPERIMENTAL            1062
 #define IDC_PLAYER1                     1100
 #define IDC_PLAYER2                     1101
 #define IDC_PLAYER3                     1102
@@ -76,7 +81,7 @@
 #define _APS_NO_MFC                     1
 #define _APS_NEXT_RESOURCE_VALUE        115
 #define _APS_NEXT_COMMAND_VALUE         40001
-#define _APS_NEXT_CONTROL_VALUE         1062
+#define _APS_NEXT_CONTROL_VALUE         1063
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif
