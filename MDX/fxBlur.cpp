@@ -112,8 +112,9 @@ D3DTLVERTEX *InitScreenVertexList(void)
 
 	RECT rect;
 	D3DTLVERTEX *me = new D3DTLVERTEX[numRequired*4];
+	int i = 0;
 
-	for (int i=0; i<numRequired * 4; i+=4)
+	for (i=0; i<numRequired * 4; i+=4)
 	{
 		me[i].tu = 0;
 		me[i].tv = 0;
