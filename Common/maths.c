@@ -1800,19 +1800,14 @@ BOOL SlideVectorToVectorFF(FVECTOR *vect,FVECTOR *dest,fixed speed)
 
 	SubVectorFFF(&tempVect,dest,vect);
 	m = MagnitudeF(&tempVect);
-	if(m < speed)
+
+	if((m == 0) || (m < speed))
 	{
 		SetVectorFF(vect,dest);
 		return TRUE;
 	}
 	else
 	{
-		if (m == 0)
-		{
-			SetVectorFF(vect, dest);
-			return TRUE;
-		}
-
 		m = FDiv(speed,m);
 		ScaleVectorFF(&tempVect,m);
 		AddToVectorFF(vect,&tempVect);
