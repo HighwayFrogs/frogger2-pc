@@ -172,25 +172,27 @@ long StartVideoPlayback(int num)
 	HRESULT res;
 	DDSURFACEDESC2	ddsd;
 
-	if (!cdromDrive[0])
-	{
-		utilPrintf("No Frogger2 CD-ROM detected; skipping video playback\n");
-		return 0;
-	}
-
 	BinkSoundUseDirectSound(lpDS);
-
-	sprintf(path, "%s" VIDEOPATH "%s.bik", cdromDrive, fmv[num].name);
+	ZeroMemory(path, MAX_PATH);
+	sprintf(path, "%s" VIDEOPATH "%s.bik", baseDirectory, fmv[num].name);
 
 	bink = BinkOpen(path, 0);
 	if (!bink)
 	{
 		utilPrintf("StartVideoPlayback(): Bink failed opening '%s'\n", path);
-		return 0;
+		ZeroMemory(path, MAX_PATH);
+		sprintf(path, "%s" VIDEOPATH "%s.bik", cdromDrive, fmv[num].name);
+	}
+	
+
+	if (bink)
+	{
+		utilPrintf("StartVideoPlayback(): Starting video: '%s'\n", path);
 	}
 	else
 	{
-		utilPrintf("StartVideoPlayback(): Starting video: '%s'\n", path);
+		utilPrintf("StartVideoPlayback(): Bink failed opening '%s', skipping video playback\n", path);
+		return 0;
 	}
 
 	DDINIT(ddsd);
