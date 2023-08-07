@@ -25,7 +25,6 @@
 #define IDC_DEBUGMODE                   1004
 #define IDC_SHOWIGT                     1005
 #define IDC_LOADBMPS                    1006
-#define IDC_ALTZBUFFER                  1007
 
 #define IDC_LIST3                       1010
 #define IDC_CONNECTION                  1012
@@ -68,7 +67,6 @@
 #define IDC_P2                          1059
 #define IDC_P3                          1060
 #define IDC_P4                          1061
-#define IDC_TXT_EXPERIMENTAL            1062
 #define IDC_PLAYER1                     1100
 #define IDC_PLAYER2                     1101
 #define IDC_PLAYER3                     1102

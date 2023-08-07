@@ -32,7 +32,7 @@ enum
 extern LPDIRECTDRAW7		pDirectDraw7;
 extern LPDIRECTDRAWCLIPPER	pClipper;
 extern LPDIRECTDRAWSURFACE7	surface[NUM_SRF];
-extern unsigned long		rXRes, rYRes, rBitDepth, r565 ,rHardware, rFullscreen, rScale, rFlipOK;
+extern unsigned long		rXRes, rYRes, rBitDepth, r565, rHardware, rFullscreen, rScale, rFlipOK, rAltZBuffer;
 extern HWND					rWin;
 extern char					rVideoDevice[256];
 

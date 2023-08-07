@@ -260,6 +260,9 @@ int GetIniInformation(void)
 	GetPrivateProfileString("General", "show_igt", "False", tempStr, 16, iniFilePath);
 	showIGT = stricmp(tempStr, "True") == 0;
 
+	GetPrivateProfileString("General", "alt_zbuffer", "True", tempStr, 16, iniFilePath);
+	rAltZBuffer = stricmp(tempStr, "True") == 0;
+
 	int lang;
 
 	for (lang=0; lang<LANG_NUMLANGS; lang++)
@@ -303,6 +306,9 @@ int SetIniInformation(void)
 
 	sprintf(tempStr, showIGT ? "True" : "False");
 	WritePrivateProfileString("General", "show_igt", tempStr, iniFilePath);
+
+	sprintf(tempStr, rAltZBuffer ? "True" : "False");
+	WritePrivateProfileString("General", "alt_zbuffer", tempStr, iniFilePath);
 
 	utilPrintf("Successfully saved ini information to %s\n", iniFilePath);
 	return 0;
@@ -452,10 +458,11 @@ LRESULT CALLBACK MyInitProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			SetWindowText(GetDlgItem(hWnd, IDCANCEL), GAMESTRING(STR_PCSETUP_CANCEL));
 
 			// Setting checkmark defaults
-			SendMessage(GetDlgItem(hWnd,IDC_WINDOW),BM_SETCHECK,!rFullscreen,0);
-			SendMessage(GetDlgItem(hWnd, IDC_LOADBMPS),BM_SETCHECK,!compressedTexBanks,0);
-			SendMessage(GetDlgItem(hWnd, IDC_DEBUGMODE),BM_SETCHECK,debugMode,0);
-			SendMessage(GetDlgItem(hWnd, IDC_SHOWIGT),BM_SETCHECK,showIGT,0);
+			SendMessage(GetDlgItem(hWnd, IDC_WINDOW), BM_SETCHECK, !rFullscreen, 0);
+			SendMessage(GetDlgItem(hWnd, IDC_LOADBMPS), BM_SETCHECK, !compressedTexBanks, 0);
+			SendMessage(GetDlgItem(hWnd, IDC_DEBUGMODE), BM_SETCHECK, debugMode, 0);
+			SendMessage(GetDlgItem(hWnd, IDC_SHOWIGT), BM_SETCHECK, showIGT, 0);
+
 			if (!InstallChecker(hWnd))
 				EndDialog(hWnd, 0);
 
@@ -478,12 +485,12 @@ LRESULT CALLBACK MyInitProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 					if (sel >= 0)
 						resolution = SendMessage(hres, CB_GETITEMDATA, (WPARAM)sel, 0);
 
-					rFullscreen = !SendMessage(GetDlgItem(hWnd,IDC_WINDOW),BM_GETCHECK,0,0);
-					compressedTexBanks = !SendMessage(GetDlgItem(hWnd, IDC_LOADBMPS),BM_GETCHECK,0,0);
-					debugMode = SendMessage(GetDlgItem(hWnd, IDC_DEBUGMODE),BM_GETCHECK,0,0);
-					showIGT = SendMessage(GetDlgItem(hWnd, IDC_SHOWIGT),BM_GETCHECK,0,0);
+					rFullscreen = !SendMessage(GetDlgItem(hWnd,IDC_WINDOW), BM_GETCHECK, 0, 0);
+					compressedTexBanks = !SendMessage(GetDlgItem(hWnd, IDC_LOADBMPS), BM_GETCHECK, 0, 0);
+					debugMode = SendMessage(GetDlgItem(hWnd, IDC_DEBUGMODE), BM_GETCHECK, 0, 0);
+					showIGT = SendMessage(GetDlgItem(hWnd, IDC_SHOWIGT), BM_GETCHECK, 0, 0);
 
-					SendMessage ( GetDlgItem(hWnd,IDC_LIST3),WM_GETTEXT,16,(long)saveName);
+					SendMessage (GetDlgItem(hWnd,IDC_LIST3), WM_GETTEXT, 16, (long)saveName);
 
 					return FALSE;				
 				}
@@ -934,7 +941,7 @@ int GameStartup()
 
 	/*SetPriorityClass(GetCurrentProcess(),REALTIME_PRIORITY_CLASS);
 	SetThreadPriority(GetCurrentThread(),THREAD_PRIORITY_TIME_CRITICAL);*/
-	InitTiming(60.0);
+	InitTiming(60);
 
 #ifndef FINAL_MASTER
 	InitEditor();

@@ -28,6 +28,8 @@
 
 #define NUM_LANGUAGES 5
 
+const float ONE_OVER_1K_X_1K = 1.0f / (1024 * 1024);
+
 const char *languageText[NUM_LANGUAGES] = {"English","Francais","Deutsch","Italiano","Svierge"};
 const char *softwareString = "Software Rendering";
 const char *softwareDriver = "Blitz Games SoftStation";
@@ -36,7 +38,7 @@ unsigned long selIdx;
 
 LPDIRECTDRAW7			pDirectDraw7;
 LPDIRECTDRAWCLIPPER		pClipper;
-unsigned long			rXRes, rYRes, rBitDepth, r565 ,rHardware,rFullscreen = 1, rScale = 1, rFlipOK = 1;
+unsigned long			rXRes, rYRes, rBitDepth, r565 , rHardware, rFullscreen = 1, rScale = 1, rFlipOK = 1, rAltZBuffer = 0;
 HWND					rWin;
 char					rVideoDevice[256];
 
@@ -146,19 +148,20 @@ struct VIDEOMODEINFO
 
 HRESULT WINAPI VideoModeCallback(LPDDSURFACEDESC2 desc, LPVOID context)
 {
-	char mode[16];
+	char mode[256];
 	int index;
 	DWORD videomode;
 	VIDEOMODEINFO *info = (VIDEOMODEINFO*)context;
 	
 	HWND hcmb = (HWND)info->hcombo;
 
-	DWORD bytes = (desc->dwWidth*desc->dwHeight*2)*3;
-	dp("%d x %d, ~%d bytes (%0.3fMB)\n", desc->dwWidth, desc->dwHeight, bytes, bytes*(1.0f/(1024*1024)));
+	DWORD rgbBitCount = desc->ddpfPixelFormat.dwRGBBitCount;
+	DWORD bytes = (desc->dwHeight * desc->lPitch);
+	dp("%d x %d (%d-bit, %dHz), ~%d bytes (%0.3fMB)\n", desc->dwWidth, desc->dwHeight, rgbBitCount, desc->dwRefreshRate, bytes, bytes * ONE_OVER_1K_X_1K);
 
 	if (bytes < info->totalVidMem)
 	{
-		sprintf(mode, "%dx%d", desc->dwWidth, desc->dwHeight);
+		sprintf(mode, "%dx%d (%d-bit, %dHz)", desc->dwWidth, desc->dwHeight, desc->ddpfPixelFormat.dwRGBBitCount, desc->dwRefreshRate);
 		videomode = (desc->dwWidth << 16)|(desc->dwHeight);
 
 		index = SendMessage(hcmb, CB_ADDSTRING, 0, (LPARAM)mode);
@@ -203,12 +206,12 @@ BOOL FillVideoModes(HWND hdlg, GUID *lpGUID, DWORD resolution)
 	{
 		if (total)
 		{
-			dp("Total video memory: %d (%0.2fMB)\n", total, total*(1.0f/(1024*1024)));
+			dp("Total video memory: %d (%0.2fMB)\n", total, total * ONE_OVER_1K_X_1K);
 			info.totalVidMem = total;
 		}
 	}
 
-	lpDD->EnumDisplayModes(0, NULL, (LPVOID)&info, VideoModeCallback);
+	lpDD->EnumDisplayModes(DDEDM_REFRESHRATES, NULL, (LPVOID)&info, VideoModeCallback);
 
 	// Check if ini specified res is compatible with users display
 	// by checking if the desired resolution
@@ -562,7 +565,8 @@ unsigned long DDrawCreateSurfaces(HWND window, unsigned long xRes, unsigned long
 	DDSURFACEDESC2	ddsd;
 	HRESULT			res;
 	unsigned long	l;
-	unsigned long	zMask = 0;
+	DDPIXELFORMAT	zBufferFormat;
+	unsigned long	bitCounter = 0, zMask = 0;
 
 	rBitDepth =	bitDepth;
 	rXRes = xRes;
@@ -624,7 +628,7 @@ unsigned long DDrawCreateSurfaces(HWND window, unsigned long xRes, unsigned long
 	}
 	else
 	{
-			ShowWindow(mdxWinInfo.hWndMain,SW_SHOW);
+		ShowWindow(mdxWinInfo.hWndMain,SW_SHOW);
 
 		if ((res = pDirectDraw7->SetCooperativeLevel(window, DDSCL_NORMAL)) != DD_OK)
 		{
@@ -633,7 +637,7 @@ unsigned long DDrawCreateSurfaces(HWND window, unsigned long xRes, unsigned long
 			return 0;
 		}
 
-			// Create a primary surface
+		// Create a primary surface
 		DDINIT(ddsd);
 		ddsd.dwFlags = DDSD_CAPS;
 		ddsd.ddsCaps.dwCaps = DDSCAPS_PRIMARYSURFACE | DDSCAPS_VIDEOMEMORY | DDSCAPS_LOCALVIDMEM;
@@ -646,7 +650,7 @@ unsigned long DDrawCreateSurfaces(HWND window, unsigned long xRes, unsigned long
 		
 		surfacesMade++;
 	
-			// Create a primary surface
+		// Create an additional (secondary) render surface
 		DDINIT(ddsd);
 		ddsd.dwFlags = DDSD_WIDTH | DDSD_HEIGHT | DDSD_CAPS;
 		ddsd.dwWidth  = rXRes;
@@ -677,8 +681,7 @@ unsigned long DDrawCreateSurfaces(HWND window, unsigned long xRes, unsigned long
 	}
 
 	// Test the green mask to see how many bits it is.
- 
-	l = (int)ddsd.ddpfPixelFormat.dwGBitMask;
+ 	l = (int)ddsd.ddpfPixelFormat.dwGBitMask;
 	while ( (!(l&1)) && (l) )
 		  l >>= 1;
 	r565 = (l != 31);
@@ -688,21 +691,30 @@ unsigned long DDrawCreateSurfaces(HWND window, unsigned long xRes, unsigned long
 	// Create a zbuffer if asked
 	if (zBits && rHardware)
 	{
+		// Calculate the zbuffer z-mask
+		for (bitCounter = 0; bitCounter < zBits; bitCounter++)
+		{
+			zMask |= (1 << bitCounter);
+		}
+
+		// Define the zbuffer pixel format
+		DDINIT(zBufferFormat);
+		zBufferFormat.dwFlags = DDPF_ZBUFFER;
+		zBufferFormat.dwZBufferBitDepth = zBits;	// Possible values: 8, 16, 24, 32
+		zBufferFormat.dwZBitMask = zMask;
+
+		// Setup required zbuffer surface parameters
 		DDINIT(ddsd);
 		ddsd.dwFlags = DDSD_CAPS | DDSD_WIDTH | DDSD_HEIGHT | DDSD_PIXELFORMAT;
+		ddsd.ddsCaps.dwCaps = DDSCAPS_ZBUFFER | DDSCAPS_VIDEOMEMORY | DDSCAPS_LOCALVIDMEM;
 		ddsd.dwWidth = rXRes;
 		ddsd.dwHeight = rYRes;
-		
-		ddsd.ddpfPixelFormat.dwSize = sizeof (DDPIXELFORMAT);
-		ddsd.ddpfPixelFormat.dwFlags = DDPF_ZBUFFER;
-		
-		ddsd.ddpfPixelFormat.dwZBufferBitDepth = zBits;
-		
-		for (;zBits;zMask |= (1<<--zBits));
-		
-		ddsd.ddpfPixelFormat.dwZBitMask = zMask;
-		ddsd.ddpfPixelFormat.dwRGBZBitMask = zMask;
-		ddsd.ddsCaps.dwCaps = DDSCAPS_ZBUFFER | DDSCAPS_VIDEOMEMORY | DDSCAPS_LOCALVIDMEM;
+
+		// Now set the pixel format for the surface
+		ddsd.ddpfPixelFormat = zBufferFormat;
+
+		// Is the user trying to use the original or alternative z-buffer creation method?
+		ddsd.ddpfPixelFormat.dwRGBZBitMask = (rAltZBuffer) ? (0) : (zMask);
 		
 		if ((res = pDirectDraw7->CreateSurface(&ddsd, &surface[ZBUFFER_SRF], NULL)) != DD_OK)
 		{
