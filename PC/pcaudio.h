@@ -197,6 +197,8 @@ extern void FreeBufSampleList( );
 extern SAMPLE *FindSample( unsigned long uid );
 extern SAMPLE *FindVoice( unsigned long uid, int pl );
 
+extern SAMPLE *CreateSampleFromWavFile( char *folder, char *file, long looped );
+
 extern void CleanBufferSamples ( void );
 extern void SetSampleFormat ( SAMPLE *sample );
 

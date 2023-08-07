@@ -63,12 +63,12 @@ void SubAmbientSound(AMBIENT_SOUND *ambientSound);
 int UpdateLoopingSample( AMBIENT_SOUND *sample );
 
 SAMPLE *CreateSample( char *data, SAMPLE_HEADER *shdr );
+void FreeSample(SAMPLE* sample);
 
 void SetSampleFormat ( SAMPLE *sample );
 void CleanBufferSamples( void );
 
-DWORD playCDTrack( HWND hWndNotify, BYTE bTrack );
-DWORD stopCDTrack( HWND hWndNotify );
+DWORD playCDTrack( HWND hWndNotify, BYTE bTrack, long loop );
 
 // CD Audio variables
 
@@ -76,6 +76,9 @@ static int		auxVolume, oldVolume;
 static DWORD	volumecontrolid, cdaudiovalid;
 
 int cdTrack = 0;	// cd is not playing
+short trackLoop = 0;
+int playingMusic = 0;
+SAMPLE *musicFileSample = NULL;
 
 static char		errStr[128];
 static int		mixerid;
@@ -143,6 +146,24 @@ enum
 	LEVELCOMPLETELOOP_CDAUDIO,
 
 	NUM_CD_TRACKS,
+};
+
+// These are the original file-names determined from the backups. ~Knee.
+char* CdTrackFileNames[NUM_CD_TRACKS] =
+{
+	NULL, // NOTRACK (0)
+	NULL, // 1
+	"01 Garden.wav", // GARDEN_CDAUDIO (2)
+	"02 Ancients.wav", // ANCIENTS_CDAUDIO (3)
+	"03 Space.wav", // SPACE_CDAUDIO (4)
+	"04 Subterranean.wav", // SUBTERRANEAN_CDAUDIO (5)
+	"05 Laboratory.wav", // LABORATORY_CDAUDIO (6)
+	"06 Halloween.wav", // HALLOWEEN_CDAUDIO (7)
+	"07 retro.wav", // SUPERRETRO_CDAUDIO (8)
+	"08 Title.wav", // FRONTEND_CDAUDIO (9)
+	"09 level complete.wav", // LEVELCOMPLETE_CDAUDIO (10)
+	"10 gameover.wav", // GAMEOVER_CDAUDIO (11)
+	"11 EOL.wav" // LEVELCOMPLETELOOP_CDAUDIO (12)
 };
 
 /*	--------------------------------------------------------------------------------
@@ -280,6 +301,51 @@ SAMPLE *CreateSample( char *data, SAMPLE_HEADER *shdr )
 		utilPrintf("Could not load wave file\n");
 		return NULL;
 	}
+
+	return sfx;
+}
+
+SAMPLE *CreateSampleFromWavFile( char *folder, char *fileName, long looped)
+{
+	SAMPLE *sfx;
+	int i=0;
+	char name[MAX_PATH];
+	char filePath[MAX_PATH];
+
+	if( !lpDS )
+	{
+		utilPrintf("Could not create sample, no sound device\n");
+		return NULL;
+	}
+
+	sfx = (SAMPLE *)MALLOC0(sizeof(SAMPLE));
+
+	// Remove extension from filename for psx compatability
+	while( fileName[i] != '\0' && fileName[i] != '.' )
+	{
+		name[i] = fileName[i];
+		i++;
+	}
+	name[i] = '\0';
+	strlwr(name);
+
+	sfx->uid = UpdateCRC(name);
+
+	// Create full name
+	ZeroMemory(filePath, MAX_PATH);
+	strcpy( filePath, folder );
+	strcat( filePath, fileName );
+
+	if( !(LoadWavFile(sfx,filePath)) )
+	{
+		FREE( sfx );
+		utilPrintf("Could not load wave file '%s'\n", filePath);
+		return NULL;
+	}
+
+	// Sample looped
+	if(looped)
+		sfx->flags |= SFXFLAGS_LOOP;
 
 	return sfx;
 }
@@ -785,10 +851,7 @@ void UnPauseAudio( )
 		PlaySample( mus, NULL, 0, SAMPLE_VOLUME/2, -1 );
 	}
 #else
-	if( mciDevice )
-	{
-		LoopSong();
-	}
+	LoopSong();
 #endif
 }
 
@@ -920,13 +983,69 @@ int InitCDaudio()
 
 int ShutdownCDaudio()
 {
-	if( mciDevice )
+	StopSong();
+
+	if (musicFileSample)
 	{
-		StopSong( );
-		SetCDVolume(auxVolume);
+		FreeSample(musicFileSample);
+		musicFileSample = 0;
 	}
 
+	if( mciDevice )
+		SetCDVolume(auxVolume);
+
 	return 0;
+}
+
+/*	--------------------------------------------------------------------------------
+	Function		: playCDTrackFromFile
+	Purpose			: Attempts to play a CD track from a .wav file.
+	Parameters		: char
+	Returns			: 1 if the track is playing from the file, 0 if it could not be played.
+	Info			: 
+*/
+int playCDTrackFromFile(int track, long loop)
+{
+	SAMPLE* sample;
+	char path[MAX_PATH];
+	char* wavFileName;
+
+	if (musicFileSample)
+	{
+		StopSong();
+
+		if (cdTrack == track)
+		{
+			PlaySample(musicFileSample, NULL, 0, oldVolume, -1);
+			return 1; // success.
+		}
+		else
+		{
+			// The current track isn't this one, so let's let it go.
+			FreeSample(musicFileSample);
+			musicFileSample = 0;
+		}
+	}
+
+	wavFileName = CdTrackFileNames[track];
+	if (!wavFileName)
+		return 0;
+
+	ZeroMemory(path, MAX_PATH);
+	strcat( path, baseDirectory );
+	strcat( path, "music\\" );
+
+	sample = CreateSampleFromWavFile(path, wavFileName, loop);
+	if( !sample )
+	{
+		utilPrintf( "Could not open music at %s, defaulting to CD playback.\n", path );
+		return 0;
+	}
+
+	musicFileSample = sample;
+	AddSample( sample );
+	PlaySample( sample, NULL, 0, oldVolume, -1 );
+	return 1;
 }
 
 /*	--------------------------------------------------------------------------------
@@ -964,49 +1083,78 @@ void PrepareSong(short world, short loop)
 		return;
 	}
 	// play cd audio track here....
-	playCDTrack ( mdxWinInfo.hWndMain, track);
-	
-	if (loop)
-		cdTrack = track;
-	else
-		cdTrack = -1;	// playing but not looping
+	playCDTrack ( mdxWinInfo.hWndMain, track, loop);
 }
 
 
 void LoopSong()
 {
-	if (cdTrack>0)
-		playCDTrack(mdxWinInfo.hWndMain, cdTrack);
-	else
-		cdTrack = 0;	// CD is not playing
+	if (playingMusic)
+	{
+		if (trackLoop && cdTrack)
+		{
+			playCDTrack(mdxWinInfo.hWndMain, cdTrack, trackLoop);
+		}
+		else
+		{
+			playingMusic = 0;
+		}
+	}
 }
 
 
 void StopSong( )
 {
-	stopCDTrack( mdxWinInfo.hWndMain );
-	cdTrack = 0;
-}
+	MCI_GENERIC_PARMS parms;
 
+	if (mciDevice)
+	{
+		// Stop
+		mciSendCommand(mciDevice, MCI_STOP, MCI_NOTIFY, (DWORD)(LPMCI_GENERIC_PARMS)&parms);
+
+		// Close device
+		mciSendCommand(mciDevice, MCI_CLOSE, MCI_NOTIFY, (DWORD)(LPMCI_GENERIC_PARMS)&parms);
+
+		mciDevice = 0;
+	}
+
+	if (musicFileSample)
+		StopSample(musicFileSample);
+
+	playingMusic = 0;
+}
 
 int IsSongPlaying()
 {
-	return (cdTrack != 0);
-}
+	if (musicFileSample)
+	{
+		BUFSAMPLE *s;
+		unsigned long stat;
+		HRESULT result;
+		DWORD currentPlayPosition;
 
-DWORD stopCDTrack ( HWND hWndNotify )
-{
-	MCI_GENERIC_PARMS parms;
+		for( s=bufferList.head.next; s!=&bufferList.head; s=s->next )
+		{
+			if (s->uid != musicFileSample->uid)
+				continue;
 
-	// Stop
-	mciSendCommand(mciDevice, MCI_STOP, MCI_NOTIFY, (DWORD)(LPMCI_GENERIC_PARMS)&parms);
+			s->lpdsBuffer->lpVtbl->GetStatus(s->lpdsBuffer, &stat);
+			if (!(stat & DSBSTATUS_PLAYING))
+				return 0; // If it isn't seen as playing, don't pretend it's playing.
 
-	// Close device
-	mciSendCommand(mciDevice, MCI_CLOSE, MCI_NOTIFY, (DWORD)(LPMCI_GENERIC_PARMS)&parms);
+			if ((result = s->lpdsBuffer->lpVtbl->GetCurrentPosition(s->lpdsBuffer, &currentPlayPosition, NULL)) != DS_OK)
+			{
+				utilPrintf("Failed to get the current music position.\n");
+				continue;
+			}
 
-	mciDevice = 0;
+			// If this fails, the audio format might be converted, and we might need to call GetFormat() to get the format of the audio in the buffer, then we should convert the number of bytes defined in the sample to the nubmer of bytes it would be in the format seen here.
+			return (musicFileSample->len > currentPlayPosition);
+		}
 
-	return TRUE;
+	}
+
+	return (mciDevice && playingMusic);
 }
 
 int pauseCDTrack()
@@ -1018,7 +1166,7 @@ int pauseCDTrack()
 // soon as playback begins. The window procedure function for the 
 // specified window will be notified when playback is complete. 
 // Returns 0L on success; otherwise, returns an MCI error code.
-DWORD playCDTrack ( HWND hWndNotify, BYTE bTrack )
+DWORD playCDTrack ( HWND hWndNotify, BYTE bTrack, long loop)
 {
     UINT wDeviceID;
     DWORD dwReturn;
@@ -1026,6 +1174,14 @@ DWORD playCDTrack ( HWND hWndNotify, BYTE bTrack )
     MCI_SET_PARMS mciSetParms;
     MCI_PLAY_PARMS mciPlayParms;
 	DWORD flags;
+
+	if (playCDTrackFromFile(bTrack, loop))
+	{
+		cdTrack = bTrack;
+		trackLoop = loop;
+		playingMusic = 1;
+		return 0L; // Playing CD track from file.
+	}
 
 	if( !mciDevice )
 	{
@@ -1086,6 +1242,9 @@ DWORD playCDTrack ( HWND hWndNotify, BYTE bTrack )
     }
 
 	mciDevice = wDeviceID;
+	cdTrack = bTrack;
+	trackLoop = loop;
+	playingMusic = 1;
 
     return 0L;
 }
@@ -1306,16 +1465,11 @@ void AddBufSample( BUFSAMPLE *bufSample )
 	}
 }
 
-
-void RemoveSample( SAMPLE *sample )
+void FreeSample(SAMPLE* sample)
 {
-	if( !sample->next )
+	if (!sample)
 		return;
-
-	sample->prev->next	= sample->next;
-	sample->next->prev	= sample->prev;
-	sample->next		= NULL;
-
+	
 	if( sample->lpds3DBuffer )
 		sample->lpds3DBuffer->lpVtbl->Release(sample->lpds3DBuffer);
 
@@ -1329,6 +1483,21 @@ void RemoveSample( SAMPLE *sample )
 		FREE( sample->data );
 
 	FREE( sample );
+}
+
+void RemoveSample( SAMPLE *sample )
+{
+	if( !sample->next )
+		return;
+
+	sample->prev->next	= sample->next;
+	sample->next->prev	= sample->prev;
+	sample->next		= NULL;
+
+	if (musicFileSample == sample)
+		return; // Don't free yet.
+
+	FreeSample(sample);
 }
 
 

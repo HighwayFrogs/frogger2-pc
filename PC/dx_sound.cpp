@@ -194,6 +194,156 @@ void ShutDownDirectSound ( void )
 	ShutdownCDaudio();
 }
 
+int LoadWavFile( SAMPLE *sample, char *name )
+{
+	HRESULT			dsrVal;
+	HMMIO 			hwav;    // handle to wave file
+	MMCKINFO		parent,  // parent chunk
+					child;   // child chunk
+	WAVEFORMATEX    wfmtx;   // wave format structure
+
+
+	UCHAR *snd_buffer,       // temporary sound buffer to hold voc data
+		  *audio_ptr_1=NULL, // data ptr to first write buffer 
+		  *audio_ptr_2=NULL; // data ptr to second write buffer
+
+	unsigned long	audio_length_1=0,  // length of first write buffer
+					audio_length_2=0;  // length of second write buffer
+
+	DSBUFFERDESC		dsbd;           // directsound description
+
+	// open the WAV file
+	if( (hwav = mmioOpen( name, NULL, MMIO_READ | MMIO_ALLOCBUF )) == NULL )
+	{
+		utilPrintf("RETURNING : LoadWavFile - Opening Wav File Failure '%s'.\n", name);
+		return 0;
+	}
+
+	// descend into the RIFF 
+	parent.fccType = mmioFOURCC ( 'W', 'A', 'V', 'E' );
+
+	if ( mmioDescend ( hwav, &parent, NULL, MMIO_FINDRIFF ) )
+    {
+		// close the file
+		mmioClose ( hwav, 0 );
+
+		// return error, no wave section
+		return 0; 	
+    }
+
+	// descend to the WAVEfmt 
+	child.ckid = mmioFOURCC ( 'f', 'm', 't', ' ' );
+
+	if ( mmioDescend ( hwav, &child, &parent, 0 ) )
+    {
+		// close the file
+		mmioClose ( hwav, 0 );
+
+		// return error, no format section
+		return 0; 	
+    }
+
+	// now read the wave format information from file
+	if ( mmioRead ( hwav, ( char * ) &wfmtx, sizeof ( wfmtx ) ) != sizeof ( wfmtx ) )
+    {
+		// close file
+		mmioClose ( hwav, 0 );
+
+		// return error, no wave format data
+		return 0;
+    }
+
+	// make sure that the data format is PCM
+	if ( wfmtx.wFormatTag != WAVE_FORMAT_PCM )
+    {
+		// close the file
+		mmioClose ( hwav, 0 );
+
+		// return error, not the right data format
+		return 0; 
+    }
+
+	// now ascend up one level, so we can access data chunk
+	if ( mmioAscend ( hwav, &child, 0 ) )
+	{
+		// close file
+		mmioClose ( hwav, 0 );
+
+		// return error, couldn't ascend
+		return 0; 	
+	}
+
+	// descend to the data chunk 
+	child.ckid = mmioFOURCC ( 'd', 'a', 't', 'a' );
+
+	if ( mmioDescend ( hwav, &child, &parent, MMIO_FINDCHUNK ) )
+    {
+		// close file
+		mmioClose ( hwav, 0 );
+
+		// return error, no data
+		return 0; 	
+    }
+
+	// finally!!!! now all we have to do is read the data in and
+	// set up the directsound buffer
+
+	// allocate the memory to load sound data
+	snd_buffer = ( UCHAR * ) AllocMem( child.cksize );
+
+	// read the wave data 
+	mmioRead ( hwav, ( char * ) snd_buffer, child.cksize );
+
+	// close the file
+	mmioClose ( hwav, 0 );
+
+	// prepare to create sounds buffer
+	ZeroMemory ( &dsbd, sizeof ( DSBUFFERDESC ) );
+	dsbd.dwSize			= sizeof(DSBUFFERDESC);
+	dsbd.dwFlags		= DSBCAPS_CTRLPAN | DSBCAPS_CTRLVOLUME | DSBCAPS_CTRLFREQUENCY | DSBCAPS_STATIC;
+
+	dsbd.dwBufferBytes	= child.cksize;
+	dsbd.lpwfxFormat	= &wfmtx;
+
+	sample->len = child.cksize;
+
+	// create the sound buffer
+
+	dsrVal = lpDS->CreateSoundBuffer ( &dsbd, &sample->lpdsBuffer, NULL );
+	if ( dsrVal != DS_OK )
+	{
+		utilPrintf("CreateSoundBuffer failed on file '%s' - '%s'\n", name, DSoundErrorToString(dsrVal));
+
+		// release memory
+		FreeMem ( snd_buffer );
+
+		// return error
+		return ( -1 );
+	}
+
+	// copy data into sound buffer
+	if ( sample->lpdsBuffer->Lock ( 0, child.cksize, (void **) &audio_ptr_1, &audio_length_1, (void **)&audio_ptr_2, &audio_length_2, DSBLOCK_FROMWRITECURSOR ) != DS_OK )
+		 return(0);
+
+	// copy first section of circular buffer
+	memcpy(audio_ptr_1, snd_buffer, audio_length_1);
+
+	// copy last section of circular buffer
+	memcpy(audio_ptr_2, (snd_buffer+audio_length_1),audio_length_2);
+
+	// unlock the buffer
+	if (sample->lpdsBuffer->Unlock(audio_ptr_1, 
+											audio_length_1, 
+											audio_ptr_2, 
+											audio_length_2)!=DS_OK)
+ 									 return(0);
+
+	// release the temp buffer
+	FreeMem(snd_buffer);
+
+	return 1;
+}
+
 
 int LoadWav( SAMPLE *sample, char *data, int length )
 {
