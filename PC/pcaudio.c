@@ -974,21 +974,21 @@ int InitCDaudio()
 }
 
 /*	--------------------------------------------------------------------------------
-	FUNCTION:	ShutdownCDaudio
-	PURPOSE:	Shutdown the CD audio device
+	FUNCTION:	ShutdownMusic
+	PURPOSE:	Shutdown the music audio device
 	PARAMETERS:	
 	RETURNS:	0/1
 	INFO:		
 */
 
-int ShutdownCDaudio()
+int ShutdownMusic()
 {
 	StopSong();
 
 	if (musicFileSample)
 	{
 		FreeSample(musicFileSample);
-		musicFileSample = 0;
+		musicFileSample = NULL;
 	}
 
 	if( mciDevice )
@@ -1016,7 +1016,7 @@ int playCDTrackFromFile(int track, long loop)
 
 		if (cdTrack == track)
 		{
-			AddSample(musicFileSample); // TODO: Not so simple, this could be in the list twice.
+			AddSample(musicFileSample);
 			PlaySample(musicFileSample, NULL, 0, oldVolume, -1);
 			return 1; // success.
 		}
@@ -1024,7 +1024,7 @@ int playCDTrackFromFile(int track, long loop)
 		{
 			// The current track isn't this one, so let's let it go.
 			FreeSample(musicFileSample);
-			musicFileSample = 0;
+			musicFileSample = NULL;
 		}
 	}
 
@@ -1123,6 +1123,8 @@ void StopSong( )
 	{
 		StopSample(musicFileSample);
 		RemoveSample(musicFileSample);
+		if (playingMusic)
+			soundList.numEntries--;
 	}
 
 	playingMusic = 0;
@@ -1473,9 +1475,6 @@ void FreeSample(SAMPLE* sample)
 {
 	if (!sample)
 		return;
-
-	if (sample->next)
-		RemoveSample(sample);
 	
 	if( sample->lpds3DBuffer )
 		sample->lpds3DBuffer->lpVtbl->Release(sample->lpds3DBuffer);
@@ -1500,6 +1499,7 @@ void RemoveSample( SAMPLE *sample )
 	sample->prev->next	= sample->next;
 	sample->next->prev	= sample->prev;
 	sample->next		= NULL;
+	sample->prev		= NULL;
 
 	if (musicFileSample == sample)
 		return; // The music is managed separately.
@@ -1516,6 +1516,7 @@ void RemoveBufSample( BUFSAMPLE *bufSample )
 	bufSample->prev->next	= bufSample->next;
 	bufSample->next->prev	= bufSample->prev;
 	bufSample->next		= NULL;
+	bufSample->prev		= NULL;
 	bufferList.numEntries--;
 
 	if( bufSample->lpdsBuffer )

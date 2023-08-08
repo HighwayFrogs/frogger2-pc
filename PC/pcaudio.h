@@ -220,7 +220,7 @@ extern void PauseAudio( );
 extern void UnPauseAudio( );
 
 int InitCDaudio();
-int ShutdownCDaudio();
+int ShutdownMusic();
 int GetCDVolume();
 void SetCDVolume(int vol);
 

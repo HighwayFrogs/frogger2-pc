@@ -188,10 +188,10 @@ int InitDirectSound( HINSTANCE hInst,  HWND hWndMain )
 
 void ShutDownDirectSound ( void )
 {
+	ShutdownMusic();
+
 	if( lpDS )
 		lpDS->Release();
-
-	ShutdownCDaudio();
 }
 
 int LoadWavFile( SAMPLE *sample, char *name )
