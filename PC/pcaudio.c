@@ -319,6 +319,7 @@ SAMPLE *CreateSampleFromWavFile( char *folder, char *fileName, long looped)
 	}
 
 	sfx = (SAMPLE *)MALLOC0(sizeof(SAMPLE));
+	ZeroMemory(sfx, sizeof(SAMPLE));
 
 	// Remove extension from filename for psx compatability
 	while( fileName[i] != '\0' && fileName[i] != '.' )
