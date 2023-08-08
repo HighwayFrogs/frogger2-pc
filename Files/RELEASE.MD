@@ -25,7 +25,7 @@ Replace `Frogger2.exe` in your install folder with the enhanced/modded `Frogger2
 
 ### 3) Setup videos to play from files instead of CD (Recommended)  
 Create a folder called `video` in the game folder.  
-From the CD, copy all of the files in `\Video\` into the new video file you've made.  
+From the CD, copy all of the files in `\Video\` into the new video folder you've made.  
 If you're getting the video files from the tape backup instead, they're at `D:\Frogger\Frogger2_Source_Delivery\Fmv\Pc\`.  
 
 ### 4) Setup music to play from files instead of CD (Recommended)  
