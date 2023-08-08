@@ -3,9 +3,15 @@ Frogger 2 had many debug features included.
 The enhanced mod enables these debug features for you if you enable the "Debug Mode" checkbox.  
 Enabling debug mode will unlock all levels and characters automatically. All the other debug features need to be toggled manually.  
 
+## Debug Logs
+Even if the "Debug Mode" checkbox is unchecked, debug logs are created for the game to help diagnose any issues that might arise.  
+The location the game wants to make these files is at `C:\frogger2.log` and `C:\mdebug.log`, however this will only occur if the program is run as admin or run on something old like Windows XP.  
+Instead, the files will likely be created at `%localappdata%\VirtualStore\`, which is where modern Windows will redirect the files to go.  
+When issues arise, looking inside of these files with any ol' text editor (such as Notepad) may include helpful warnings to guide troubleshooting.  
+
 ## Load .Bmps Option
 This checkbox in the config window will make the game read textures from folders containing .bmp files placed in `Textures\` instead of .FLA files.  
-You can get the texture folders from `D:\Frogger\Frogger2_Source_Delivery\Data\Pc\Textures\` or `` in the end of project tape backup.  
+You can get the texture folders from `D:\Frogger\Frogger2_Source_Delivery\Data\Pc\Textures\` or `\\BLITZONE\DATA\TeamSpirit\pcversion\Textures\` in the end of project tape backup.  
 IF YOU DO NOT COPY ANY TEXTURES, THE GAME WILL LIKELY JUST CRASH. You can look at the `frogger2.log` file either at `C:\frogger2.log` or `%localappdata%\VirtualStore\frogger2.log` to find a log of what files it failed to load.  
 This feature works regardless of if the "Debug Mode" checkbox is pressed.  
 
