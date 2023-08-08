@@ -63,7 +63,7 @@ In your game folder, there should be a folder called `textures`. Inside this fol
 
 ### 6) Done
 The game should now be possible to run just by running `Frogger2.exe` in your game folder.  
-You are assumed to know what you're doing if you go this route, but support is provided by the [Highway Frogs](https://highwayfrogs.net/) community by joining the discord server.  
+Support is provided by the [Highway Frogs](https://highwayfrogs.net/) community by joining the discord server.  
 
 ## Known Issues
 **CD Audio Playback:**  
