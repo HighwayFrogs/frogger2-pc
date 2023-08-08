@@ -319,7 +319,6 @@ SAMPLE *CreateSampleFromWavFile( char *folder, char *fileName, long looped)
 	}
 
 	sfx = (SAMPLE *)MALLOC0(sizeof(SAMPLE));
-	ZeroMemory(sfx, sizeof(SAMPLE));
 
 	// Remove extension from filename for psx compatability
 	while( fileName[i] != '\0' && fileName[i] != '.' )
@@ -1017,6 +1016,7 @@ int playCDTrackFromFile(int track, long loop)
 
 		if (cdTrack == track)
 		{
+			AddSample(musicFileSample); // TODO: Not so simple, this could be in the list twice.
 			PlaySample(musicFileSample, NULL, 0, oldVolume, -1);
 			return 1; // success.
 		}
@@ -1044,8 +1044,8 @@ int playCDTrackFromFile(int track, long loop)
 	}
 
 	musicFileSample = sample;
-	AddSample( sample );
-	PlaySample( sample, NULL, 0, oldVolume, -1 );
+	AddSample(sample);
+	PlaySample(sample, NULL, 0, oldVolume, -1);
 	return 1;
 }
 
@@ -1120,7 +1120,10 @@ void StopSong( )
 	}
 
 	if (musicFileSample)
+	{
 		StopSample(musicFileSample);
+		RemoveSample(musicFileSample);
+	}
 
 	playingMusic = 0;
 }
@@ -1470,6 +1473,9 @@ void FreeSample(SAMPLE* sample)
 {
 	if (!sample)
 		return;
+
+	if (sample->next)
+		RemoveSample(sample);
 	
 	if( sample->lpds3DBuffer )
 		sample->lpds3DBuffer->lpVtbl->Release(sample->lpds3DBuffer);
@@ -1496,7 +1502,7 @@ void RemoveSample( SAMPLE *sample )
 	sample->next		= NULL;
 
 	if (musicFileSample == sample)
-		return; // Don't free yet.
+		return; // The music is managed separately.
 
 	FreeSample(sample);
 }
