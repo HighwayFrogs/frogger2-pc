@@ -330,7 +330,7 @@ BOOL UpdateFroggerControls(long pl)
 		{
 			PlaySample(genSfx[GEN_FROG_HOP],NULL,0,100-Random(15),actF);
 			hopCount++;
-			hopTimer = 30;
+			hopTimer = 30 * 4096;
 		}
 		else
 		{
@@ -438,7 +438,7 @@ BOOL UpdateFroggerControls(long pl)
 	else
 	{
 		if( hopTimer )
-			hopTimer -= max(gameSpeed>>12, 1);
+			hopTimer -= gameSpeed;
 
 		if( hopTimer <= 0 )
 		{
