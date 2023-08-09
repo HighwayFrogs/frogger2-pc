@@ -40,6 +40,7 @@ The code has been updated to support different pixel formats by automatically co
 
 **Situations Fixed:**  
  - Any full-screen image such as the loading screen or gallery images would cover only half of the screen and show incorrect colors.  
+ - The pages on the level select book in the main menu were garbled.  
  
 **Situations Ignored:**  
  - `pcmisc.cpp` has a "Design viewer" which is basically a slideshow viewer of level designs. It is unused and supporting it is pointless because we can just look at the .bmp files directly.  

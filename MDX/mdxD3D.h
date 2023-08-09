@@ -92,7 +92,6 @@ unsigned long DDrawExpandToSurface(LPDIRECTDRAWSURFACE7 pSurface, unsigned short
 
 LPDIRECTDRAWSURFACE7 D3DCreateSurface(long xs,long ys, long cKey,long videoRam);
 LPDIRECTDRAWSURFACE7 D3DCreateTexSurfaceScreen(long xs,long ys, long cKey, long alphaSurf, long videoRam);
-unsigned long DDrawCopyToSurface2(LPDIRECTDRAWSURFACE7 pSurface, unsigned short *data, unsigned long xs, unsigned long ys);
 
 void D3DClearView(void);
 

@@ -427,130 +427,54 @@ MDX_TEXENTRY *AddTextureToTexList(char *file, char *shortn, long finalTex)
 */
 void GrabSurfaceToTexture(long x, long y, MDX_TEXENTRY *texture, LPDIRECTDRAWSURFACE7 srf)
 {
-//	if( !texture )
-//		return;
-
-	short tempdata[256*256];
-	long xS,yS,mPitch,j;
+	long xSize, ySize;
 	HRESULT res;
+	DDSURFACEDESC2 ddsd, ddsdTexture;
+	char *src, *dst;
+	long inputBytesPerPixel, outputBytesPerPixel;
+
+	if (!texture)
+		return;
 	
-	if (texture)
+	xSize = texture->xSize;
+	ySize = texture->ySize;
+
+	// Setup first surface:
+	DDINIT(ddsd);
+	if ((res = srf->Lock(NULL,&ddsd,DDLOCK_SURFACEMEMORYPTR|DDLOCK_WAIT,0)) != DD_OK)
 	{
-		xS = texture->xSize;
-		yS = texture->ySize;
-
-		DDSURFACEDESC2		ddsd;
-		DDINIT(ddsd);
-
-		if ((res = surface[RENDER_SRF]->Lock(NULL,&ddsd,DDLOCK_SURFACEMEMORYPTR|DDLOCK_WAIT,0))==DD_OK)
-		{
-			mPitch = ddsd.lPitch/2;
-
-			for (j = 0; j<yS; j++)
-				memcpy(&tempdata[j*xS],&(((short *)ddsd.lpSurface)[x+(j+y)*mPitch]),xS*2);
-
-			surface[RENDER_SRF]->Unlock(NULL);
-
-			DDrawCopyToSurface2(texture->surf,(unsigned short *)tempdata,xS,yS);
-		}
-		else
-			dp("GrabSurfaceToTexture failed: %d\n", res);
+		dp("GrabSurfaceToTexture for ddsd failed: %d\n", res);
+		return;
 	}
 
-//	DDSURFACEDESC2 ddsd;
-//	DDINIT(ddsd);
-//	HRESULT res;
-//	RECT r = { 0, 0, texture->xSize-1, texture->ySize-1 };
-//	LPDIRECTDRAWSURFACE7 pSurface;
-
-//	ddsd.dwFlags = DDSD_CAPS | DDSD_HEIGHT | DDSD_WIDTH;
-//	ddsd.ddsCaps.dwCaps = DDSCAPS_OFFSCREENPLAIN;
-//	ddsd.dwHeight = texture->ySize;
-//	ddsd.dwWidth = texture->xSize;
-
-//	if( (res = pDirectDraw7->CreateSurface(&ddsd, &pSurface, NULL)) != DD_OK )
-//	{
-//		ddShowError(res);
-//		return;
-//	}
-	
-//	if( (res = pSurface->Blt( NULL, srf, &r, FALSE, NULL )) != DD_OK )
-//	{
-//		ddShowError(res);
-//		return;
-//	}
-
-//	if( (res = texture->surf->Blt( NULL, pSurface, NULL, FALSE, NULL )) != DD_OK )
-//	{
-//		ddShowError(res);
-//		return;
-//	}
-
-
-
-
-
-
-
-
-
-//	if( (res = texture->surf->Blt( &r, srf, &r, FALSE, NULL )) != DD_OK )
-//		ddShowError(res);
-
-//	if( (res = texture->surf->BltFast( 0, 0, srf, NULL, DDBLTFAST_NOCOLORKEY )) != DD_OK )
-//		ddShowError(res);
-
-
-
-
-
-
-
-
-
-//	HRESULT res;
-
-//	short tempdata[256*256];
-//	long xS,yS,mPitch,j;
-	
-//	if (texture)
-//	{
-//		xS = texture->xSize;
-//		yS = texture->ySize;
-
-//		DDSURFACEDESC2		ddsd;
-//		DDINIT(ddsd);
-
-//		if ((res = surface[RENDER_SRF]->Lock(NULL,&ddsd,DDLOCK_SURFACEMEMORYPTR|DDLOCK_WAIT,0))==DD_OK)
-//		{
-//			mPitch = ddsd.lPitch/2;
-
-//			for (j = 0; j<yS; j++)
-//				memcpy(&tempdata[j*xS],&(((short *)ddsd.lpSurface)[x+(j+y)*mPitch]),xS*2);
-
-//			surface[RENDER_SRF]->Unlock(NULL);
-
-//			DDrawCopyToSurface2(texture->surf,(unsigned short *)tempdata,xS,yS);
-//		}
-//		else
-//			dp("GrabSurfaceToTexture failed: %d\n", res);
-//	}
-
-/*	if only these worked... -ds 
-
-	if (texture)
+	// Setup second surface:
+	DDINIT(ddsdTexture);
+	if ((res = texture->surf->Lock(NULL,&ddsdTexture,DDLOCK_SURFACEMEMORYPTR|DDLOCK_WAIT,0)) != DD_OK)
 	{
-		RECT r = { 0, 0, texture->xSize, texture->ySize };
-
-		//res = texture->surf->Blt(&r, srf, &r, DDBLT_WAIT, 0);
-
-		res = pDirect3DDevice->Load(texture->surf, NULL, srf, &r, 0);
-
-		if (res != DD_OK)
-			ddShowError(res);
+		dp("GrabSurfaceToTexture for ddsdTexture failed: %d\n", res);
+		srf->Unlock(NULL);
+		return;
 	}
-*/
 
+
+	inputBytesPerPixel = ((ddsd.ddpfPixelFormat.dwRGBBitCount - 1) / 8) + 1;
+	outputBytesPerPixel = ((ddsdTexture.ddpfPixelFormat.dwRGBBitCount - 1) / 8) + 1;
+
+	// Copy image data.
+	src = (char*)ddsd.lpSurface;
+	dst = (char*)ddsdTexture.lpSurface;
+	for (y = 0; y < ySize; y++)
+	{
+		ConvertPixelData((void*)src, (void*)dst, xSize, 1, &ddsd.ddpfPixelFormat, &ddsdTexture.ddpfPixelFormat);
+		src += ddsd.dwWidth * inputBytesPerPixel;
+		dst += xSize * outputBytesPerPixel;
+	}
+	
+	
+	// TODO: If red == 248 (0xF8) and blue == 248 (0xF8), the highest bit should be set to 1 to enable transparency...?
+
+	texture->surf->Unlock(NULL);
+	srf->Unlock(NULL);
 }
 
 /*	--------------------------------------------------------------------------------

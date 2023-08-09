@@ -152,6 +152,8 @@ int WindowsInitialise(HINSTANCE hInstance, char *appName, long debugMode)
 {
     WNDCLASS wc;
 	
+	SetupDefaultPixelFormat();
+
 	strcpy (winAppName,appName);
 
 	// save instance handle

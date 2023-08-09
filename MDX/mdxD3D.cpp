@@ -581,45 +581,6 @@ void SurfaceDraw()
 }
 
 
-/*	--------------------------------------------------------------------------------
-	Function	: DDrawCopyToSurface
-	Purpose		: Dimentions
-	Parameters	: 
-	Returns		: 
-	Info		: 
-*/
-
-unsigned long DDrawCopyToSurface2(LPDIRECTDRAWSURFACE7 pSurface, unsigned short *data, unsigned long xs, unsigned long ys)
-{
-	DDSURFACEDESC2		ddsd;
-	short val,rShift;
-	unsigned long texHasMagenta = 0;
-	
-	// Copy the data into the surface manually
-	DDINIT(ddsd);
-	if (pSurface->Lock(NULL,&ddsd,DDLOCK_SURFACEMEMORYPTR|DDLOCK_WAIT,0)!=DD_OK)
-		return 0;
-	
-	rShift = r565; 		
-	
-	for (unsigned int y=0;y<ys;y++)
-		for (unsigned int x=0;x<xs;x++)
-		{
-			val  = data[x+y*xs];
-			val = ((val>>rShift) & 0x7FE0) | (val&0x1f);
-			
-			if (val!=(0x1f | 0x1f<<10))
-				val |= 0x8000;
-			else
-				texHasMagenta = 1;
-			((short *)ddsd.lpSurface)[x+y*(ddsd.lPitch/2)] = val;
-		}
-
-	pSurface->Unlock(NULL);
-	return texHasMagenta;
-}
-
-
 /*  -------------------------------------------------------------------------------
 	Function	: DDrawCopyToSurface
 	Purpose		:

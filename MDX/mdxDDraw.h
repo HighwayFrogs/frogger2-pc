@@ -19,6 +19,7 @@ extern "C"
 
 #define RELEASE(x) if (x) {x->Release(); x=NULL;}
 #define DDINIT(x) {memset(&x,0,sizeof(x)); x.dwSize = sizeof(x);}
+#define mdxSignedShiftLeft(x, y) (y >= 0) ? (x << y) : (x >> -y)
 
 enum 
 {
@@ -119,8 +120,9 @@ void DDrawClearSurface(unsigned long srfN, unsigned long value, unsigned long fi
 WNDPROC SetUserVideoProc(WNDPROC proc);
 
 
-void* ConvertPixelDataToSurface(void *data, DWORD width, DWORD height, LPDIRECTDRAWSURFACE7 surface, void **oldData);
-void* ConvertPixelData(void *data, DWORD width, DWORD height, DDPIXELFORMAT *inPixelFormat, DDPIXELFORMAT *outPixelFormat, void **oldData);
+void SetupDefaultPixelFormat();
+void* ConvertPixelDataToSurfaceFormat(void **data, DWORD width, DWORD height, LPDIRECTDRAWSURFACE7 surface);
+void ConvertPixelData(void *src, void* dst, DWORD width, DWORD height, DDPIXELFORMAT *inPixelFormat, DDPIXELFORMAT *outPixelFormat);
 
 
 void mdxLoadBackdrop(const char* filename);

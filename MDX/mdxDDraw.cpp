@@ -36,6 +36,8 @@ const char *softwareDriver = "Blitz Games SoftStation";
 
 unsigned long selIdx;
 
+DDPIXELFORMAT defaultPixelFormat;
+
 LPDIRECTDRAW7			pDirectDraw7;
 LPDIRECTDRAWCLIPPER		pClipper;
 unsigned long			rXRes, rYRes, rBitDepth, r565 , rHardware, rFullscreen = 1, rScale = 1, rFlipOK = 1, rAltZBuffer = 0;
@@ -66,6 +68,20 @@ struct MDX_DXDEVICE
 
 MDX_DXDEVICE dxDeviceList[10];
 unsigned long dxNumDevices = 0;
+
+void SetupDefaultPixelFormat()
+{
+	// Default pixel format. (This is the format which we expect to receive data, because this is the format loaded from files.)
+	// It's RGB1555.
+	DDINIT(defaultPixelFormat);
+	defaultPixelFormat.dwFlags = DDPF_RGB | DDPF_ALPHAPIXELS;
+	defaultPixelFormat.dwRGBBitCount = 16;
+	defaultPixelFormat.dwRGBAlphaBitMask = 0x8000; // 1
+	defaultPixelFormat.dwRBitMask = 0x7c00; // 5
+	defaultPixelFormat.dwGBitMask = 0x03e0; // 5
+	defaultPixelFormat.dwBBitMask = 0x001f; // 5
+
+}
 
 BOOL WINAPI  EnumDDDevices(GUID FAR* lpGUID, LPSTR lpDriverDesc, LPSTR lpDriverName, LPVOID lpContext, HMONITOR mon)
 {
@@ -961,72 +977,71 @@ inline char CalculateMaskStart(DWORD mask)
 	return start;
 }
 
-void* ConvertPixelDataToSurface(void *data, DWORD width, DWORD height, LPDIRECTDRAWSURFACE7 surface, void **oldData)
+void* ConvertPixelDataToSurfaceFormat(void **data, DWORD width, DWORD height, LPDIRECTDRAWSURFACE7 surface)
 {
 	DDSURFACEDESC2 ddsd;
 	HRESULT result;
-	DDPIXELFORMAT defaultPixelFormat;
-
-	// Default return value.
-	if (oldData)
-		*oldData = NULL;
-
-	// Default pixel format. (This is the format which we expect to receive data, because this is the format loaded from files.)
-	DDINIT(defaultPixelFormat);
-	defaultPixelFormat.dwFlags = DDPF_RGB | DDPF_ALPHAPIXELS;
-	defaultPixelFormat.dwRGBBitCount = 16;
-	defaultPixelFormat.dwRGBAlphaBitMask = 0x8000; // 1
-	defaultPixelFormat.dwRBitMask = 0x7c00; // 5
-	defaultPixelFormat.dwGBitMask = 0x03e0; // 5
-	defaultPixelFormat.dwBBitMask = 0x001f; // 5
+	void* oldData;
+	long inputBytesPerPixel, outputBytesPerPixel;
 
 	DDINIT(ddsd);
 	result = surface->GetSurfaceDesc(&ddsd);
 	if (result != DD_OK)
 	{
 		dp("Failed to convert pixel data - GetSurfaceDesc() returned status %d.", result);
-		return data;
+		return NULL;
 	}
 
 	if (!(ddsd.dwFlags & DDSD_PIXELFORMAT))
 	{
 		dp("Failed to convert pixel data - DDSURFACEDESC2 did not have a pixel format. (Flags: %d)", ddsd.dwFlags);
-		return data;
+		return NULL;
 	}
 
 	if (!(ddsd.ddpfPixelFormat.dwFlags & DDPF_RGB))
 	{
 		dp("Failed to convert pixel data - DDSURFACEDESC2 pixel format was not RGB. (Flags: %d)", ddsd.ddpfPixelFormat.dwFlags);
-		return data;
+		return NULL;
 	}
 
-	return ConvertPixelData(data, width, height, &defaultPixelFormat, &ddsd.ddpfPixelFormat, oldData);
+	inputBytesPerPixel = ((defaultPixelFormat.dwRGBBitCount - 1) / 8) + 1;
+	outputBytesPerPixel = ((ddsd.ddpfPixelFormat.dwRGBBitCount - 1) / 8) + 1;
+
+	if (inputBytesPerPixel == outputBytesPerPixel)
+	{
+		ConvertPixelData(*data, *data, width, height, &defaultPixelFormat, &ddsd.ddpfPixelFormat);
+		return NULL;
+	}
+	else
+	{
+		// The size changed so we need a new buffer.
+		oldData = (void*) *data;
+		*data = (char*)AllocMem(outputBytesPerPixel * width * height);
+		ConvertPixelData(oldData, *data, width, height, &defaultPixelFormat, &ddsd.ddpfPixelFormat);
+		return oldData;
+	}
 }
 
-void* ConvertPixelData(void *data, DWORD width, DWORD height, DDPIXELFORMAT *inPixelFormat, DDPIXELFORMAT *outPixelFormat, void **oldData)
+void ConvertPixelData(void *src, void* dst, DWORD width, DWORD height, DDPIXELFORMAT *inPixelFormat, DDPIXELFORMAT *outPixelFormat)
 {
 	DWORD inAlphaBitMask, outAlphaBitMask;
 	long inMaskStartA, inMaskStartR, inMaskStartG, inMaskStartB;
 	long outMaskStartA, outMaskStartR, outMaskStartG, outMaskStartB;
 	long diffMaskLengthA, diffMaskLengthR, diffMaskLengthG, diffMaskLengthB;
-	char *inBuf, *outBuf, *newBuf;
-	long inputBytesPerPixel, outputBytesPerPixel, makeNewBuf;
-
-	// Default return value.
-	if (oldData)
-		*oldData = NULL;
+	char *inBuf, *outBuf;
+	long inputBytesPerPixel, outputBytesPerPixel;
 
 	// Verify pixel formats ok.
 	if (!(inPixelFormat->dwFlags & DDPF_RGB))
 	{
 		dp("Failed to convert pixel data - Input pixel format was not RGB. (Flags: %d)", inPixelFormat->dwFlags);
-		return data;
+		return;
 	}
 
 	if (!(outPixelFormat->dwFlags & DDPF_RGB))
 	{
 		dp("Failed to convert pixel data - Output pixel format was not RGB. (Flags: %d)", outPixelFormat->dwFlags);
-		return data;
+		return;
 	}
 
 	inAlphaBitMask = (inPixelFormat->dwFlags & DDPF_ALPHAPIXELS) ? inPixelFormat->dwRGBAlphaBitMask : 0;
@@ -1050,16 +1065,10 @@ void* ConvertPixelData(void *data, DWORD width, DWORD height, DDPIXELFORMAT *inP
 
 	inputBytesPerPixel = ((inPixelFormat->dwRGBBitCount - 1) / 8) + 1;
 	outputBytesPerPixel = ((outPixelFormat->dwRGBBitCount - 1) / 8) + 1;
-	makeNewBuf = (inputBytesPerPixel != outputBytesPerPixel);
-
-	// Setup output buffer.
-	newBuf = (char*)data;
-	if (makeNewBuf)
-		newBuf = (char*)AllocMem(outputBytesPerPixel * width * height);
 
 	// Convert pixel data.
-	inBuf = (char*)data;
-	outBuf = newBuf;
+	inBuf = (char*)src;
+	outBuf = (char*)dst;
 	for (long pos = (width * height); pos; pos--)
 	{
 		// 1) Get pixel data from input buffer & format.
@@ -1069,15 +1078,20 @@ void* ConvertPixelData(void *data, DWORD width, DWORD height, DDPIXELFORMAT *inP
 		DWORD red = (value & inPixelFormat->dwRBitMask) >> inMaskStartR;
 		DWORD green = (value & inPixelFormat->dwGBitMask) >> inMaskStartG;
 		DWORD blue = (value & inPixelFormat->dwBBitMask) >> inMaskStartB;
+//		if (pos == (width * height))
+//			dp("First Pixel: %d, [R=%d,G=%d,B=%d,A=%d] [R=%d/%d,G=%d/%d,B=%d/%d,A=%d/%d] -> ", value, red, green, blue, alpha, outMaskStartR, diffMaskLengthR, outMaskStartG, diffMaskLengthG, outMaskStartB, diffMaskLengthB, outMaskStartA, diffMaskLengthA);
 
 		// 2) Convert pixel data to new format.
-		red <<= diffMaskLengthR;
-		green <<= diffMaskLengthG;
-		blue <<= diffMaskLengthB;
+		red = mdxSignedShiftLeft(red, diffMaskLengthR);
+		green = mdxSignedShiftLeft(green, diffMaskLengthG);
+		blue = mdxSignedShiftLeft(blue, diffMaskLengthB);
 		if (!inAlphaBitMask && outAlphaBitMask)
-			alpha = outAlphaBitMask; // Fully enable alpha bits.
+			alpha = outAlphaBitMask >> outMaskStartA; // Fully enable alpha bits.
 		else
-			alpha <<= diffMaskLengthA;
+			alpha = mdxSignedShiftLeft(alpha, diffMaskLengthA);
+
+//		if (pos == (width * height))
+//			dp("[R=%d,G=%d,B=%d,A=%d]\n", red, green, blue, alpha);
 
 		value = (alpha << outMaskStartA) | (red << outMaskStartR) | (green << outMaskStartG) | (blue << outMaskStartB);
 
@@ -1086,17 +1100,6 @@ void* ConvertPixelData(void *data, DWORD width, DWORD height, DDPIXELFORMAT *inP
 		inBuf += inputBytesPerPixel;
 		outBuf += outputBytesPerPixel;
 	}
-
-	// Free old buffer or return it.
-	if (makeNewBuf)
-	{
-		if (oldData)
-			*oldData = data;
-		else
-			FreeMem(data);
-	}
-
-	return newBuf;
 }
 
 /*	--------------------------------------------------------------------------------
@@ -1209,7 +1212,7 @@ void mdxLoadBackdrop(const char* filename)
 		xDim = h->dim[0]; yDim = h->dim[1];
 	}
 
-	data = (BYTE*) ConvertPixelDataToSurface(data, xDim, yDim, surface[RENDER_SRF], &oldData);
+	oldData = ConvertPixelDataToSurfaceFormat((void**)&data, xDim, yDim, surface[RENDER_SRF]);
 
 	surface[RENDER_SRF]->GetSurfaceDesc(&ddsd);
 	ddsd.dwFlags = DDSD_CAPS | DDSD_WIDTH | DDSD_HEIGHT | DDSD_PIXELFORMAT;
