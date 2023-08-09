@@ -272,7 +272,7 @@ void LoadScreenFromNumber(unsigned long num)
 	char file[MAX_PATH];
 
 	sprintf(file,"%s%s\\des%03lu.bmp",baseDirectory,"Design\\",num);
-	screen = (short *)gelfLoad_BMP(file,NULL,(void**)&pptr,NULL,NULL,NULL,r565?GELF_IFORMAT_16BPP565:GELF_IFORMAT_16BPP555,GELF_IMAGEDATA_TOPDOWN);	
+	screen = (short *)gelfLoad_BMP(file,NULL,(void**)&pptr,NULL,NULL,NULL,GELF_IFORMAT_16BPP555,GELF_IMAGEDATA_TOPDOWN);	
 }
 
 void FreeScreen(void)

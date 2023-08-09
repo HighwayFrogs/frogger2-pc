@@ -684,7 +684,7 @@ unsigned long DDrawCreateSurfaces(HWND window, unsigned long xRes, unsigned long
  	l = (int)ddsd.ddpfPixelFormat.dwGBitMask;
 	while ( (!(l&1)) && (l) )
 		  l >>= 1;
-	r565 = (l != 31);
+	r565 = FALSE;
 	
 	// Create a render surface
 	
@@ -932,6 +932,173 @@ void DDrawClearSurface(unsigned long srfN, unsigned long value, unsigned long fi
 	surface[srfN]->Blt(NULL,NULL,NULL,DDBLT_WAIT | fillType,&m);
 }
 
+inline char CalculateMaskLength(DWORD mask)
+{
+	char length = 0;
+
+	// Find first.
+	while (!(mask & 1) && mask)
+		mask >>= 1;
+
+	while (mask)
+	{
+		length++;
+		mask >>= 1;
+	}
+
+	return length;
+}
+
+inline char CalculateMaskStart(DWORD mask)
+{
+	char start = 0;
+	while (!(mask & 1) && mask)
+	{
+		mask >>= 1;
+		start++;
+	}
+
+	return start;
+}
+
+void* ConvertPixelDataToSurface(void *data, DWORD width, DWORD height, LPDIRECTDRAWSURFACE7 surface, void **oldData)
+{
+	DDSURFACEDESC2 ddsd;
+	HRESULT result;
+	DDPIXELFORMAT defaultPixelFormat;
+
+	// Default return value.
+	if (oldData)
+		*oldData = NULL;
+
+	// Default pixel format. (This is the format which we expect to receive data, because this is the format loaded from files.)
+	DDINIT(defaultPixelFormat);
+	defaultPixelFormat.dwFlags = DDPF_RGB | DDPF_ALPHAPIXELS;
+	defaultPixelFormat.dwRGBBitCount = 16;
+	defaultPixelFormat.dwRGBAlphaBitMask = 0x8000; // 1
+	defaultPixelFormat.dwRBitMask = 0x7c00; // 5
+	defaultPixelFormat.dwGBitMask = 0x03e0; // 5
+	defaultPixelFormat.dwBBitMask = 0x001f; // 5
+
+	DDINIT(ddsd);
+	result = surface->GetSurfaceDesc(&ddsd);
+	if (result != DD_OK)
+	{
+		dp("Failed to convert pixel data - GetSurfaceDesc() returned status %d.", result);
+		return data;
+	}
+
+	if (!(ddsd.dwFlags & DDSD_PIXELFORMAT))
+	{
+		dp("Failed to convert pixel data - DDSURFACEDESC2 did not have a pixel format. (Flags: %d)", ddsd.dwFlags);
+		return data;
+	}
+
+	if (!(ddsd.ddpfPixelFormat.dwFlags & DDPF_RGB))
+	{
+		dp("Failed to convert pixel data - DDSURFACEDESC2 pixel format was not RGB. (Flags: %d)", ddsd.ddpfPixelFormat.dwFlags);
+		return data;
+	}
+
+	return ConvertPixelData(data, width, height, &defaultPixelFormat, &ddsd.ddpfPixelFormat, oldData);
+}
+
+void* ConvertPixelData(void *data, DWORD width, DWORD height, DDPIXELFORMAT *inPixelFormat, DDPIXELFORMAT *outPixelFormat, void **oldData)
+{
+	DWORD inAlphaBitMask, outAlphaBitMask;
+	long inMaskStartA, inMaskStartR, inMaskStartG, inMaskStartB;
+	long outMaskStartA, outMaskStartR, outMaskStartG, outMaskStartB;
+	long diffMaskLengthA, diffMaskLengthR, diffMaskLengthG, diffMaskLengthB;
+	char *inBuf, *outBuf, *newBuf;
+	long inputBytesPerPixel, outputBytesPerPixel, makeNewBuf;
+
+	// Default return value.
+	if (oldData)
+		*oldData = NULL;
+
+	// Verify pixel formats ok.
+	if (!(inPixelFormat->dwFlags & DDPF_RGB))
+	{
+		dp("Failed to convert pixel data - Input pixel format was not RGB. (Flags: %d)", inPixelFormat->dwFlags);
+		return data;
+	}
+
+	if (!(outPixelFormat->dwFlags & DDPF_RGB))
+	{
+		dp("Failed to convert pixel data - Output pixel format was not RGB. (Flags: %d)", outPixelFormat->dwFlags);
+		return data;
+	}
+
+	inAlphaBitMask = (inPixelFormat->dwFlags & DDPF_ALPHAPIXELS) ? inPixelFormat->dwRGBAlphaBitMask : 0;
+	outAlphaBitMask = (outPixelFormat->dwFlags & DDPF_ALPHAPIXELS) ? outPixelFormat->dwRGBAlphaBitMask : 0;
+
+	// Calculate pixel format conversion information.
+	inMaskStartA = CalculateMaskStart(inAlphaBitMask);
+	inMaskStartR = CalculateMaskStart(inPixelFormat->dwRBitMask);
+	inMaskStartG = CalculateMaskStart(inPixelFormat->dwGBitMask);
+	inMaskStartB = CalculateMaskStart(inPixelFormat->dwBBitMask);
+
+	outMaskStartA = CalculateMaskStart(outAlphaBitMask);
+	outMaskStartR = CalculateMaskStart(outPixelFormat->dwRBitMask);
+	outMaskStartG = CalculateMaskStart(outPixelFormat->dwGBitMask);
+	outMaskStartB = CalculateMaskStart(outPixelFormat->dwBBitMask);
+
+	diffMaskLengthA = CalculateMaskLength(outAlphaBitMask) - CalculateMaskLength(inAlphaBitMask);
+	diffMaskLengthR = CalculateMaskLength(outPixelFormat->dwRBitMask) - CalculateMaskLength(inPixelFormat->dwRBitMask);
+	diffMaskLengthG = CalculateMaskLength(outPixelFormat->dwGBitMask) - CalculateMaskLength(inPixelFormat->dwGBitMask);
+	diffMaskLengthB = CalculateMaskLength(outPixelFormat->dwBBitMask) - CalculateMaskLength(inPixelFormat->dwBBitMask);
+
+	inputBytesPerPixel = ((inPixelFormat->dwRGBBitCount - 1) / 8) + 1;
+	outputBytesPerPixel = ((outPixelFormat->dwRGBBitCount - 1) / 8) + 1;
+	makeNewBuf = (inputBytesPerPixel != outputBytesPerPixel);
+
+	// Setup output buffer.
+	newBuf = (char*)data;
+	if (makeNewBuf)
+		newBuf = (char*)AllocMem(outputBytesPerPixel * width * height);
+
+	// Convert pixel data.
+	inBuf = (char*)data;
+	outBuf = newBuf;
+	for (long pos = (width * height); pos; pos--)
+	{
+		// 1) Get pixel data from input buffer & format.
+		DWORD value = 0;
+		memcpy(&value, inBuf, inputBytesPerPixel);
+		DWORD alpha = ((value & inAlphaBitMask) >> inMaskStartA);
+		DWORD red = (value & inPixelFormat->dwRBitMask) >> inMaskStartR;
+		DWORD green = (value & inPixelFormat->dwGBitMask) >> inMaskStartG;
+		DWORD blue = (value & inPixelFormat->dwBBitMask) >> inMaskStartB;
+
+		// 2) Convert pixel data to new format.
+		red <<= diffMaskLengthR;
+		green <<= diffMaskLengthG;
+		blue <<= diffMaskLengthB;
+		if (!inAlphaBitMask && outAlphaBitMask)
+			alpha = outAlphaBitMask; // Fully enable alpha bits.
+		else
+			alpha <<= diffMaskLengthA;
+
+		value = (alpha << outMaskStartA) | (red << outMaskStartR) | (green << outMaskStartG) | (blue << outMaskStartB);
+
+		// 3) Write converted pixel data to output buffer.
+		memcpy(outBuf, &value, outputBytesPerPixel);
+		inBuf += inputBytesPerPixel;
+		outBuf += outputBytesPerPixel;
+	}
+
+	// Free old buffer or return it.
+	if (makeNewBuf)
+	{
+		if (oldData)
+			*oldData = data;
+		else
+			FreeMem(data);
+	}
+
+	return newBuf;
+}
+
 /*	--------------------------------------------------------------------------------
 	Function	: CopyDataToSurface
 	Purpose		: Copy data (matching the screen format) from a buffer to the screen
@@ -942,10 +1109,12 @@ void DDrawClearSurface(unsigned long srfN, unsigned long value, unsigned long fi
 void CopyDataToSurface(void *data, LPDIRECTDRAWSURFACE7 surface)
 {
 	HRESULT res;
+	DWORD bytesPerPixel;
 	DDSURFACEDESC2 ddsd;
 	DDINIT(ddsd);
 
 	res = surface->Lock(NULL,&ddsd,DDLOCK_SURFACEMEMORYPTR|DDLOCK_WAIT|DDLOCK_WRITEONLY|DDLOCK_NOSYSLOCK, 0);
+	bytesPerPixel = ((ddsd.ddpfPixelFormat.dwRGBBitCount - 1) / 8) + 1;
 	
 	if (res == DD_OK)
 	{
@@ -954,10 +1123,10 @@ void CopyDataToSurface(void *data, LPDIRECTDRAWSURFACE7 surface)
 
 		while (rows--)
 		{
-			memcpy(p, q, ddsd.dwWidth*2);
+			memcpy(p, q, ddsd.dwWidth * bytesPerPixel);
 			
 			p += ddsd.lPitch;
-			q += ddsd.dwWidth*2;
+			q += ddsd.dwWidth * bytesPerPixel;
 		}
 
 		surface->Unlock(NULL);
@@ -1014,10 +1183,11 @@ void mdxLoadBackdrop(const char* filename)
 
 	void *fdata;
 	BYTE* data;
+	void* oldData;
 	
 	if (isBMP(filename))
 	{
-		data = (BYTE*)gelfLoad_BMP((char*)filename,NULL,(void**)&pptr,&xDim,&yDim,NULL,r565?GELF_IFORMAT_16BPP565:GELF_IFORMAT_16BPP555,GELF_IMAGEDATA_TOPDOWN);
+		data = (BYTE*)gelfLoad_BMP((char*)filename,NULL,(void**)&pptr,&xDim,&yDim,NULL,GELF_IFORMAT_16BPP555,GELF_IMAGEDATA_TOPDOWN);
 		if (!data) {
 			dp("mdxLoadBackdrop(): Failed loading .BMP\n");
 			return;
@@ -1037,16 +1207,9 @@ void mdxLoadBackdrop(const char* filename)
 		gelf = 0;
 
 		xDim = h->dim[0]; yDim = h->dim[1];
-
-		unsigned short *p = (unsigned short*)data;
-
-		if (r565)
-			for (int x=(xDim*yDim); x; x--, p++)
-			{
-				unsigned short pix = *p;
-				*p = ((pix & 0x7fe0)<<1)|(pix & 0x1f);
-			}
 	}
+
+	data = (BYTE*) ConvertPixelDataToSurface(data, xDim, yDim, surface[RENDER_SRF], &oldData);
 
 	surface[RENDER_SRF]->GetSurfaceDesc(&ddsd);
 	ddsd.dwFlags = DDSD_CAPS | DDSD_WIDTH | DDSD_HEIGHT | DDSD_PIXELFORMAT;
@@ -1059,22 +1222,9 @@ void mdxLoadBackdrop(const char* filename)
 	// a surface the size of the bitmap.
 	if( ddcaps.dwCaps2 & DDCAPS2_WIDESURFACES )
 	{
-*/		ddsd.dwWidth = xDim;
-		ddsd.dwHeight = yDim;
-
-/*
-	DDINIT(ddsd.ddpfPixelFormat);
-	ddsd.ddpfPixelFormat.dwFlags = DDPF_RGB;
-	ddsd.ddpfPixelFormat.dwRGBBitCount = 16;
-	
-	ddsd.ddpfPixelFormat.dwRBitMask = 0xf800;
-	ddsd.ddpfPixelFormat.dwGBitMask = 0x07e0;
-	ddsd.ddpfPixelFormat.dwBBitMask = 0x001f;
-
-	//ddsd.ddpfPixelFormat.dwRBitMask = 0x7c00;
-	//ddsd.ddpfPixelFormat.dwGBitMask = 0x03e0;
-	//ddsd.ddpfPixelFormat.dwBBitMask = 0x001f;
-*/
+*/	
+	ddsd.dwWidth = xDim;
+	ddsd.dwHeight = yDim;
 
 	/*	if (rHardware)
 		ddsd.ddsCaps.dwCaps = DDSCAPS_OFFSCREENPLAIN | DDSCAPS_VIDEOMEMORY;
@@ -1083,27 +1233,30 @@ void mdxLoadBackdrop(const char* filename)
 
 	mdxFreeBackdrop();
 
-	if ((res = pDirectDraw7->CreateSurface(&ddsd, &backdrop, NULL)) != DD_OK)
+	if ((res = pDirectDraw7->CreateSurface(&ddsd, &backdrop, NULL)) == DD_OK)
+	{
+		surfacesMade++;
+		CopyDataToSurface(data, backdrop);
+	}
+	else
 	{
 		dp("Error creating backdrop surface\n");
-
-		if( gelf )
-			free(data);
-		else
-			FreeMem(fdata);
-
 		ddShowError(res);
-		return;
 	}
 
-	surfacesMade++;
-	
-	CopyDataToSurface(data, backdrop);
-
 	if (gelf)
+	{
 		free(data);
+		if (oldData)
+			FreeMem(oldData);
+	}
 	else
+	{
 		FreeMem(fdata);
+		if (oldData) // We free data here instead of oldData, since fdata was free'd.
+			FreeMem(data);
+		
+	}
 }
 
 /*	--------------------------------------------------------------------------------

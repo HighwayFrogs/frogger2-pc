@@ -32,6 +32,19 @@ In certain situations, the game camera could cause crash due to a divide by zero
 It's unknown how common this crash was in a retail game environment, but it was common in our builds, likely due to very high framerate.  
 We believe we have fixed this crash.  
 
+
+### 32-Bit Color Fixes
+The game had several points where it was hardcoded to use 16-bit colors.  
+Since then, 32-bit colors have become the standard.  
+The code has been updated to support different pixel formats by automatically converting to the target format.  
+
+**Situations Fixed:**  
+ - Any full-screen image such as the loading screen or gallery images would cover only half of the screen and show incorrect colors.  
+ 
+**Situations Ignored:**  
+ - `pcmisc.cpp` has a "Design viewer" which is basically a slideshow viewer of level designs. It is unused and supporting it is pointless because we can just look at the .bmp files directly.  
+
+
 ## Audio
 
 ### CD Audio Playback

@@ -119,6 +119,10 @@ void DDrawClearSurface(unsigned long srfN, unsigned long value, unsigned long fi
 WNDPROC SetUserVideoProc(WNDPROC proc);
 
 
+void* ConvertPixelDataToSurface(void *data, DWORD width, DWORD height, LPDIRECTDRAWSURFACE7 surface, void **oldData);
+void* ConvertPixelData(void *data, DWORD width, DWORD height, DDPIXELFORMAT *inPixelFormat, DDPIXELFORMAT *outPixelFormat, void **oldData);
+
+
 void mdxLoadBackdrop(const char* filename);
 
 void mdxDrawBackdrop();

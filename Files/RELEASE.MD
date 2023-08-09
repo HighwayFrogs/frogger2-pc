@@ -7,7 +7,8 @@ Frogger 2 Enhanced is a Frogger 2 mod which improves the PC port to resolve bugs
  - Playing music from .wav files. (Instead of just CD)  
  - Playing videos from files. (Instead of just CD)  
  - Optionally enabling debug features such as the in-game editor.  
- - Fix compatibility problems that make running the game difficult.
+ - Fix compatibility bugs that make the game not work as intended or crash.  
+ - Add modern quality of life improvements.  
 
 ## Setup Guide
 The following guide is here to describe how to setup the Frogger 2 enhanced mod from scratch.  
