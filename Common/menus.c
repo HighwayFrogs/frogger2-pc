@@ -965,6 +965,12 @@ void RunFrontendGameLoop (void)
 			if (cheatCombos[CHEAT_OPEN_ALL_CHARS].state == 0)
 				ComboCheat(CHEAT_OPEN_ALL_CHARS);
 
+			if (cheatCombos[CHEAT_OPEN_ALL_EXTRAS].state == 0)
+				ComboCheat(CHEAT_OPEN_ALL_EXTRAS);
+
+			if (cheatCombos[CHEAT_EXTRA_LEVELS].state == 0)
+				ComboCheat(CHEAT_EXTRA_LEVELS);
+
 			if (cheatCombos[CHEAT_OPEN_ALL_LEVELS].state == 0)
 				ComboCheat(CHEAT_OPEN_ALL_LEVELS);
 		}
