@@ -641,7 +641,7 @@ void UpdateGaribs()
 		}
 		else if( garib->fx )
 		{
-			garib->dropSpeed -= max(gameSpeed>>12, 1);
+			garib->dropSpeed -= gameSpeed;
 
 			if( garib->dropSpeed <= 0 )
 			{
@@ -650,7 +650,7 @@ void UpdateGaribs()
 					fx->tilt = 4096;
 					SetFXColour( fx, garib->fx->r, garib->fx->g, garib->fx->b );
 				}
-				garib->dropSpeed = 30;
+				garib->dropSpeed = 30 << 12;
 			}
 		}
 

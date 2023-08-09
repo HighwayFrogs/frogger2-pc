@@ -51,7 +51,7 @@ typedef struct TAGGARIB
 	SVECTOR				pos;
 //	unsigned long		flags;
 //	GAMETILE			*gameTile;
-	short				dropSpeed;
+	long				dropSpeed;
 } GARIB;
 
 typedef struct TAGGARIBLIST
