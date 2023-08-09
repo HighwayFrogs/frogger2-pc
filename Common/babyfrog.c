@@ -204,7 +204,7 @@ int PickupBabyFrog( ACTOR2 *baby, GAMETILE *tile )
 	babyFlash->height = babyIcons[n]->height;		
 
 	babyList[i].isSaved	= 1;
-	babyList[i].collect = 40;
+	babyList[i].collect = 40 << 12;
 
 	lastBabySaved = i;
 
@@ -426,9 +426,9 @@ void RunBabyCollect( int bby )
 	fixedRotateVectorByRotation( &fwd, &inVec, &q );
 	Orientate( &act->qRot, &fwd, &up );
 
-	babyList[bby].collect -= max( gameSpeed>>12, 1 );
+	babyList[bby].collect -= gameSpeed;
 
-	if( babyList[bby].collect < 1 )
+	if( babyList[bby].collect < 0 )
 	{
 		SPECFX *fx;
 		if( (fx = CreateSpecialEffectDirect( FXTYPE_SPARKLYTRAIL, &act->position, &up, 204800, 12288, 0, 20480 )) )
