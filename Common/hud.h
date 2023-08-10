@@ -58,6 +58,8 @@ typedef struct TAG_ARCADE_HUD
 	SPRITEOVERLAY *timeHeadOver;
 	SPRITEOVERLAY *timeHandOver;
 
+	TEXTOVERLAY	  *speedrunTimer;
+
 	TEXTOVERLAY   *timeTextMin;
 	TEXTOVERLAY   *timeTextSec;
 	TEXTOVERLAY   *timeTextHSec;
