@@ -352,6 +352,30 @@ void QuatToPSXMatrix(IQUATERNION* q, MATRIX* m);
 												   (dest)->vy = (v1)->vy + ((v2)->vy>>12),\
 												   (dest)->vz = (v1)->vz + ((v2)->vz>>12)
 
+// Added by Kneesnap to solve a problem in UpdateFlappyThing/enemies.c. 
+// The original game code's goal was to move forward in a direction towards a target point.
+// It didn't work at high FPS because at high FPS the magnitude of the distance moved per frame would be small.
+// And the actor position &act->position didn't contain enough precision to store the small movements.
+// When added to the position, it was the same as rounding down to the nearest integer.
+// Thus, if you were supposed to move 0.995 of a movement unit, you would round down to 0 movement units, meaning no movement would occur.
+// A proper solution would be to use a function to linearly interpolate between the start position and end position, but there are potentially very many places this fix could be required.
+// Some of those places might not even be using position data, but instead represent something else, so a more generalized solution is preferred as the base-line.
+// We can implement the interpolation solution on a case-by-case basis.
+// This is our generalized solution, where I opted to use randomness to normalize speeds over time.
+// If the amount of movement in a direction was 0.25 units, then every four movement updates we'd expect it to move 1 unit in that direction.
+// We can mimick this intended behavior by having a 25% chance every movement update to increase by 1 unit.
+// This works shockingly well so we'll probably keep it as the main solution.
+#define RoundVectorRandF(vec) \
+	if (Random(4096) < ((vec)->vx & 4095)) \
+		(vec)->vx += 4096; \
+	if (Random(4096) < ((vec)->vy & 4095)) \
+		(vec)->vy += 4096; \
+	if (Random(4096) < ((vec)->vz & 4095)) \
+		(vec)->vz += 4096; \
+	(vec)->vx ^= ((vec)->vx & 4095); \
+	(vec)->vy ^= ((vec)->vy & 4095); \
+	(vec)->vz ^= ((vec)->vz & 4095);
+
 
 #define CrossProductFFF(result, operand1, operand2) (result)->vx = FMul((operand1)->vy,(operand2)->vz) - FMul((operand1)->vz,(operand2)->vy),\
 													 (result)->vy = FMul((operand1)->vz,(operand2)->vx) - FMul((operand1)->vx,(operand2)->vz),\

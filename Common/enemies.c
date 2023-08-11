@@ -1953,9 +1953,11 @@ void UpdateFlappyThing( ENEMY *nme )
 	IQuatSlerp( &q1, &q2, speed, &act->qRot );
 
 	// Move forwards a bit in direction of facing
-//	RotateVectorByQuaternion( &fwd, &inVec, &act->qRot );
-	ScaleVectorFF( &fwd, FMul(path->nodes[1].speed,gameSpeed) *SCALE );
-	AddVectorSFS( &act->position, &fwd, &act->position );
+	// Kneesnap [8/10/2023]: The original code didn't work with high FPS, but I've fixed it with the creation of RoundVectorRandF. Check out its definition for details.
+	speed = FMul(path->nodes[1].speed,gameSpeed) * SCALE;
+	ScaleVectorFF(&fwd,  speed);
+	RoundVectorRandF(&fwd)
+	AddVectorSFS(&act->position, &fwd, &act->position);
 
 	nme->flags |= ENEMY_NEW_NODAMAGE;
 }
