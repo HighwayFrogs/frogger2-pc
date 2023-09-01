@@ -751,7 +751,7 @@ void CopyActorList()
 			slideVal = ((c->flags>>5) & 3);
 			
 			if (slideVal)
-				SlideObjectTextures(a->objectController->object,(slideSpeeds[slideVal]*gameSpeed)>>12);
+				SlideObjectTextures(a->objectController->object,FRoundRandomHack(slideSpeeds[slideVal]*gameSpeed));
 
 			if (c->flags&ACTOR_SLOWSLIDE)
 				SlideObjectTextures(a->objectController->object,gameSpeed>>8);

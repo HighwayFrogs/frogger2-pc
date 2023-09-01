@@ -376,6 +376,12 @@ void QuatToPSXMatrix(IQUATERNION* q, MATRIX* m);
 	(vec)->vy ^= ((vec)->vy & 4095); \
 	(vec)->vz ^= ((vec)->vz & 4095);
 
+#define RoundRandSFF(dest, a, b) \
+	(dest) = FMul((a), (b)); \
+	if (Random(4096) < ((dest) & 4095)) \
+		(dest) += 4096; \
+	(dest) ^= ((dest) & 4095);
+
 
 #define CrossProductFFF(result, operand1, operand2) (result)->vx = FMul((operand1)->vy,(operand2)->vz) - FMul((operand1)->vz,(operand2)->vy),\
 													 (result)->vy = FMul((operand1)->vz,(operand2)->vx) - FMul((operand1)->vx,(operand2)->vz),\

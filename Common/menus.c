@@ -1268,9 +1268,10 @@ void RunFrontendGameLoop (void)
 	for (i=0; i<MAX_SPARKLES; i++)
 	{
 		unsigned long spkLev;
+		long deltaA = FRoundRandomHack(gameSpeed * 3);
 
-		if (sparkles[i]->a > (gameSpeed * 3)/4096)
-			sparkles[i]->a-= (gameSpeed * 3)/4096;
+		if (sparkles[i]->a > deltaA)
+			sparkles[i]->a-= deltaA;
 		else
 		{
 			if (options.mode == OP_ARCADE)

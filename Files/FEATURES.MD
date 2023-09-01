@@ -41,6 +41,7 @@ The code has been updated to support different pixel formats by automatically co
 **Situations Fixed:**  
  - Any full-screen image such as the loading screen or gallery images would cover only half of the screen and show incorrect colors.  
  - The pages on the level select book in the main menu were garbled.  
+ - Using both software rendering and "Run in Window" together caused the same graphical effect described above.  TODO: NOT FINISHED
  
 **Situations Ignored:**  
  - `pcmisc.cpp` has a "Design viewer" which is basically a slideshow viewer of level designs. It is unused and supporting it is pointless because we can just look at the .bmp files directly.  
@@ -93,6 +94,25 @@ The video files can be copied from a CD (or other source such as the tape backup
 If videos do not play, error messages describing the issue should be included in the debug log file `frogger2.log` described in the debug document.  
 
 ## Misc
+### Delta Time Errors
+We fixed a few things which don't work correctly with high frame rates:  
+ - Frogger Wall Smoosh Animation Not Playing  
+ - Pause Menu Text Color Flashing  
+ - Froglets vanish immediately during their collection animation  
+ - Bugs show too many particle effects  
+ - Tiled backgrounds scroll too fast  
+ - Fish swim slowly  
+ - Fish bubbles don't float and pop quickly  
+ - Homing enemy position updates (Ghost could freeze in place)  
+ - Bouncing enemy position updates  
+ - Galloping enemy position updates
+ - Path & vertical enemy position updates  
+ - Smoother fade in/fade out  
+ - Fixed tons of particle effects from not displaying, displaying improperly, or displaying too many (Such as PFX Jet / Smoke Particles from Jets, FX Ring / Croak, Bubbles, Twinkle, etc)  
+ - Changed camera shake to happen every game tick, instead of every rendered frame, making for a much more pleasent experience  
+ - Fix too many bubbles & water ripples showing on death by drowning  
+ - Many more fixes  
+
 ### Removing Windows Registry
 The Windows Registry is used to store many pieces of game configuration data in the retail release.  
 Unfortunately, this can cause many many issues when trying to run the game.  
@@ -110,12 +130,7 @@ We have made the game fully portable, so all you need is a single folder contain
 ### Running Without Admin
 Running as admin should no longer be required to play the game.  
 There are some debugging features which may require running as admin to function properly, but we tried to take care of that as best we could.  
- 
-TODO: Unfinished:
- - Speedrun Timer
- - Audio Sliders
- - Images in windowed mode.
- - GPUs show up twice in config window.
- - FMV Freezes clicking outside the window in windowed mode.
- - Keyboard input while not in focus.
- - Weird DirectX repeat issue.
+
+### Video Playback
+When playing a video back, most actions (moving window, closing game, switching to another window) would cause the game to become unresponsive until video playback finished.  
+This would be annoying if you wanted to move a window after starting the game, then skip the FMVs but the game was frozen. This has been fixed.  

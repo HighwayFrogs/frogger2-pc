@@ -5,6 +5,16 @@
 // 	return f*4096;
 // }
 
+// The usage of this function is described in the documentation for RoundVectorRandF in maths.h
+long FRoundRandomHack(fixed x)
+{
+	long result = (x >> 12);
+	if (Random(4096) < (x & 4095))
+		result++;
+
+	return result;
+}
+
 fixed FMul(fixed x, fixed y)
 {
 	int a = x>>12;

@@ -430,7 +430,7 @@ void ProcessPTDissolve( PROCTEXTURE *pt )
 	PTSurfaceBlit( pt->tex, pt->buf1, pt->palette );
 
 	while( i-- )
-		pt->buf2[i] = (Random((10*gameSpeed)>>12)) ? pt->buf1[i] : (pt->active==1);
+		pt->buf2[i] = (FRoundRandomHack(10*gameSpeed)) ? pt->buf1[i] : (pt->active==1);
 
 	// Swap buffers
 	tmp = pt->buf1;

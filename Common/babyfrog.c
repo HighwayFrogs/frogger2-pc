@@ -331,7 +331,7 @@ void UpdateBabies( )
 		dist = MagnitudeF(&frogV)>>12;
 
 		if( babyList[i].idle > 0 )
-			babyList[i].idle -= gameSpeed>>12;
+			babyList[i].idle -= FRoundRandomHack(gameSpeed);
 
 		if( dist < BABY_ACTIVE_RADIUS ) // Play attract animations when frog is close
 		{
@@ -347,7 +347,7 @@ void UpdateBabies( )
 
 			// Decrease twice as fast if very close
 			if( dist < BABY_ACTIVE_RADIUS/2 )
-				babyList[i].idle -= gameSpeed>>12;
+				babyList[i].idle -= FRoundRandomHack(gameSpeed);
 
 			if( babyList[i].idle < 1 )
 			{
@@ -464,5 +464,6 @@ void RunBabyCollect( int bby )
 	}
 
 	ScaleVectorFF( &up, gameSpeed*30 );
+	RoundVectorRandF(&up);
 	AddToVectorSF( &act->position, &up );
 }

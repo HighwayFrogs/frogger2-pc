@@ -220,7 +220,7 @@ void PrintTextOverlays()
 		{
 			if(cur->speed)
 			{
-				fixed spd = FMul(gameSpeed, cur->speed)>>12;
+				fixed spd = FRoundRandomHack(FMul(gameSpeed, cur->speed));
 
 				if( Fabs(cur->xPosTo-cur->xPos) )
 				{

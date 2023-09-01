@@ -881,25 +881,25 @@ void ProcessKeyboardInput()
 		}
 
 		if (KEYPRESS(DIK_F1))
-			camDist.vy+=(20*gameSpeed)>>12;
+			camDist.vy += FRoundRandomHack(20*gameSpeed);
 
 		if (KEYPRESS(DIK_F2))
-			camDist.vy-=(20*gameSpeed)>>12;
+			camDist.vy -= FRoundRandomHack(20*gameSpeed);
 
 		if (KEYPRESS(DIK_F3))
 		{
 			if (KEYPRESS(DIK_LCONTROL))
-				camSideOfs+=20*gameSpeed;
+				camSideOfs += 20*gameSpeed;
 			else
-				camDist.vz+=(20*gameSpeed)>>12;
+				camDist.vz += FRoundRandomHack(20*gameSpeed);
 		}
 
 		if (KEYPRESS(DIK_F4))
 		{
 			if (KEYPRESS(DIK_LCONTROL))
-				camSideOfs-=20*gameSpeed;
+				camSideOfs -= 20*gameSpeed;
 			else
-				camDist.vz-=(20*gameSpeed)>>12;
+				camDist.vz -= FRoundRandomHack(20*gameSpeed);
 		}
 
 		if( KEYPRESS(DIK_F8) )

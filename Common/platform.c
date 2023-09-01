@@ -889,6 +889,7 @@ void UpdatePathPlatform(PLATFORM *plat)
 	SubVectorFSS(&fwd,&toPosition,&fromPosition);
 	
  	ScaleVectorFF(&fwd,length);
+	RoundVectorRandF(&fwd);
  	AddVectorSFS(&act->position,&fwd,&fromPosition);
 }
 
@@ -940,6 +941,7 @@ void UpdateUpDownPlatform(PLATFORM *plat)
 	t = ToFixed(actFrameCount-plat->path->startFrame) / (plat->path->endFrame-plat->path->startFrame);
 
 	ScaleVectorFF( &moveVec, FMul(t,end_offset) + FMul(ToFixed(1)-t,start_offset) );
+	RoundVectorRandF(&moveVec);
 	AddVectorSSF(&plat->pltActor->actor->position, &plat->path->nodes->worldTile->centre, &moveVec);
 }
 
@@ -971,6 +973,7 @@ void UpdateStepOnActivatedPlatform(PLATFORM *plat)
 	speed = FMul(plat->currSpeed*SCALE, gameSpeed);
 
 	ScaleVectorFF(&moveVec, speed);
+	RoundVectorRandF(&moveVec);
 
 	// platform only moves when frog is it - otherwsie returns to start position
 	if(plat->flags & PLATFORM_NEW_CARRYINGFROG)

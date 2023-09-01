@@ -487,7 +487,7 @@ void PrintSprites ( void )
 		{
 			if((gameState.mode != PAUSE_MODE) && (gameState.mode != GAMEOVER_MODE))
 			{
-				cur->angle += (cur->angleInc * gameSpeed)>>12;
+				cur->angle += FRoundRandomHack(cur->angleInc * gameSpeed);
 				if( cur->angle >= 4096 ) 
 					cur->angle -= 4096;
 				else if( cur->angle < 0 ) 

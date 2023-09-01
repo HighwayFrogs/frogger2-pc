@@ -597,6 +597,7 @@ void UpdateGallopingEnemy(ENEMY *nme)
 	foo.vy = (normal.vy*x - fwd.vy*y)>>12;
 	foo.vz = (normal.vz*x - fwd.vz*y)>>12;
 
+	RoundVectorRandF(&foo);
 	AddToVectorSF(&nme->nmeActor->actor->position, &foo);
 
 	nme->nmeActor->actor->size.vz = 4096+(rsin(clam-1500)>>3);
@@ -627,6 +628,7 @@ void UpdateBouncingEnemy(ENEMY *nme)
 
 	SetVectorFF(&v, &nme->inTile->normal);
 	ScaleVectorFF(&v, y);
+	RoundVectorRandF(&v);
 	AddToVectorSF(&nme->nmeActor->actor->position, &v);
 
 	nme->nmeActor->actor->size.vy = 4096 - ((x*x)>>14);
@@ -835,8 +837,6 @@ void UpdatePathNME( ENEMY *cur )
 
 		if( !(cur->flags & ENEMY_NEW_DONOTMOVE) )
 		{
-			AddVectorSFS(&act->actor->position,&fwd,&fromPosition);
-
 			if( cur->visible && !(cur->flags & ENEMY_NEW_NOREORIENTATE) )
 			{
 				if( !(cur->flags & ENEMY_NEW_FACEFORWARDS) )
@@ -850,6 +850,9 @@ void UpdatePathNME( ENEMY *cur )
 					OrientateSF(&act->actor->qRot, &path->nodes->worldTile->dirVector[cur->facing],  &cur->currNormal);
 				}
 			}
+
+			RoundVectorRandF(&fwd);
+			AddVectorSFS(&act->actor->position,&fwd,&fromPosition);
 		}
 	}
 
@@ -939,6 +942,7 @@ void UpdateSlerpPathNME( ENEMY *cur )
  		ScaleVectorFF( &fwd, FMul(cur->speed,gameSpeed)*SCALE );
  	}
  
+	RoundVectorRandF(&fwd);
  	AddToVectorSF(&act->position, &fwd);
  
  	if( DistanceBetweenPointsSS(&act->position, &toPosition) < 409600 )
@@ -1424,6 +1428,7 @@ void UpdateMoveVerticalNME( ENEMY *cur )
 	t = FDiv( ToFixed(actFrameCount-path->startFrame) , ToFixed(path->endFrame-path->startFrame) );
 
 	ScaleVectorFF( &moveVec, FMul(t,end_offset) + FMul(4096-t,start_offset) );
+	RoundVectorRandF(&moveVec);
 	AddVectorSSF(&act->position, &path->nodes->worldTile->centre, &moveVec);
 }
 
@@ -1543,6 +1548,7 @@ void UpdateHomingNME( ENEMY *cur )
 	}
 
 	ScaleVectorFF( &fwd, FMul(cur->speed, gameSpeed)*SCALE );
+	RoundVectorRandF(&fwd);
 	AddToVectorSF( &cur->nmeActor->actor->position, &fwd );
 }
 

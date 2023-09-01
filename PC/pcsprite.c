@@ -158,7 +158,7 @@ void PrintSpriteOverlays(long num)
 		if(cur->used && cur->draw && cur->a)
 		{
 			// Go to destination, if specified
-			fixed spd = FMul(gameSpeed, cur->speed)>>12;
+			fixed spd = FRoundRandomHack(FMul(gameSpeed, cur->speed));
 
 			if( Fabs(cur->xPosTo-cur->xPos) )
 			{
@@ -320,7 +320,7 @@ void PrintSprite(SPRITE *sprite)
 		if(sprite->flags & SPRITE_FLAGS_ROTATE)
 		{
 			// rotate the little blighters
-			sprite->angle += (sprite->angleInc * gameSpeed)>>12;
+			sprite->angle += FRoundRandomHack(sprite->angleInc * gameSpeed);
 			if( sprite->angle >= 4096 ) 
 				sprite->angle -= 4096;
 			else if( sprite->angle < 0 ) 

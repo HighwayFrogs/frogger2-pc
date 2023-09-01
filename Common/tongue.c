@@ -291,7 +291,7 @@ void UpdateFrogTongue( int pl )
 				else if( tongue[pl].type == TONGUE_GET_SCENIC )
 				{
 					ENEMY *e = (ENEMY *)tongue[pl].thing;
-					ScaleVectorFF( &e->nmeActor->actor->size, 4096-((128*gameSpeed)>>12) );
+					ScaleVectorFF( &e->nmeActor->actor->size, 4096-FRoundRandomHack(128*gameSpeed) );
 					SetVectorSS( &e->nmeActor->actor->position, &tongue[pl].pos );
 				}
 			}

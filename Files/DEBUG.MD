@@ -9,6 +9,11 @@ The location the game wants to make these files is at `C:\frogger2.log` and `C:\
 Instead, the files will likely be created at `%localappdata%\VirtualStore\`, which is where modern Windows will redirect the files to go.  
 When issues arise, looking inside of these files with any ol' text editor (such as Notepad) may include helpful warnings to guide troubleshooting.  
 
+## Level Select
+Debug mode enables two more worlds in the arcade mode level select.  
+The first one is just the frontend world, and only contains two playable maps, the main menu and training.  
+The other contains four unused but fully completed multiplayer maps.  
+
 ## Load .Bmps Option
 This checkbox in the config window will make the game read textures from folders containing .bmp files placed in `Textures\` instead of .FLA files.  
 You can get the texture folders from `D:\Frogger\Frogger2_Source_Delivery\Data\Pc\Textures\` or `\\BLITZONE\DATA\TeamSpirit\pcversion\Textures\` in the end of project tape backup.  
