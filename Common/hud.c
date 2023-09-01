@@ -92,6 +92,8 @@ char timeStringHSec[8]	= "00";
 
 char mStartString[32];
 
+char speedrunTimerString[16] = "00:00:00";
+
 char collectString[32] = "";
 char coinsText[5] = "00";
 //char coinsText2[5] = "00";
@@ -128,6 +130,10 @@ void InitArcadeHUD(void)
 	arcadeHud.timeBak->b = 128;
 	sprintf(timeBarStr,"%d:%02d.%d0",worldVisualData[player[0].worldNum].levelVisualData[player[0].levelNum].difficultTime/600,(worldVisualData[player[0].worldNum].levelVisualData[player[0].levelNum].difficultTime/10)%60,(worldVisualData[player[0].worldNum].levelVisualData[player[0].levelNum].difficultTime)%10);
 	arcadeHud.timeBarText = CreateAndAddTextOverlay(2048,3300,timeBarStr,YES,255,font,TEXTOVERLAY_SHADOW);
+	arcadeHud.speedrunTimer = CreateAndAddTextOverlay(0, 0, speedrunTimerString, NO, 255, fontSmall, TEXTOVERLAY_NORMAL);
+	arcadeHud.speedrunTimer->b = 0;
+	arcadeHud.speedrunTimer->draw = showIGT && ((gameState.single == STORY_MODE));
+
 	if((gameState.mode == FRONTEND_MODE) || (gameState.mode == DEMO_MODE))
 	{
 		GTInit(&goTimer,0);
@@ -509,7 +515,7 @@ void DisableHUD(void)
 	arcadeHud.livesOver->draw = arcadeHud.coinsOver->draw = arcadeHud.livesText->draw = arcadeHud.coinsText->draw = /*arcadeHud.coinsText2->draw =*/ 0;
 	arcadeHud.collectText->draw = 0;
 	arcadeHud.autoHopOver->draw = arcadeHud.quickHopOver->draw = 0;
-
+	arcadeHud.speedrunTimer->draw = 0;
 	if( gameState.single != STORY_MODE )
 	{
 		arcadeHud.timeHeadOver->draw = arcadeHud.timeHandOver->draw = arcadeHud.timeFaceOver->draw = 0;
@@ -559,6 +565,11 @@ void EnableHUD(void)
 	{
 		arcadeHud.timeHeadOver->draw = arcadeHud.timeHandOver->draw = arcadeHud.timeFaceOver->draw = 1;
 		arcadeHud.timeTextMin->draw = arcadeHud.timeTextSec->draw = 1;
+	}
+
+	if((gameState.single == STORY_MODE) && (player[0].worldNum != WORLDID_FRONTEND))
+	{
+		arcadeHud.speedrunTimer->draw = showIGT;
 	}
 
 	for(i=0; i<numBabies; i++)
@@ -675,12 +686,17 @@ void UpDateOnScreenInfo ( void )
 	long hardTimeFrames = worldVisualData[player[0].worldNum].levelVisualData[player[0].levelNum].parTime * 6;
 	long frameCheck = 0;
 	int oldTime;
-	
+	int timeForLevel = (actFrameCount - storeFrameCount)/6;
 
 	if (gameState.mode == INGAME_MODE)
 	{
 		long alpha = actFrameCount-100;
 
+		if(arcadeHud.speedrunTimer->draw)
+		{
+									//   min  sec  milli
+			sprintf(speedrunTimerString,"%02i:%02i.%i0",((int)timeForLevel/600)%600,((int)timeForLevel/10)%60,((int)timeForLevel)%10);
+		}
 		
 		if(arcadeHud.coinZoom->draw)
 		{
