@@ -168,23 +168,6 @@ static char *BooleanString(int flag) {
 
 void SaveEditorState()
 {
-	// FILE *f = fopen(EDITOR_STATE_FILE, "w");
-	// if (!f) return;
-
-	// fprintf(f, "%s\nFlags: ", savePath);
-
-	// if (invertMouse) fprintf(f, "invertmouse ");
-	// if (drawLinks) fprintf(f, "links ");
-	// if (drawNormals) fprintf(f, "normals ");
-	// if (drawVectors) fprintf(f, "vectors ");
-	// if (drawDots) fprintf(f, "dots ");
-	// fprintf(f, "\n");
-
-	// fprintf(f, "%f %f\n", HorizontalWhizziness, InOutWhizziness);
-
-	// fprintf(f, "%s\n", scriptPath);
-
-	// fclose(f);
 	WritePrivateProfileString("Editor Flags", "invert_mouse", BooleanString(invertMouse), iniFilePath);
 	WritePrivateProfileString("Editor Flags", "draw_links", BooleanString(drawLinks), iniFilePath);
 	WritePrivateProfileString("Editor Flags", "draw_normals", BooleanString(drawNormals), iniFilePath);
