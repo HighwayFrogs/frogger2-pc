@@ -8,6 +8,7 @@
 
 ----------------------------------------------------------------------------------------------- */
 
+#include <minwindef.h>
 #include <ultra64.h>
 #include <stdio.h>
 
@@ -1709,7 +1710,7 @@ void DeleteFlags( )
 
 void EditorSave(const char* path)
 {
-	char filename[80];
+	char filename[MAX_PATH];
 	int i, worldID, levelID;
 
 	strcpy(savePath, path);
@@ -1742,7 +1743,7 @@ void EditorSave(const char* path)
 
 void EditorLoad(const char* path)
 {
-	char filename[80];
+	char filename[MAX_PATH];
 	int i, worldID, levelID;
 
 	strcpy(savePath, path);
