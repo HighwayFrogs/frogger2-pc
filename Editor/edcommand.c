@@ -1726,9 +1726,11 @@ void EditorSave(const char* path)
 	sprintf(filename, "%s" ENTITY_DUMP_FILE, savePath, worldID, levelID);
 	if (SaveCreateList(filename, createList))
 	{
+		utilPrintf("Saving Editor data to: %s" ENTITY_DUMP_FILE, savePath, worldID, levelID);
 		sprintf(statusMessage, "Saved editor file %s", filename);
 	}
 	else
+		utilPrintf("Error saving Editor data to: %s" ENTITY_DUMP_FILE, savePath, worldID, levelID);
 		sprintf(statusMessage, "Error saving to %s", filename);
 }
 

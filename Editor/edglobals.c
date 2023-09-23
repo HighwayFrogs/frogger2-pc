@@ -116,8 +116,8 @@ EDVECTOR editCameraRot = { 0.0, 0.0, 0.0 };
 
 TOOLBAR_SUBMENU submenu = NULL;
 
-char savePath[80] = EDITOR_SAVE_BASE;
-char scriptPath[80] = "";
+char savePath[MAX_PATH] = EDITOR_SAVE_BASE;
+char scriptPath[MAX_PATH] = "";
 
 SELECTFUNC selectFunc = NULL;
 EDITGROUP *selectionList = NULL;
