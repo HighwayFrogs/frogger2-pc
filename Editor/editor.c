@@ -16,6 +16,8 @@
 
 #include <islmem.h>
 #include <winbase.h>
+#include <winnt.h>
+#include <Windows.h>
 
 #include "edmaths.h"
 #include "editfile.h"
@@ -201,12 +203,40 @@ void LoadEditorState()
 	drawDots = stricmp(tempStr, "True") == 0;
 }
 
-
 /*	--------------------------------------------------------------------------------
 	Function		: 
 	Purpose			: 
 	Parameters		: 
 	Returns			: 
+	Info			: 
+*/
+
+int CheckEditIcons()
+{
+	// This is a bit of a hack but abusing the fact that there is already an editicons list
+	// and it will be changed by a subsequent call to LoadEditIcons 
+	// if the icon is present we set the editicons[i].surface = 1 otherwise 0
+	char texturePath[MAX_PATH];
+	int i;
+	int success = 1;
+	DWORD attribs;
+
+	for (i = 0; i < EDITORTEXTURES; i++)	
+	{
+		sprintf(texturePath, "%s" TEXTURE_BASE "editor\\editor%d.bmp", baseDirectory, i+1);
+		attribs = GetFileAttributes(texturePath);
+		editicons[i].surface = (attribs != ((DWORD)-1) && !(attribs & FILE_ATTRIBUTE_DIRECTORY));
+		if (!editicons[i].surface) success = 0;
+	}
+
+	return success;
+}
+
+/*	--------------------------------------------------------------------------------
+	Function		: 
+	Purpose			: 
+	Parameters		: 
+	Returns			: whether loading all of the icons were successfully loaded
 	Info			: 
 */
 

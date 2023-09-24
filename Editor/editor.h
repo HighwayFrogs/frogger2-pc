@@ -20,6 +20,8 @@ void ShutdownEditor(void);
 
 void EditorKeypress(char c);
 
+int CheckEditIcons(void);
+
 #ifdef __cplusplus
 }
 #endif
