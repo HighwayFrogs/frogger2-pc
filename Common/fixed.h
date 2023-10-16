@@ -24,6 +24,7 @@ extern "C" {
 fixed FMul(fixed x, fixed y);
 fixed NewFDiv(fixed x, fixed y, char *file, int line);
 fixed FDiv2(fixed x, fixed y);
+long FRoundRandomHack(fixed x);
 
 #ifdef __cplusplus
 }

@@ -840,7 +840,7 @@ void UpdateFXDecal( SPECFX *fx )
  	if( fx->follow )
  		SetVectorSS( &fx->origin, &fx->follow->position );
 
-	fo = (fx->fade * gameSpeed)>>12;
+	fo = FRoundRandomHack(fx->fade * gameSpeed);
 	if( fx->a > fo ) fx->a -= fo;
 	else fx->a = 0;
 
@@ -850,7 +850,7 @@ void UpdateFXDecal( SPECFX *fx )
 	fx->scale.vz += spd;
 
 	if( fx->spin )
-		fx->angle += (fx->spin * gameSpeed)>>12;
+		fx->angle += FRoundRandomHack(fx->spin * gameSpeed);
 
 	if( (!fx->a) || (actFrameCount > fx->lifetime) )
 		DeallocateFX(fx,1);
@@ -872,7 +872,7 @@ void UpdateFXRing( SPECFX *fx )
  	if( fx->follow )
  		SetVectorSS( &fx->origin, &fx->follow->position );
 
-	fo = (fx->fade * gameSpeed)>>12;
+	fo = FRoundRandomHack(fx->fade * gameSpeed);
 	if( fx->fadeAlpha > fo ) fx->fadeAlpha -= fo;
 	else fx->fadeAlpha = 0;
 
@@ -884,7 +884,7 @@ void UpdateFXRing( SPECFX *fx )
 	fx->scale.vx += speed;
 	fx->scale.vy += speed>>2;
 	fx->scale.vz += speed;
-	fx->angle += (fx->spin * gameSpeed)>>12;
+	fx->angle += FRoundRandomHack(fx->spin * gameSpeed);
 	
 	if( (!fx->fadeAlpha) || (actFrameCount > fx->lifetime) )
 		DeallocateFX(fx,1);
@@ -907,17 +907,17 @@ void UpdateFXBolt( SPECFX *fx )
  	if( fx->follow )
  		SetVectorSS( &fx->origin, &fx->follow->position );
 
-	fo = (fx->fade * gameSpeed)>>12;
+	fo = FRoundRandomHack(fx->fade * gameSpeed);
 	if( fx->a > fo ) fx->a -= fo;
 	else fx->a = 0;
 
 	fx->vel.vx += accn;
 	fx->vel.vy += accn;
 	fx->vel.vz += accn;
-	fx->origin.vx += (FMul(fx->vel.vx, gameSpeed)>>12);
-	fx->origin.vy += (FMul(fx->vel.vy, gameSpeed)>>12);
-	fx->origin.vz += (FMul(fx->vel.vz, gameSpeed)>>12);
-	fx->angle += (fx->spin * gameSpeed)>>12;
+	fx->origin.vx += FRoundRandomHack(FMul(fx->vel.vx, gameSpeed));
+	fx->origin.vy += FRoundRandomHack(FMul(fx->vel.vy, gameSpeed));
+	fx->origin.vz += FRoundRandomHack(FMul(fx->vel.vz, gameSpeed));
+	fx->angle += FRoundRandomHack(fx->spin * gameSpeed);
 	
 	if( actFrameCount > fx->lifetime )
 		DeallocateFX(fx,1);
@@ -943,7 +943,7 @@ void UpdateFXSmoke( SPECFX *fx )
 	s = fx->sprites;
 	while(i--)
 	{
-		fo = (fx->fade * gameSpeed)>>12;
+		fo = FRoundRandomHack(fx->fade * gameSpeed);
 		if( s->a > fo ) s->a -= fo;
 		else
 		{
@@ -952,9 +952,9 @@ void UpdateFXSmoke( SPECFX *fx )
 			dead = 1;
 		}
 	 
-	 	s->pos.vx += (FMul(fx->vel.vx, gameSpeed)>>12);
-		s->pos.vy += (FMul(fx->vel.vy, gameSpeed)>>12);
-		s->pos.vz += (FMul(fx->vel.vz, gameSpeed)>>12);
+	 	s->pos.vx += FRoundRandomHack(FMul(fx->vel.vx, gameSpeed));
+		s->pos.vy += FRoundRandomHack(FMul(fx->vel.vy, gameSpeed));
+		s->pos.vz += FRoundRandomHack(FMul(fx->vel.vz, gameSpeed));
 	 
 		// Slow down gameSpeed times
 		vS = ( 4096 - gameSpeed/50/*FMul(82,gameSpeed)*/);
@@ -962,8 +962,8 @@ void UpdateFXSmoke( SPECFX *fx )
 
 		if( fx->type == FXTYPE_SMOKE_GROWS )
 		{
-			s->scaleX += (FMul(fx->accn,gameSpeed)>>12);
-			s->scaleY += (FMul(fx->accn,gameSpeed)>>12);
+			s->scaleX += FRoundRandomHack(FMul(fx->accn,gameSpeed));
+			s->scaleY += FRoundRandomHack(FMul(fx->accn,gameSpeed));
 		}
 		else if( fx->type == FXTYPE_BUBBLES )
 		{
@@ -1110,16 +1110,16 @@ void UpdateFXExplode( SPECFX *fx )
 			}
 		}
 
-		s->pos.vx += (FMul(p->vel.vx, gameSpeed)>>12);
-		s->pos.vy += (FMul(p->vel.vy, gameSpeed)>>12);
-		s->pos.vz += (FMul(p->vel.vz, gameSpeed)>>12);
+		s->pos.vx += FRoundRandomHack(FMul(p->vel.vx, gameSpeed));
+		s->pos.vy += FRoundRandomHack(FMul(p->vel.vy, gameSpeed));
+		s->pos.vz += FRoundRandomHack(FMul(p->vel.vz, gameSpeed));
 
-		fo = ((Random(4) + fx->fade) * gameSpeed)>>12;
+		fo = FRoundRandomHack((Random(4) + fx->fade) * gameSpeed);
 
 		if( fx->type == FXTYPE_SMOKEBURST || fx->type == FXTYPE_FIERYSMOKE )
 		{
-			s->scaleX += (FMul(fx->accn,gameSpeed)>>12);
-			s->scaleY += (FMul(fx->accn,gameSpeed)>>12);
+			s->scaleX += FRoundRandomHack(FMul(fx->accn,gameSpeed));
+			s->scaleY += FRoundRandomHack(FMul(fx->accn,gameSpeed));
 		}
 
 		// For fiery smoke, fade to black then fade out if not the additive component
@@ -1424,7 +1424,7 @@ void UpdateFXTwinkle( SPECFX *fx )
 		if( (actFrameCount-fx->tilt) > (fx->lifetime-fx->tilt)/2 )
 		{
 			fx->speed += FMul( fx->accn, gameSpeed );
-			speed = FMul( fx->speed, gameSpeed )>>12;
+			speed = FRoundRandomHack(FMul( fx->speed, gameSpeed ));
 
 			s->scaleX -= speed;
 			s->scaleY -= speed;
@@ -1433,7 +1433,7 @@ void UpdateFXTwinkle( SPECFX *fx )
 		{
 			fx->speed -= FMul( fx->accn, gameSpeed );
 			if( fx->speed < 0 ) fx->speed = 0;
-			speed = FMul( fx->speed, gameSpeed )>>12;
+			speed = FRoundRandomHack(FMul( fx->speed, gameSpeed ));
 
 			s->scaleX += speed;
 			s->scaleY += speed;
@@ -1446,7 +1446,7 @@ void UpdateFXTwinkle( SPECFX *fx )
 	{
 		if( fx->type == FXTYPE_TWINKLE )
 		{
-			fo = Random((int)fx->fade) * (gameSpeed>>12);
+			fo = Random((int)fx->fade) * FRoundRandomHack(gameSpeed);
 			if( s->a > fo ) s->a -= fo;
 			else
 			{

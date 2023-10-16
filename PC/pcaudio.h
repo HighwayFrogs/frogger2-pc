@@ -213,17 +213,18 @@ extern void InitVoices( char *path, int len );
 
 extern void PrepareSong(short num, short loop);
 extern void LoopSong();
-extern void StopSong( );
+extern void StopSong();
 extern int IsSongPlaying();
 
-extern void PauseAudio( );
-extern void UnPauseAudio( );
+extern void PauseAudio();
+extern void UnPauseAudio();
 
 int InitCDaudio();
 int ShutdownMusic();
 int GetCDVolume();
 void SetCDVolume(int vol);
 
+DWORD PlayCDTrackFromFile(int track, long loop);
 
 #ifdef __cplusplus
 }

@@ -188,9 +188,9 @@ void UpdatePFXJet( SPECFX *fx )
 			}
 		}
 
-		s->pos.vx += (FMul(p->vel.vx, gameSpeed)>>12);
-		s->pos.vy += (FMul(p->vel.vy, gameSpeed)>>12);
-		s->pos.vz += (FMul(p->vel.vz, gameSpeed)>>12);
+		s->pos.vx += FRoundRandomHack(FMul(p->vel.vx, gameSpeed));
+		s->pos.vy += FRoundRandomHack(FMul(p->vel.vy, gameSpeed));
+		s->pos.vz += FRoundRandomHack(FMul(p->vel.vz, gameSpeed));
 
 //		fo = (Random(4) + fx->fade) * (gameSpeed>>12);
 //		if( s->a > fo ) s->a -= fo;

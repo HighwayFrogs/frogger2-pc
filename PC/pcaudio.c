@@ -32,6 +32,7 @@
 #include "cam.h"
 #include "game.h"
 #include "controll.h"
+#include "CDAudioManager.h"
 
 #define MAX_AMBIENT_SFX		50
 #define DEFAULT_SFX_DIST	7000
@@ -45,8 +46,6 @@ int SAMPLE_VOLUME = 255;
 
 SAMPLE voices[4];
 SAMPLE *genSfx[NUM_GENERIC_SFX];
-
-MCIDEVICEID mciDevice = 0;
 
 SOUNDLIST soundList;					// Actual Sound Samples List
 AMBIENT_SOUND_LIST	ambientSoundList;
@@ -798,7 +797,7 @@ void UpdateAmbientSounds()
 	RETURNS:	
 	INFO:		
 */
-void PauseAudio( )
+void PauseAudio()
 {
 	BUFSAMPLE *s;
 	AMBIENT_SOUND *a;
@@ -815,8 +814,7 @@ void PauseAudio( )
 	for( a=ambientSoundList.head.next; a!=&ambientSoundList.head; a=a->next )
 		a->lpdsBuffer = NULL;
 
-	if( mciDevice )
-		mciSendCommand(mciDevice, MCI_STOP, 0, (DWORD)NULL);
+    CDAudioManager_Pause();
 }
 
 
@@ -827,7 +825,7 @@ void PauseAudio( )
 	RETURNS:	
 	INFO:		
 */
-void UnPauseAudio( )
+void UnPauseAudio()
 {
 	BUFSAMPLE *s;
 	AMBIENT_SOUND *a;
@@ -851,7 +849,7 @@ void UnPauseAudio( )
 		PlaySample( mus, NULL, 0, SAMPLE_VOLUME/2, -1 );
 	}
 #else
-	LoopSong();
+    CDAudioManager_Resume();
 #endif
 }
 
@@ -970,8 +968,12 @@ int InitCDaudio()
 		}
 
 	oldVolume = auxVolume = GetCDVolume();
+
+    CDAudioManager_Startup();
+
 	return 0;
 }
+
 
 /*	--------------------------------------------------------------------------------
 	FUNCTION:	ShutdownMusic
@@ -983,7 +985,8 @@ int InitCDaudio()
 
 int ShutdownMusic()
 {
-	StopSong();
+    CDAudioManager_Stop();
+    CDAudioManager_Shutdown();
 
 	if (musicFileSample)
 	{
@@ -991,20 +994,20 @@ int ShutdownMusic()
 		musicFileSample = NULL;
 	}
 
-	if( mciDevice )
-		SetCDVolume(auxVolume);
+	//if( mciDevice )
+	//	SetCDVolume(auxVolume);
 
 	return 0;
 }
 
 /*	--------------------------------------------------------------------------------
-	Function		: playCDTrackFromFile
+	Function		: PlayCDTrackFromFile
 	Purpose			: Attempts to play a CD track from a .wav file.
-	Parameters		: char
-	Returns			: 1 if the track is playing from the file, 0 if it could not be played.
+	Parameters		: 
+	Returns			: 0 if the track is playing from the file, non-zero if it could not be played.
 	Info			: 
 */
-int playCDTrackFromFile(int track, long loop)
+DWORD PlayCDTrackFromFile(int track, long loop)
 {
 	SAMPLE* sample;
 	char path[MAX_PATH];
@@ -1012,13 +1015,13 @@ int playCDTrackFromFile(int track, long loop)
 
 	if (musicFileSample)
 	{
-		StopSong();
+        StopSong();
 
 		if (cdTrack == track)
 		{
 			AddSample(musicFileSample);
 			PlaySample(musicFileSample, NULL, 0, oldVolume, -1);
-			return 1; // success.
+			return 0; // success.
 		}
 		else
 		{
@@ -1030,7 +1033,7 @@ int playCDTrackFromFile(int track, long loop)
 
 	wavFileName = CdTrackFileNames[track];
 	if (!wavFileName)
-		return 0;
+		return 1;
 
 	ZeroMemory(path, MAX_PATH);
 	strcat( path, baseDirectory );
@@ -1040,13 +1043,13 @@ int playCDTrackFromFile(int track, long loop)
 	if( !sample )
 	{
 		utilPrintf( "Could not open music at %s, defaulting to CD playback.\n", path );
-		return 0;
+		return 1;
 	}
 
 	musicFileSample = sample;
 	AddSample(sample);
 	PlaySample(sample, NULL, 0, oldVolume, -1);
-	return 1;
+	return 0;
 }
 
 /*	--------------------------------------------------------------------------------
@@ -1066,25 +1069,26 @@ void PrepareSong(short world, short loop)
 
 	switch (world)
 	{
-	case WORLDID_GARDEN:		track = GARDEN_CDAUDIO; break;
-	case WORLDID_ANCIENT:		track = ANCIENTS_CDAUDIO; break;
-	case WORLDID_SPACE:			track = SPACE_CDAUDIO; break;
-	case WORLDID_CITY:			track = SUPERRETRO_CDAUDIO; break;
-	case WORLDID_SUBTERRANEAN:	track = SUBTERRANEAN_CDAUDIO; break;
-	case WORLDID_LABORATORY:	track = LABORATORY_CDAUDIO; break;
-	case WORLDID_HALLOWEEN:		track = HALLOWEEN_CDAUDIO; break;
-	case WORLDID_SUPERRETRO:	track = SUPERRETRO_CDAUDIO; break;
-	case WORLDID_FRONTEND:		track = FRONTEND_CDAUDIO; break;
+	    case WORLDID_GARDEN:		track = GARDEN_CDAUDIO; break;
+	    case WORLDID_ANCIENT:		track = ANCIENTS_CDAUDIO; break;
+	    case WORLDID_SPACE:			track = SPACE_CDAUDIO; break;
+	    case WORLDID_CITY:			track = SUPERRETRO_CDAUDIO; break;
+	    case WORLDID_SUBTERRANEAN:	track = SUBTERRANEAN_CDAUDIO; break;
+	    case WORLDID_LABORATORY:	track = LABORATORY_CDAUDIO; break;
+	    case WORLDID_HALLOWEEN:		track = HALLOWEEN_CDAUDIO; break;
+	    case WORLDID_SUPERRETRO:	track = SUPERRETRO_CDAUDIO; break;
+	    case WORLDID_FRONTEND:		track = FRONTEND_CDAUDIO; break;
 
-	case AUDIOTRK_GAMEOVER:		track = GAMEOVER_CDAUDIO; break;
-	case AUDIOTRK_LEVELCOMPLETE:track = LEVELCOMPLETE_CDAUDIO; break;
-	case AUDIOTRK_LEVELCOMPLETELOOP:track = LEVELCOMPLETELOOP_CDAUDIO; break;
+	    case AUDIOTRK_GAMEOVER:		track = GAMEOVER_CDAUDIO; break;
+	    case AUDIOTRK_LEVELCOMPLETE:track = LEVELCOMPLETE_CDAUDIO; break;
+	    case AUDIOTRK_LEVELCOMPLETELOOP:track = LEVELCOMPLETELOOP_CDAUDIO; break;
 
-	default:
-		return;
+	    default:
+		    return;
 	}
+
 	// play cd audio track here....
-	playCDTrack ( mdxWinInfo.hWndMain, track, loop);
+	playCDTrack(mdxWinInfo.hWndMain, track, loop);
 }
 
 
@@ -1104,21 +1108,8 @@ void LoopSong()
 }
 
 
-void StopSong( )
+void StopSong()
 {
-	MCI_GENERIC_PARMS parms;
-
-	if (mciDevice)
-	{
-		// Stop
-		mciSendCommand(mciDevice, MCI_STOP, MCI_NOTIFY, (DWORD)(LPMCI_GENERIC_PARMS)&parms);
-
-		// Close device
-		mciSendCommand(mciDevice, MCI_CLOSE, MCI_NOTIFY, (DWORD)(LPMCI_GENERIC_PARMS)&parms);
-
-		mciDevice = 0;
-	}
-
 	if (musicFileSample)
 	{
 		StopSample(musicFileSample);
@@ -1158,101 +1149,33 @@ int IsSongPlaying()
 			return (musicFileSample->len > currentPlayPosition);
 		}
 
+        return 0;
 	}
 
-	return (mciDevice && playingMusic);
+	return playingMusic;
 }
 
-int pauseCDTrack()
-{
-    return mciSendCommand(mciDevice, MCI_STOP, 0, 0);
-}
+//int pauseCDTrack()
+//{
+//    return mciSendCommand(mciDevice, MCI_STOP, 0, 0);
+//}
 
 // Plays a specified audio track using MCI_OPEN, MCI_PLAY. Returns as 
 // soon as playback begins. The window procedure function for the 
 // specified window will be notified when playback is complete. 
 // Returns 0L on success; otherwise, returns an MCI error code.
-DWORD playCDTrack ( HWND hWndNotify, BYTE bTrack, long loop)
+DWORD playCDTrack(HWND hWndNotify, BYTE bTrack, long loop)
 {
-    UINT wDeviceID;
-    DWORD dwReturn;
-    MCI_OPEN_PARMS mciOpenParms;
-    MCI_SET_PARMS mciSetParms;
-    MCI_PLAY_PARMS mciPlayParms;
-	DWORD flags;
+    DWORD result = CDAudioManager_Play(bTrack, loop);
 
-	if (playCDTrackFromFile(bTrack, loop))
-	{
-		cdTrack = bTrack;
-		trackLoop = loop;
-		playingMusic = 1;
-		return 0L; // Playing CD track from file.
-	}
-
-	if( !mciDevice )
-	{
-		// Open the CD audio device by specifying the device name.
-		mciOpenParms.lpstrDeviceType = "cdaudio";
-
-		if ( dwReturn = mciSendCommand( 0, MCI_OPEN, MCI_OPEN_TYPE, ( DWORD ) ( LPVOID ) &mciOpenParms ) )
-		{
-			if( dwReturn == MCIERR_MUST_USE_SHAREABLE )
-			{
-				utilPrintf("Failed to open device %s, trying shareable...\n", mciOpenParms.lpstrDeviceType );
-				if ( dwReturn = mciSendCommand( 0, MCI_OPEN, MCI_OPEN_TYPE | MCI_OPEN_SHAREABLE, ( DWORD ) ( LPVOID ) &mciOpenParms ) )
-				{
-					utilPrintf("Failed to open device %s\n",mciOpenParms.lpstrDeviceType);
-					// Failed to open device. Don't close it; just return error.
-					return dwReturn;
-				}
-			}
-		}
-
-		// The device opened successfully; get the device ID.
-		wDeviceID = mciOpenParms.wDeviceID;
-
-		// Set the time format to track/minute/second/frame (TMSF).
-		mciSetParms.dwTimeFormat = MCI_FORMAT_TMSF;
-
-		if (dwReturn = mciSendCommand ( wDeviceID, MCI_SET,MCI_SET_TIME_FORMAT, ( DWORD )  ( LPVOID ) &mciSetParms ) )
-		{
-			utilPrintf("Failed to set time format for cd device\n");
-
-			mciSendCommand( wDeviceID, MCI_CLOSE, 0, 0 );
-			return dwReturn;
-		}
-	}
-	else // Repeat performance
-	{
-		wDeviceID = mciDevice;
-	}
-	
-	// Begin playback from the given track and play until the beginning 
-    // of the next track. 
-    mciPlayParms.dwTo		= 0L;
-    mciPlayParms.dwFrom		= MCI_MAKE_TMSF ( bTrack, 0, 0, 0 );
-    mciPlayParms.dwTo		= MCI_MAKE_TMSF ( bTrack + 1, 0, 0, 0 );
-    mciPlayParms.dwCallback = ( DWORD ) hWndNotify;
-
-	if( bTrack != LEVELCOMPLETELOOP_CDAUDIO )
-		flags = MCI_FROM | MCI_TO | MCI_NOTIFY;
-	else
-		flags = MCI_FROM | MCI_NOTIFY;
-
-    if ( dwReturn = mciSendCommand ( wDeviceID, MCI_PLAY, flags, (DWORD)(LPVOID) &mciPlayParms ) )
+    if (result == 0)
     {
-		utilPrintf("Couldn't play cd track %i\n",bTrack);
-
-        mciSendCommand ( wDeviceID, MCI_CLOSE, 0, 0 );
-        return dwReturn;
+	    cdTrack = bTrack;
+	    trackLoop = loop;
+	    playingMusic = 1;
     }
 
-	mciDevice = wDeviceID;
-	cdTrack = bTrack;
-	trackLoop = loop;
-	playingMusic = 1;
-
-    return 0L;
+    return result;
 }
 
 
@@ -1477,10 +1400,14 @@ void FreeSample(SAMPLE* sample)
 		return;
 	
 	if( sample->lpds3DBuffer )
+    {
 		sample->lpds3DBuffer->lpVtbl->Release(sample->lpds3DBuffer);
+    }
 
 	if( sample->lpdsBuffer )
+    {
 		sample->lpdsBuffer->lpVtbl->Release(sample->lpdsBuffer);
+    }
 
 //	if( sample->idName )
 //		FREE( sample->idName );

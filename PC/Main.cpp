@@ -20,6 +20,7 @@
 
 #include <anim.h>
 #include <stdio.h>
+#include <winuser.h>
 
 #include "game.h"
 #include "types2d.h"
@@ -45,6 +46,7 @@
 #include "E3_Demo.h"
 #include "menus.h"
 #include "editor.h"
+#include "editdefs.h"
 #include "drawloop.h"
 #include "fadeout.h"
 #include "pcsprite.h"
@@ -56,6 +58,7 @@
 #include "controll.h"
 #include "pcmisc.h"
 #include "pcaudio.h"
+#include "CDAudioManager.h"
 #include "lang.h"
 #include "mdx.h"
 #include "mdxException.h"
@@ -504,6 +507,23 @@ LRESULT CALLBACK MyInitProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 					}
 					return FALSE;
 				}
+				case IDC_DEBUGMODE:
+				{
+					debugMode = SendMessage(GetDlgItem(hWnd, IDC_DEBUGMODE), BM_GETCHECK, 0, 0);	
+					if (debugMode && !CheckEditIcons())
+					{
+						const char baseMessage[] = "There are missing .bmp files needed for the built-in editor. You will not see these icons! The following editor .bmp files are missing:\r\n";
+						char texturePaths[(sizeof(baseMessage)/sizeof(char))+(MAX_PATH+3) * EDITORTEXTURES];
+						sprintf(texturePaths, baseMessage);
+						for (int i = 0; i < EDITORTEXTURES; i++)
+						{
+							if (editicons[i].surface == NULL)
+								sprintf(texturePaths, "%s\n - " TEXTURE_BASE "editor\\editor%d.bmp", texturePaths, i+1);
+						}
+						MessageBox(NULL, texturePaths, "Frogger2", MB_ICONEXCLAMATION|MB_OK);
+					}
+					return FALSE;
+				}
 			}
 		}
 	}
@@ -705,15 +725,30 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
 	case MM_MCINOTIFY:
 	{
+        dp("=================================\n");
 		// Loop cd track when it finishes
-		switch( (int)wParam )
+		switch (wParam)
 		{
-		case MCI_NOTIFY_SUCCESSFUL:
-			LoopSong();
-			break;
-		}
+		    case MCI_NOTIFY_SUCCESSFUL:
+                dp("Device [%u] MCI_NOTIFY_SUCCESSFUL\n", lParam);
+			    LoopSong();
+			    break;
 
-		break;
+		    case MCI_NOTIFY_ABORTED:
+                dp("Device [%u] MCI_NOTIFY_ABORTED\n", lParam);
+			    break;
+
+		    case MCI_NOTIFY_FAILURE:
+                dp("Device [%u] MCI_NOTIFY_FAILURE\n", lParam);
+			    break;
+
+		    case MCI_NOTIFY_SUPERSEDED:
+                dp("Device [%u] MCI_NOTIFY_SUPERSEDED\n", lParam);
+			    break;
+		}
+        dp("=================================\n");
+
+		return 0;
 	}
 
 	default:
@@ -751,7 +786,7 @@ void CopyActorList()
 			slideVal = ((c->flags>>5) & 3);
 			
 			if (slideVal)
-				SlideObjectTextures(a->objectController->object,(slideSpeeds[slideVal]*gameSpeed)>>12);
+				SlideObjectTextures(a->objectController->object,FRoundRandomHack(slideSpeeds[slideVal]*gameSpeed));
 
 			if (c->flags&ACTOR_SLOWSLIDE)
 				SlideObjectTextures(a->objectController->object,gameSpeed>>8);
@@ -832,6 +867,29 @@ long LoopFunc(void)
 	}
 
 	ProcessUserInput();
+
+    //>>
+    // [ANDYE]
+    if(gCDAMData && pTxtOvrCDAMInfo)
+    {
+        if (gCDAMTrackInfo[gCDAMData->currTrackNum] != NULL)
+        {
+            if (gCDAMTrackInfo[gCDAMData->currTrackNum]->hasAudioFile)
+            {
+                sprintf(szCDAMInfo, "TRACK %02d (%02d:%02d) - WAV FILE",
+                    gCDAMData->currTrackNum,
+                    gCDAMTrackInfo[gCDAMData->currTrackNum]->length.minute, gCDAMTrackInfo[gCDAMData->currTrackNum]->length.second);
+            }
+            else
+            {
+                sprintf(szCDAMInfo, "TRACK %02d (%02d:%02d) - %02d:%02d",
+                    gCDAMData->currTrackPosTMSF.track,
+                    gCDAMTrackInfo[gCDAMData->currTrackPosTMSF.track]->length.minute, gCDAMTrackInfo[gCDAMData->currTrackPosTMSF.track]->length.second,
+                    gCDAMData->currTrackPosTMSF.minute, gCDAMData->currTrackPosTMSF.second);
+            }
+        }
+    }
+    //>>
 
 	if (networkGame)
 	{

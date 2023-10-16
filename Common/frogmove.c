@@ -74,6 +74,8 @@ unsigned long conveyorFrames[3] = { 60, 30, 15 };
 unsigned long standardHopJumpDownDivisor	= 10;
 unsigned long superHopJumpDownDivisor		= 12;
 
+unsigned long lastPlayerAnimCooldown = 0;
+
 struct {
 	int lastHopOn;
 	int freq;
@@ -330,7 +332,7 @@ BOOL UpdateFroggerControls(long pl)
 		{
 			PlaySample(genSfx[GEN_FROG_HOP],NULL,0,100-Random(15),actF);
 			hopCount++;
-			hopTimer = 30;
+			hopTimer = 30 * 4096;
 		}
 		else
 		{
@@ -438,7 +440,7 @@ BOOL UpdateFroggerControls(long pl)
 	else
 	{
 		if( hopTimer )
-			hopTimer -= max(gameSpeed>>12, 1);
+			hopTimer -= gameSpeed;
 
 		if( hopTimer <= 0 )
 		{
@@ -790,6 +792,7 @@ void UpdateFroggerPos(long pl)
 		{
 			SetVectorFF( &moveVec, &currTile[pl]->normal );
 			ScaleVectorFF( &moveVec, gameSpeed*2 );
+			RoundVectorRandF(&moveVec);
 			AddToVectorSF( &frog[pl]->actor->position, &moveVec );
 
 			// Frog has broken free!
@@ -800,6 +803,7 @@ void UpdateFroggerPos(long pl)
 		{
 			SetVectorFF( &moveVec, &currTile[pl]->normal );
 			ScaleVectorFF( &moveVec, gameSpeed/-5 );
+			RoundVectorRandF(&moveVec);
 			AddToVectorSF( &frog[pl]->actor->position, &moveVec );
 
 			// Frog is dead
@@ -1840,7 +1844,7 @@ BOOL KillFrog(long pl)
 			break;
 
 		case DEATHBY_DROWNING:
-			if( !(actFrameCount % 5) )
+			if( !(actFrameCount % 5) && actFrameCount != lastPlayerAnimCooldown)
 			{
 				VECTOR up;
 				SPECFX *fx;
@@ -1859,6 +1863,8 @@ BOOL KillFrog(long pl)
 						AddVectorSSF( &fx->rebound->point, &frog[pl]->actor->position, &up );
 					}
 				}
+
+				lastPlayerAnimCooldown = actFrameCount;
 			}
 			break;
 
@@ -1866,11 +1872,13 @@ BOOL KillFrog(long pl)
 			break;
 
 		case DEATHBY_FIRE:
-			if( !(actFrameCount % 2) )
+			if( !(actFrameCount % 2)  && lastPlayerAnimCooldown != actFrameCount)
 			{
 				FVECTOR n;
 				SetVectorFF(&n, &currTile[pl]->normal);
 				CreateSpecialEffect( FXTYPE_FIERYSMOKE, &frog[pl]->actor->position, &n, 204800, 2048, 0, 6144 );
+
+				lastPlayerAnimCooldown = actFrameCount;
 			}
 			break;
 

@@ -15,6 +15,9 @@
 #include <math.h>
 
 #include <islmem.h>
+#include <winbase.h>
+#include <winnt.h>
+#include <Windows.h>
 
 #include "edmaths.h"
 #include "editfile.h"
@@ -161,25 +164,17 @@ void DrawEditorArrow(int x1, int y1, int x2, int y2, float width, D3DCOLOR col);
 	Returns			: 
 */
 
+static char *BooleanString(int flag) {
+	return flag ? "True" : "False";
+}
+
 void SaveEditorState()
 {
-	FILE *f = fopen(EDITOR_STATE_FILE, "w");
-	if (!f) return;
-
-	fprintf(f, "%s\nFlags: ", savePath);
-
-	if (invertMouse) fprintf(f, "invertmouse ");
-	if (drawLinks) fprintf(f, "links ");
-	if (drawNormals) fprintf(f, "normals ");
-	if (drawVectors) fprintf(f, "vectors ");
-	if (drawDots) fprintf(f, "dots ");
-	fprintf(f, "\n");
-
-	fprintf(f, "%f %f\n", HorizontalWhizziness, InOutWhizziness);
-
-	fprintf(f, "%s\n", scriptPath);
-
-	fclose(f);
+	WritePrivateProfileString("Editor Flags", "invert_mouse", BooleanString(invertMouse), iniFilePath);
+	WritePrivateProfileString("Editor Flags", "draw_links", BooleanString(drawLinks), iniFilePath);
+	WritePrivateProfileString("Editor Flags", "draw_normals", BooleanString(drawNormals), iniFilePath);
+	WritePrivateProfileString("Editor Flags", "draw_vectors", BooleanString(drawVectors), iniFilePath);
+	WritePrivateProfileString("Editor Flags", "draw_dots", BooleanString(drawDots), iniFilePath);
 }
 
 /*	--------------------------------------------------------------------------------
@@ -190,32 +185,58 @@ void SaveEditorState()
 
 void LoadEditorState()
 {
-	char str[80];
+	char tempStr[16];
 
-	FILE *f = fopen(EDITOR_STATE_FILE, "r");
-	if (!f) return;
+	GetPrivateProfileString("Editor Flags", "invert_mouse", "False", tempStr, 16, iniFilePath);
+	invertMouse = stricmp(tempStr, "True") == 0;
 
-	fscanf(f, "%s\n", savePath);
-	fgets(str, 79, f);
+	GetPrivateProfileString("Editor Flags", "draw_links", "False", tempStr, 16, iniFilePath);
+	drawLinks = stricmp(tempStr, "True") == 0;
 
-	invertMouse = (strstr(str, "invertmouse")) ? TRUE : FALSE;
-	drawNormals = (strstr(str, "normals")) ? TRUE : FALSE;
-	drawVectors = (strstr(str, "vectors")) ? TRUE : FALSE;
-	drawDots = (strstr(str, "dots")) ? TRUE : FALSE;
-	drawLinks = (strstr(str, "links")) ? TRUE : FALSE;
+	GetPrivateProfileString("Editor Flags", "draw_normals", "False", tempStr, 16, iniFilePath);
+	drawNormals = stricmp(tempStr, "True") == 0;
 
-	fscanf(f, "%f %f\n", &HorizontalWhizziness, &InOutWhizziness);
-	fscanf(f, "%s\n", scriptPath);
+	GetPrivateProfileString("Editor Flags", "draw_vectors", "False", tempStr, 16, iniFilePath);
+	drawVectors = stricmp(tempStr, "True") == 0;
 
-	fclose(f);
+	GetPrivateProfileString("Editor Flags", "draw_dots", "False", tempStr, 16, iniFilePath);
+	drawDots = stricmp(tempStr, "True") == 0;
 }
-
 
 /*	--------------------------------------------------------------------------------
 	Function		: 
 	Purpose			: 
 	Parameters		: 
 	Returns			: 
+	Info			: 
+*/
+
+int CheckEditIcons()
+{
+	// This is a bit of a hack but abusing the fact that there is already an editicons list
+	// and it will be changed by a subsequent call to LoadEditIcons 
+	// if the icon is present we set the editicons[i].surface = 1 otherwise 0
+	char texturePath[MAX_PATH];
+	int i;
+	int success = 1;
+	DWORD attribs;
+
+	for (i = 0; i < EDITORTEXTURES; i++)	
+	{
+		sprintf(texturePath, "%s" TEXTURE_BASE "editor\\editor%d.bmp", baseDirectory, i+1);
+		attribs = GetFileAttributes(texturePath);
+		editicons[i].surface = (attribs != ((DWORD)-1) && !(attribs & FILE_ATTRIBUTE_DIRECTORY));
+		if (!editicons[i].surface) success = 0;
+	}
+
+	return success;
+}
+
+/*	--------------------------------------------------------------------------------
+	Function		: 
+	Purpose			: 
+	Parameters		: 
+	Returns			: whether loading all of the icons were successfully loaded
 	Info			: 
 */
 
@@ -250,7 +271,6 @@ void LoadEditIcons()
 	}
 
 	utilPrintf("Loaded %d pages of editor textures\n", EDITORTEXTURES);
-
 }
            
 /*	--------------------------------------------------------------------------------

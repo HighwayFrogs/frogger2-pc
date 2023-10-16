@@ -163,6 +163,7 @@ SPRITEOVERLAY *titleHud[4];
 TEXTOVERLAY *titleHudText[4];
 
 int pauseFrameCount;
+long pauseFrameCountFixed = 0;
 int pauseFaded = 0;
 long pauseFadeTimer;
 /*	--------------------------------------------------------------------------------
@@ -180,6 +181,7 @@ void StartPauseMenu()
 	checkMenuKeys = 1;
 #endif
 	pauseFrameCount = 0;
+	pauseFrameCountFixed = 0;
 	quittingLevel = NO;
 	pauseConfirmMode = NO;
 	restartingLevel = NO;
@@ -379,7 +381,13 @@ void RunPauseMenu()
 	int i;
 
 
-	pauseFrameCount += max((pauseGameSpeed>>12),1);
+	pauseFrameCountFixed += pauseGameSpeed;
+	while (pauseFrameCountFixed >= 4096)
+	{
+		pauseFrameCountFixed -= 4096;
+		pauseFrameCount++;
+	}
+
 	if((quittingLevel) && (pauseConfirmMode == 0))
 	{
 #ifdef DREAMCAST_VERSION
@@ -1260,9 +1268,10 @@ void RunFrontendGameLoop (void)
 	for (i=0; i<MAX_SPARKLES; i++)
 	{
 		unsigned long spkLev;
+		long deltaA = FRoundRandomHack(gameSpeed * 3);
 
-		if (sparkles[i]->a > (gameSpeed * 3)/4096)
-			sparkles[i]->a-= (gameSpeed * 3)/4096;
+		if (sparkles[i]->a > deltaA)
+			sparkles[i]->a-= deltaA;
 		else
 		{
 			if (options.mode == OP_ARCADE)

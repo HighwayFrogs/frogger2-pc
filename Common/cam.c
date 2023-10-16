@@ -30,6 +30,7 @@
 #include "multi.h"
 
 
+unsigned long lastCamShakeFrame = 0;
 int camControlMode = 0;
 
 FVECTOR cameraUpVect		= { 0,4096,0 };
@@ -674,12 +675,16 @@ void UpdateCameraPosition( )
 	
 	if (cam_shakiness > 0)
 	{
-		currCamTarget.vx += Random(cam_shakiness) - (cam_shakiness>>1);
-		currCamSource.vx += Random(cam_shakiness) - (cam_shakiness>>1);
-		currCamTarget.vy += Random(cam_shakiness) - (cam_shakiness>>1);
-		currCamSource.vy += Random(cam_shakiness) - (cam_shakiness>>1);
-		currCamTarget.vz += Random(cam_shakiness) - (cam_shakiness>>1);
-		currCamSource.vz += Random(cam_shakiness) - (cam_shakiness>>1);
+		if (actFrameCount != lastCamShakeFrame)
+		{
+			currCamTarget.vx += Random(cam_shakiness) - (cam_shakiness>>1);
+			currCamSource.vx += Random(cam_shakiness) - (cam_shakiness>>1);
+			currCamTarget.vy += Random(cam_shakiness) - (cam_shakiness>>1);
+			currCamSource.vy += Random(cam_shakiness) - (cam_shakiness>>1);
+			currCamTarget.vz += Random(cam_shakiness) - (cam_shakiness>>1);
+			currCamSource.vz += Random(cam_shakiness) - (cam_shakiness>>1);
+			lastCamShakeFrame = actFrameCount;
+		}
 
 		cam_shakiness -= FMul(cam_shake_falloff, gameSpeed);
 	}

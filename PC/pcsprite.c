@@ -158,7 +158,7 @@ void PrintSpriteOverlays(long num)
 		if(cur->used && cur->draw && cur->a)
 		{
 			// Go to destination, if specified
-			fixed spd = FMul(gameSpeed, cur->speed)>>12;
+			fixed spd = FRoundRandomHack(FMul(gameSpeed, cur->speed));
 
 			if( Fabs(cur->xPosTo-cur->xPos) )
 			{
@@ -320,7 +320,7 @@ void PrintSprite(SPRITE *sprite)
 		if(sprite->flags & SPRITE_FLAGS_ROTATE)
 		{
 			// rotate the little blighters
-			sprite->angle += (sprite->angleInc * gameSpeed)>>12;
+			sprite->angle += FRoundRandomHack(sprite->angleInc * gameSpeed);
 			if( sprite->angle >= 4096 ) 
 				sprite->angle -= 4096;
 			else if( sprite->angle < 0 ) 
@@ -453,12 +453,12 @@ void DrawTiledBackdrop()
 //	xScrollSpeed = sin((float)actFrameCount/60.0)*0.001;
 //	yScrollSpeed = cos((float)actFrameCount/81.0)*0.0006;
 
-	xScroll += (float)gameSpeed * xScrollSpeed * (rXRes/640.0f);
+	xScroll += (float)gameSpeed * xScrollSpeed;
 	if(xScroll > (xRes*4)/(float)xTile)
 		xScroll -= (xRes*4)/(float)xTile;
 	else if(xScroll < 0)
 		xScroll += (xRes*4)/(float)xTile;
-	yScroll += (float)gameSpeed * yScrollSpeed * (rYRes/480.0f);
+	yScroll += (float)gameSpeed * yScrollSpeed;
 	if(yScroll > (yRes*2)/(float)yTile)
 		yScroll -= (yRes*2)/(float)yTile;
 	else if(yScroll < 0)

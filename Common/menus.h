@@ -39,20 +39,20 @@ extern int pauseGameSpeed;
 extern int oldDiffMode;
 
 #define DEC_ALPHA(x) \
-{													\
-	tValue = FMul(gameSpeed,fadeSpeed)>>12;			\
-	if (x->a > tValue)								\
-	{												\
-		x->a -= tValue;								\
-	}												\
-	else											\
-	{												\
-		x->a = 0;									\
-		x->draw = 0;								\
-	}												\
+{															\
+	tValue = FRoundRandomHack(FMul(gameSpeed,fadeSpeed));	\
+	if (x->a > tValue)										\
+	{														\
+		x->a -= tValue;										\
+	}														\
+	else													\
+	{														\
+		x->a = 0;											\
+		x->draw = 0;										\
+	}														\
 }
 
-#define INC_ALPHA(x,y) {tValue = FMul(gameSpeed,fadeSpeed)>>12;	x->draw = 1; if (x->a + tValue < y)	{x->a += tValue;} else {x->a = y;}}
+#define INC_ALPHA(x,y) {tValue = FRoundRandomHack(FMul(gameSpeed,fadeSpeed));	x->draw = 1; if (x->a + tValue < y)	{x->a += tValue;} else {x->a = y;}}
 #define MAX_LEVELSTRING 10
 #define MAX_SOUND_VOL 100
 

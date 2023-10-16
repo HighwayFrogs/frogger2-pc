@@ -32,6 +32,12 @@
 #include <pcmisc.h>
 #endif
 
+//>>
+// [ANDYE]
+TEXTOVERLAY *pTxtOvrCDAMInfo = NULL;
+char szCDAMInfo[32] = { 0 };
+//>>
+
 long grabToTexture = 0;
 
 //----- [ GLOBALS ] ----------------------------------------------------------------------------//
@@ -220,7 +226,7 @@ void PrintTextOverlays()
 		{
 			if(cur->speed)
 			{
-				fixed spd = FMul(gameSpeed, cur->speed)>>12;
+				fixed spd = FRoundRandomHack(FMul(gameSpeed, cur->speed));
 
 				if( Fabs(cur->xPosTo-cur->xPos) )
 				{
@@ -329,6 +335,16 @@ void InitTextOverlayLinkedList(long num)
 	textOverlayList.numEntries = 0;
 	textOverlayList.alloc = num;
 	textOverlayList.block = MALLOC0(sizeof(TEXTOVERLAY)*textOverlayList.alloc);
+
+    //>>
+    // [ANDYE]
+    pTxtOvrCDAMInfo = CreateAndAddTextOverlay(32, 0, szCDAMInfo, NO, 255, fontSmall, TEXTOVERLAY_NORMAL | TEXTOVERLAY_PAUSED);
+    if (pTxtOvrCDAMInfo)
+    {
+        pTxtOvrCDAMInfo->b = 0;
+        pTxtOvrCDAMInfo->scale = 4096;
+    }
+    //>>
 }
 
 /*	--------------------------------------------------------------------------------
@@ -340,9 +356,17 @@ void InitTextOverlayLinkedList(long num)
 */
 void FreeTextOverlayLinkedList()
 {
-	FREE(textOverlayList.block);
-	textOverlayList.block = NULL;
+    if (textOverlayList.block != NULL)
+    {
+        FREE(textOverlayList.block);
+        textOverlayList.block = NULL;
+    }
 	//InitTextOverlayLinkedList();
+
+    //>>
+    // [ANDYE]
+    pTxtOvrCDAMInfo = NULL;
+    //>>
 }
 
 /*	--------------------------------------------------------------------------------

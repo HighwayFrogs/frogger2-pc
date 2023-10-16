@@ -483,7 +483,7 @@ void UpdateBattle( )
 
 			if( mpl[i].path ) 
 			{
-				int fo = (256*gameSpeed)>>12;
+				int fo = FRoundRandomHack(256*gameSpeed);
 
 				if( !(player[i].frogState & FROGSTATUS_ISDEAD) )
 				{
@@ -495,7 +495,7 @@ void UpdateBattle( )
 						if( node->fx && node->fx->actor->size.vy < 4096-fo )
 							node->fx->actor->size.vy += fo;
 
-					fo = (128*gameSpeed)>>12;
+					fo = FRoundRandomHack(128*gameSpeed);
 					// For length->endoflist, fade out and make not deadly
 					while( node )
 					{
@@ -522,7 +522,7 @@ void UpdateBattle( )
 
 
 
-					fo = (128*gameSpeed)>>12;
+					fo = FRoundRandomHack(128*gameSpeed);
 
 					while( node->next ) node = node->next;
 

@@ -81,6 +81,7 @@ extern MDX_LANDSCAPE *world;
 #include <pcaudio.h>
 #include <pcmisc.h>
 #include <controll.h>
+#include <CDAudioManager.h>
 #endif
 
 #include "lang.h"
@@ -676,6 +677,8 @@ void InitLevel(unsigned long worldID,unsigned long levelID)
 	// JH : Turn on, the loading screen.
 	// JIM: Learn proper grammar you flid.
 
+    CDAudioManager_Stop();
+
 #ifdef PC_VERSION
 	pFrameModifier = 0;
 	checkMenuKeys = 0;
@@ -986,8 +989,10 @@ void InitLevel(unsigned long worldID,unsigned long levelID)
 
 	//memoryShow();
 	//memoryShowStats();
-	UnPauseAudio();
-	SetMusicVolume();
+
+    // [ANDYE] Commented UnPauseAudio() as audio track is already setup in PrepareSong call above...?
+    //UnPauseAudio();
+    SetMusicVolume();
 
 	player[0].oldLives = player[0].lives;
 
@@ -1039,7 +1044,7 @@ void FreeAllLists()
 	//memoryShowStats();
 
 #ifdef PC_VERSION
-	StopSong( );
+    CDAudioManager_Stop();
 #endif
 #ifdef PSX_VERSION
 	SpuSetKey(SPU_OFF,0xffffff);

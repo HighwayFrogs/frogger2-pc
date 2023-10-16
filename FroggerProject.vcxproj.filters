@@ -1,0 +1,585 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Common">
+      <UniqueIdentifier>{2b066e04-f941-452d-a99a-8d917d749146}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PC">
+      <UniqueIdentifier>{17a16cde-21b4-43c0-9ca0-c1f198d5ded2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PC\net">
+      <UniqueIdentifier>{246d1b98-03e9-4db1-b659-8f13c3379b7a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor">
+      <UniqueIdentifier>{3229bd37-8a1d-4a20-807c-b15a29f55a20}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Common\actor2.c">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\anim.c">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\babyfrog.c">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\bbtimer.c">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\cam.c">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\collect.c">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\crc32.c">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\DefData.c">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\E3_Demo.c">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\enemies.c">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\evenfunc.c">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\event.c">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\fixed.c">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\flatpack.c">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\frogger.c">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\frogmove.c">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\frontend.c">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\game.c">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\general.c">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\hud.c">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\language.c">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\layout.c">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\levplay.c">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\map.c">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\maths.c">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\memload.c">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\menus.c">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\multi.c">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\newpsx.c">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\options.c">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\overlays.c">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\particle.c">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\path.c">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\platform.c">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\ptexture.c">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\savegame.c">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\script.c">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\sndview.c">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\specfx.c">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\sprite.c">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\story.c">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\textover.c">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\tongue.c">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\training.c">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\types.c">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Pc\net\dputil.cpp">
+      <Filter>PC\net</Filter>
+    </ClCompile>
+    <ClCompile Include="Pc\net\netchat.cpp">
+      <Filter>PC\net</Filter>
+    </ClCompile>
+    <ClCompile Include="Pc\net\netconnect.cpp">
+      <Filter>PC\net</Filter>
+    </ClCompile>
+    <ClCompile Include="Pc\net\netgame.cpp">
+      <Filter>PC\net</Filter>
+    </ClCompile>
+    <ClCompile Include="Pc\net\netrace.cpp">
+      <Filter>PC\net</Filter>
+    </ClCompile>
+    <ClCompile Include="Pc\net\network.cpp">
+      <Filter>PC\net</Filter>
+    </ClCompile>
+    <ClCompile Include="Pc\actor.cpp">
+      <Filter>PC</Filter>
+    </ClCompile>
+    <ClCompile Include="Pc\backdrop.c">
+      <Filter>PC</Filter>
+    </ClCompile>
+    <ClCompile Include="Pc\banks.cpp">
+      <Filter>PC</Filter>
+    </ClCompile>
+    <ClCompile Include="Pc\controll.cpp">
+      <Filter>PC</Filter>
+    </ClCompile>
+    <ClCompile Include="Pc\drawloop.cpp">
+      <Filter>PC</Filter>
+    </ClCompile>
+    <ClCompile Include="Pc\dx_sound.cpp">
+      <Filter>PC</Filter>
+    </ClCompile>
+    <ClCompile Include="Pc\fadeout.cpp">
+      <Filter>PC</Filter>
+    </ClCompile>
+    <ClCompile Include="Pc\islfile.cpp">
+      <Filter>PC</Filter>
+    </ClCompile>
+    <ClCompile Include="Pc\isllocal.c">
+      <Filter>PC</Filter>
+    </ClCompile>
+    <ClCompile Include="Pc\isltex.cpp">
+      <Filter>PC</Filter>
+    </ClCompile>
+    <ClCompile Include="Pc\islutil.cpp">
+      <Filter>PC</Filter>
+    </ClCompile>
+    <ClCompile Include="Pc\Main.cpp">
+      <Filter>PC</Filter>
+    </ClCompile>
+    <ClCompile Include="Pc\pcaudio.c">
+      <Filter>PC</Filter>
+    </ClCompile>
+    <ClCompile Include="Pc\pcgfx.c">
+      <Filter>PC</Filter>
+    </ClCompile>
+    <ClCompile Include="Pc\pcmisc.cpp">
+      <Filter>PC</Filter>
+    </ClCompile>
+    <ClCompile Include="Pc\pcsprite.c">
+      <Filter>PC</Filter>
+    </ClCompile>
+    <ClCompile Include="Pc\video.cpp">
+      <Filter>PC</Filter>
+    </ClCompile>
+    <ClCompile Include="Editor\edcamera.c">
+      <Filter>Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="Editor\edcommand.c">
+      <Filter>Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="Editor\edcreate.c">
+      <Filter>Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="Editor\edglobals.c">
+      <Filter>Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="Editor\editdefs.c">
+      <Filter>Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="Editor\editfile.c">
+      <Filter>Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="Editor\editor.c">
+      <Filter>Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="Editor\edmaths.c">
+      <Filter>Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="Editor\edtoolbars.c">
+      <Filter>Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="PC\CDAudioManager.c">
+      <Filter>PC</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Common\actor2.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\anim.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\babyfrog.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\bbtimer.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\Cam.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\codes.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\collect.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\crc32.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\decomp.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\DefData.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\define.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\E3_Demo.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\enemies.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\evenfunc.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\event.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\fixed.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\flatpack.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\frogger.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\frogmove.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\frontend.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\game.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\general.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\hud.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\lang.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\language.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\layout.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\levplay.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\map.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\maths.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\memload.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\menus.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\multi.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\newpsx.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\options.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\overlays.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\particle.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\path.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\platform.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\ptexture.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\savegame.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\script.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\sndview.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\sonylibs.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\specfx.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\sprite.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\story.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\textover.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\tongue.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\training.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\types.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\types2d.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\ultra64.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Pc\net\netchat.h">
+      <Filter>PC\net</Filter>
+    </ClInclude>
+    <ClInclude Include="Pc\net\netconnect.h">
+      <Filter>PC\net</Filter>
+    </ClInclude>
+    <ClInclude Include="Pc\net\netgame.h">
+      <Filter>PC\net</Filter>
+    </ClInclude>
+    <ClInclude Include="Pc\net\netrace.h">
+      <Filter>PC\net</Filter>
+    </ClInclude>
+    <ClInclude Include="Pc\net\network.h">
+      <Filter>PC\net</Filter>
+    </ClInclude>
+    <ClInclude Include="Pc\actor.h">
+      <Filter>PC</Filter>
+    </ClInclude>
+    <ClInclude Include="Pc\backdrop.h">
+      <Filter>PC</Filter>
+    </ClInclude>
+    <ClInclude Include="Pc\banks.h">
+      <Filter>PC</Filter>
+    </ClInclude>
+    <ClInclude Include="Pc\controll.h">
+      <Filter>PC</Filter>
+    </ClInclude>
+    <ClInclude Include="Pc\drawloop.h">
+      <Filter>PC</Filter>
+    </ClInclude>
+    <ClInclude Include="Pc\dx_sound.h">
+      <Filter>PC</Filter>
+    </ClInclude>
+    <ClInclude Include="Pc\fadeout.h">
+      <Filter>PC</Filter>
+    </ClInclude>
+    <ClInclude Include="Pc\gtemac.h">
+      <Filter>PC</Filter>
+    </ClInclude>
+    <ClInclude Include="Pc\inline_c.h">
+      <Filter>PC</Filter>
+    </ClInclude>
+    <ClInclude Include="Pc\islfile.h">
+      <Filter>PC</Filter>
+    </ClInclude>
+    <ClInclude Include="Pc\islfont.h">
+      <Filter>PC</Filter>
+    </ClInclude>
+    <ClInclude Include="Pc\isllocal.h">
+      <Filter>PC</Filter>
+    </ClInclude>
+    <ClInclude Include="Pc\islmem.h">
+      <Filter>PC</Filter>
+    </ClInclude>
+    <ClInclude Include="Pc\islpad.h">
+      <Filter>PC</Filter>
+    </ClInclude>
+    <ClInclude Include="Pc\islpsi.h">
+      <Filter>PC</Filter>
+    </ClInclude>
+    <ClInclude Include="Pc\isltex.h">
+      <Filter>PC</Filter>
+    </ClInclude>
+    <ClInclude Include="Pc\islutil.h">
+      <Filter>PC</Filter>
+    </ClInclude>
+    <ClInclude Include="Pc\libapi.h">
+      <Filter>PC</Filter>
+    </ClInclude>
+    <ClInclude Include="Pc\libetc.h">
+      <Filter>PC</Filter>
+    </ClInclude>
+    <ClInclude Include="Pc\libgpu.h">
+      <Filter>PC</Filter>
+    </ClInclude>
+    <ClInclude Include="Pc\libgs.h">
+      <Filter>PC</Filter>
+    </ClInclude>
+    <ClInclude Include="Pc\libgte.h">
+      <Filter>PC</Filter>
+    </ClInclude>
+    <ClInclude Include="Pc\libsn.h">
+      <Filter>PC</Filter>
+    </ClInclude>
+    <ClInclude Include="Pc\Main.h">
+      <Filter>PC</Filter>
+    </ClInclude>
+    <ClInclude Include="Pc\net.h">
+      <Filter>PC</Filter>
+    </ClInclude>
+    <ClInclude Include="Pc\pcaudio.h">
+      <Filter>PC</Filter>
+    </ClInclude>
+    <ClInclude Include="Pc\pcgfx.h">
+      <Filter>PC</Filter>
+    </ClInclude>
+    <ClInclude Include="Pc\pcmisc.h">
+      <Filter>PC</Filter>
+    </ClInclude>
+    <ClInclude Include="Pc\pcsprite.h">
+      <Filter>PC</Filter>
+    </ClInclude>
+    <ClInclude Include="Pc\shell.h">
+      <Filter>PC</Filter>
+    </ClInclude>
+    <ClInclude Include="Pc\video.h">
+      <Filter>PC</Filter>
+    </ClInclude>
+    <ClInclude Include="Editor\edcamera.h">
+      <Filter>Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="Editor\edcommand.h">
+      <Filter>Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="Editor\edcreate.h">
+      <Filter>Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="Editor\edglobals.h">
+      <Filter>Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="Editor\editdefs.h">
+      <Filter>Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="Editor\editfile.h">
+      <Filter>Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="Editor\editor.h">
+      <Filter>Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="Editor\edittypes.h">
+      <Filter>Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="Editor\edmaths.h">
+      <Filter>Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="Editor\edtoolbars.h">
+      <Filter>Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="Psx\gametext.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="PC\CDAudioManager.h">
+      <Filter>PC</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="resource.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="Psx\acostab.s" />
+    <CustomBuild Include="Psx\asm.s" />
+    <CustomBuild Include="blitz.ico" />
+    <CustomBuild Include="Psx\bluebaby.pal" />
+    <CustomBuild Include="flog.bmp" />
+    <CustomBuild Include="frogger2.ico" />
+    <CustomBuild Include="frogger2site.ico" />
+    <CustomBuild Include="games.ico" />
+    <CustomBuild Include="Psx\greenbaby.pal" />
+    <CustomBuild Include="hasbroi.ico" />
+    <CustomBuild Include="icon1.ico" />
+    <CustomBuild Include="Psx\mpl0.pal" />
+    <CustomBuild Include="Psx\mpl1.pal" />
+    <CustomBuild Include="Psx\mpl2.pal" />
+    <CustomBuild Include="Psx\mpl3.pal" />
+    <CustomBuild Include="Psx\mpl4.pal" />
+    <CustomBuild Include="Psx\mpl5.pal" />
+    <CustomBuild Include="Psx\mpl6.pal" />
+    <CustomBuild Include="Psx\mpl7.pal" />
+    <CustomBuild Include="Psx\pinkbaby.pal" />
+    <CustomBuild Include="X:\TeamSpirit\pcversion\reactive.txt" />
+    <CustomBuild Include="Psx\redbaby.pal" />
+    <CustomBuild Include="Psx\Code\Saveicon.tim" />
+    <CustomBuild Include="X:\TeamSpirit\sonofbuglist.txt" />
+    <CustomBuild Include="todo.txt" />
+    <CustomBuild Include="Psx\yellowbaby.pal" />
+  </ItemGroup>
+</Project>

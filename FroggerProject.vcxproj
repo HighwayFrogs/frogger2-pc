@@ -1,0 +1,515 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug with Bink Video|Win32">
+      <Configuration>Debug with Bink Video</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Template|Win32">
+      <Configuration>Template</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Template|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug with Bink Video|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Template|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.Cpp.UpgradeFromVC60.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug with Bink Video|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.Cpp.UpgradeFromVC60.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.Cpp.UpgradeFromVC60.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>.\Debug\</OutDir>
+    <IntDir>.\Debug\</IntDir>
+    <LinkIncremental>true</LinkIncremental>
+    <IncludePath>G:\F2Dev\mssdk\include;$(IncludePath)</IncludePath>
+    <LibraryPath>G:\F2Dev\mssdk\lib;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug with Bink Video|Win32'">
+    <OutDir>.\DebugBink\</OutDir>
+    <IntDir>.\DebugBink\</IntDir>
+    <LinkIncremental>true</LinkIncremental>
+    <IncludePath>G:\F2Dev\mssdk\include;$(IncludePath)</IncludePath>
+    <LibraryPath>G:\F2Dev\mssdk\lib;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>.\Release\</OutDir>
+    <IntDir>.\Release\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
+    <IncludePath>G:\F2Dev\mssdk\include;$(IncludePath)</IncludePath>
+    <LibraryPath>G:\F2Dev\mssdk\lib;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Template|Win32'">
+    <IncludePath>G:\F2Dev\mssdk\include;$(IncludePath)</IncludePath>
+    <LibraryPath>G:\F2Dev\mssdk\lib;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
+      <FunctionLevelLinking>false</FunctionLevelLinking>
+      <Optimization>Disabled</Optimization>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <WarningLevel>Level2</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <AdditionalIncludeDirectories>pc;common;editor;gelf;mdx;softstation;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;PC_VERSION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AssemblerListingLocation>.\Debug\</AssemblerListingLocation>
+      <BrowseInformation>true</BrowseInformation>
+      <PrecompiledHeaderOutputFile>.\Debug\FroggerProject.pch</PrecompiledHeaderOutputFile>
+      <ObjectFileName>.\Debug\</ObjectFileName>
+      <ProgramDataBaseFileName>.\Debug\</ProgramDataBaseFileName>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+    </ClCompile>
+    <Midl>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <TypeLibraryName>.\Debug\FroggerProject.tlb</TypeLibraryName>
+      <MkTypLibCompatible>true</MkTypLibCompatible>
+      <TargetEnvironment>Win32</TargetEnvironment>
+    </Midl>
+    <ResourceCompile>
+      <Culture>0x0809</Culture>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+    <Bscmake>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OutputFile>.\Debug\FroggerProject.bsc</OutputFile>
+    </Bscmake>
+    <Link>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <IgnoreSpecificDefaultLibraries>libc;libcd;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <OutputFile>.\Debug\FroggerProject.exe</OutputFile>
+      <AdditionalLibraryDirectories>mdx\Debug;gelf;softstation;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>dsound.lib;winmm.lib;dxguid.lib;ddraw.lib;dinput.lib;odbc32.lib;odbccp32.lib;comctl32.lib;gelf.debug.lib;mdx.lib;softstation.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug with Bink Video|Win32'">
+    <ClCompile>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
+      <FunctionLevelLinking>false</FunctionLevelLinking>
+      <Optimization>Disabled</Optimization>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <AdditionalIncludeDirectories>pc;common;editor;bink;gelf;mdx;softstation;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;PC_VERSION;USE_BINK_VIDEO;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AssemblerListingLocation>.\DebugBink\</AssemblerListingLocation>
+      <BrowseInformation>true</BrowseInformation>
+      <PrecompiledHeaderOutputFile>.\DebugBink\FroggerProject.pch</PrecompiledHeaderOutputFile>
+      <ObjectFileName>.\DebugBink\</ObjectFileName>
+      <ProgramDataBaseFileName>.\DebugBink\</ProgramDataBaseFileName>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+    </ClCompile>
+    <Midl>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <TypeLibraryName>.\DebugBink\FroggerProject.tlb</TypeLibraryName>
+      <MkTypLibCompatible>true</MkTypLibCompatible>
+      <TargetEnvironment>Win32</TargetEnvironment>
+    </Midl>
+    <ResourceCompile>
+      <Culture>0x0809</Culture>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+    <Bscmake>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OutputFile>.\DebugBink\FroggerProject.bsc</OutputFile>
+    </Bscmake>
+    <Link>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <IgnoreSpecificDefaultLibraries>libc;libcd;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <OutputFile>.\DebugBink\FroggerProject.exe</OutputFile>
+      <AdditionalLibraryDirectories>bink;gelf;mdx\Debug;softstation;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>dsound.lib;winmm.lib;dxguid.lib;ddraw.lib;dinput.lib;odbc32.lib;odbccp32.lib;comctl32.lib;gelf.debug.lib;mdx.lib;softstation.lib;binkw32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <StringPooling>true</StringPooling>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <Optimization>MaxSpeed</Optimization>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <WarningLevel>TurnOffAllWarnings</WarningLevel>
+      <AdditionalIncludeDirectories>pc;common;editor;bink;gelf;mdx;softstation;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;PC_VERSION;FINAL_MASTER;USE_BINK_VIDEO;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AssemblerListingLocation>.\Release\</AssemblerListingLocation>
+      <PrecompiledHeaderOutputFile>.\Release\FroggerProject.pch</PrecompiledHeaderOutputFile>
+      <ObjectFileName>.\Release\</ObjectFileName>
+      <ProgramDataBaseFileName>.\Release\</ProgramDataBaseFileName>
+    </ClCompile>
+    <Midl>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <TypeLibraryName>.\Release\FroggerProject.tlb</TypeLibraryName>
+      <MkTypLibCompatible>true</MkTypLibCompatible>
+      <TargetEnvironment>Win32</TargetEnvironment>
+    </Midl>
+    <ResourceCompile>
+      <Culture>0x0809</Culture>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+    <Bscmake>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OutputFile>.\Release\FroggerProject.bsc</OutputFile>
+    </Bscmake>
+    <Link>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
+      <OutputFile>.\Release\FroggerProject.exe</OutputFile>
+      <AdditionalLibraryDirectories>mdx\Release;bink;gelf;softstation;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>dxguid.lib;gelf.lib;mdx.lib;softstation.lib;ddraw.lib;d3dim.lib;dsound.lib;dinput.lib;winmm.lib;comctl32.lib;msvcrt.lib;oldnames.lib;binkw32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <IgnoreSpecificDefaultLibraries>
+      </IgnoreSpecificDefaultLibraries>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="Common\actor2.c" />
+    <ClCompile Include="Common\anim.c" />
+    <ClCompile Include="Common\babyfrog.c" />
+    <ClCompile Include="Common\bbtimer.c" />
+    <ClCompile Include="Common\cam.c" />
+    <ClCompile Include="Common\collect.c" />
+    <ClCompile Include="Common\crc32.c" />
+    <ClCompile Include="Common\DefData.c" />
+    <ClCompile Include="Common\E3_Demo.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug with Bink Video|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Common\enemies.c" />
+    <ClCompile Include="Common\evenfunc.c" />
+    <ClCompile Include="Common\event.c" />
+    <ClCompile Include="Common\fixed.c" />
+    <ClCompile Include="Common\flatpack.c" />
+    <ClCompile Include="Common\frogger.c" />
+    <ClCompile Include="Common\frogmove.c" />
+    <ClCompile Include="Common\frontend.c" />
+    <ClCompile Include="Common\game.c" />
+    <ClCompile Include="Common\general.c" />
+    <ClCompile Include="Common\hud.c" />
+    <ClCompile Include="Common\language.c" />
+    <ClCompile Include="Common\layout.c" />
+    <ClCompile Include="Common\levplay.c" />
+    <ClCompile Include="Common\map.c" />
+    <ClCompile Include="Common\maths.c" />
+    <ClCompile Include="Common\memload.c" />
+    <ClCompile Include="Common\menus.c" />
+    <ClCompile Include="Common\multi.c" />
+    <ClCompile Include="Common\newpsx.c" />
+    <ClCompile Include="Common\options.c" />
+    <ClCompile Include="Common\overlays.c" />
+    <ClCompile Include="Common\particle.c" />
+    <ClCompile Include="Common\path.c" />
+    <ClCompile Include="Common\platform.c" />
+    <ClCompile Include="Common\ptexture.c" />
+    <ClCompile Include="Common\savegame.c" />
+    <ClCompile Include="Common\script.c" />
+    <ClCompile Include="Common\sndview.c" />
+    <ClCompile Include="Common\specfx.c" />
+    <ClCompile Include="Common\sprite.c" />
+    <ClCompile Include="Common\story.c" />
+    <ClCompile Include="Common\textover.c" />
+    <ClCompile Include="Common\tongue.c" />
+    <ClCompile Include="Common\training.c" />
+    <ClCompile Include="Common\types.c" />
+    <ClCompile Include="PC\CDAudioManager.c" />
+    <ClCompile Include="Pc\net\dputil.cpp" />
+    <ClCompile Include="Pc\net\netchat.cpp" />
+    <ClCompile Include="Pc\net\netconnect.cpp" />
+    <ClCompile Include="Pc\net\netgame.cpp" />
+    <ClCompile Include="Pc\net\netrace.cpp" />
+    <ClCompile Include="Pc\net\network.cpp" />
+    <ClCompile Include="Pc\actor.cpp" />
+    <ClCompile Include="Pc\backdrop.c" />
+    <ClCompile Include="Pc\banks.cpp" />
+    <ClCompile Include="Pc\controll.cpp" />
+    <ClCompile Include="Pc\drawloop.cpp" />
+    <ClCompile Include="Pc\dx_sound.cpp" />
+    <ClCompile Include="Pc\fadeout.cpp" />
+    <ClCompile Include="Pc\islfile.cpp" />
+    <ClCompile Include="Pc\isllocal.c" />
+    <ClCompile Include="Pc\isltex.cpp" />
+    <ClCompile Include="Pc\islutil.cpp" />
+    <ClCompile Include="Pc\Main.cpp" />
+    <ClCompile Include="Pc\pcaudio.c" />
+    <ClCompile Include="Pc\pcgfx.c" />
+    <ClCompile Include="Pc\pcmisc.cpp" />
+    <ClCompile Include="Pc\pcsprite.c" />
+    <ClCompile Include="Pc\video.cpp" />
+    <ClCompile Include="Editor\edcamera.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Editor\edcommand.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <InlineFunctionExpansion Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">AnySuitable</InlineFunctionExpansion>
+    </ClCompile>
+    <ClCompile Include="Editor\edcreate.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Editor\edglobals.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Editor\editdefs.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Editor\editfile.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Editor\editor.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Editor\edmaths.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Editor\edtoolbars.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Common\actor2.h" />
+    <ClInclude Include="Common\anim.h" />
+    <ClInclude Include="Common\babyfrog.h" />
+    <ClInclude Include="Common\bbtimer.h" />
+    <ClInclude Include="Common\Cam.h" />
+    <ClInclude Include="Common\codes.h" />
+    <ClInclude Include="Common\collect.h" />
+    <ClInclude Include="Common\crc32.h" />
+    <ClInclude Include="Common\decomp.h" />
+    <ClInclude Include="Common\DefData.h" />
+    <ClInclude Include="Common\define.h" />
+    <ClInclude Include="Common\E3_Demo.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug with Bink Video|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Common\enemies.h" />
+    <ClInclude Include="Common\evenfunc.h" />
+    <ClInclude Include="Common\event.h" />
+    <ClInclude Include="Common\fixed.h" />
+    <ClInclude Include="Common\flatpack.h" />
+    <ClInclude Include="Common\frogger.h" />
+    <ClInclude Include="Common\frogmove.h" />
+    <ClInclude Include="Common\frontend.h" />
+    <ClInclude Include="Common\game.h" />
+    <ClInclude Include="Common\general.h" />
+    <ClInclude Include="Common\hud.h" />
+    <ClInclude Include="Common\lang.h" />
+    <ClInclude Include="Common\language.h" />
+    <ClInclude Include="Common\layout.h" />
+    <ClInclude Include="Common\levplay.h" />
+    <ClInclude Include="Common\map.h" />
+    <ClInclude Include="Common\maths.h" />
+    <ClInclude Include="Common\memload.h" />
+    <ClInclude Include="Common\menus.h" />
+    <ClInclude Include="Common\multi.h" />
+    <ClInclude Include="Common\newpsx.h" />
+    <ClInclude Include="Common\options.h" />
+    <ClInclude Include="Common\overlays.h" />
+    <ClInclude Include="Common\particle.h" />
+    <ClInclude Include="Common\path.h" />
+    <ClInclude Include="Common\platform.h" />
+    <ClInclude Include="Common\ptexture.h" />
+    <ClInclude Include="Common\savegame.h" />
+    <ClInclude Include="Common\script.h" />
+    <ClInclude Include="Common\sndview.h" />
+    <ClInclude Include="Common\sonylibs.h" />
+    <ClInclude Include="Common\specfx.h" />
+    <ClInclude Include="Common\sprite.h" />
+    <ClInclude Include="Common\story.h" />
+    <ClInclude Include="Common\textover.h" />
+    <ClInclude Include="Common\tongue.h" />
+    <ClInclude Include="Common\training.h" />
+    <ClInclude Include="Common\types.h" />
+    <ClInclude Include="Common\types2d.h" />
+    <ClInclude Include="Common\ultra64.h" />
+    <ClInclude Include="PC\CDAudioManager.h" />
+    <ClInclude Include="Pc\net\netchat.h" />
+    <ClInclude Include="Pc\net\netconnect.h" />
+    <ClInclude Include="Pc\net\netgame.h" />
+    <ClInclude Include="Pc\net\netrace.h" />
+    <ClInclude Include="Pc\net\network.h" />
+    <ClInclude Include="Pc\actor.h" />
+    <ClInclude Include="Pc\backdrop.h" />
+    <ClInclude Include="Pc\banks.h" />
+    <ClInclude Include="Pc\controll.h" />
+    <ClInclude Include="Pc\drawloop.h" />
+    <ClInclude Include="Pc\dx_sound.h" />
+    <ClInclude Include="Pc\fadeout.h" />
+    <ClInclude Include="Pc\gtemac.h" />
+    <ClInclude Include="Pc\inline_c.h" />
+    <ClInclude Include="Pc\islfile.h" />
+    <ClInclude Include="Pc\islfont.h" />
+    <ClInclude Include="Pc\isllocal.h" />
+    <ClInclude Include="Pc\islmem.h" />
+    <ClInclude Include="Pc\islpad.h" />
+    <ClInclude Include="Pc\islpsi.h" />
+    <ClInclude Include="Pc\isltex.h" />
+    <ClInclude Include="Pc\islutil.h" />
+    <ClInclude Include="Pc\libapi.h" />
+    <ClInclude Include="Pc\libetc.h" />
+    <ClInclude Include="Pc\libgpu.h" />
+    <ClInclude Include="Pc\libgs.h" />
+    <ClInclude Include="Pc\libgte.h" />
+    <ClInclude Include="Pc\libsn.h" />
+    <ClInclude Include="Pc\Main.h" />
+    <ClInclude Include="Pc\net.h" />
+    <ClInclude Include="Pc\pcaudio.h" />
+    <ClInclude Include="Pc\pcgfx.h" />
+    <ClInclude Include="Pc\pcmisc.h" />
+    <ClInclude Include="Pc\pcsprite.h" />
+    <ClInclude Include="Pc\shell.h" />
+    <ClInclude Include="Pc\video.h" />
+    <ClInclude Include="Editor\edcamera.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Editor\edcommand.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Editor\edcreate.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Editor\edglobals.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Editor\editdefs.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Editor\editfile.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Editor\editor.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Editor\edittypes.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Editor\edmaths.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Editor\edtoolbars.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Psx\gametext.h" />
+    <ClInclude Include="resource.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="Psx\acostab.s">
+      <FileType>Document</FileType>
+    </CustomBuild>
+    <CustomBuild Include="Psx\asm.s">
+      <FileType>Document</FileType>
+    </CustomBuild>
+    <CustomBuild Include="blitz.ico" />
+    <CustomBuild Include="Psx\bluebaby.pal">
+      <FileType>Document</FileType>
+    </CustomBuild>
+    <CustomBuild Include="flog.bmp" />
+    <CustomBuild Include="frogger2.ico" />
+    <CustomBuild Include="frogger2site.ico" />
+    <CustomBuild Include="games.ico" />
+    <CustomBuild Include="Psx\greenbaby.pal">
+      <FileType>Document</FileType>
+    </CustomBuild>
+    <CustomBuild Include="hasbroi.ico" />
+    <CustomBuild Include="icon1.ico" />
+    <CustomBuild Include="Psx\mpl0.pal">
+      <FileType>Document</FileType>
+    </CustomBuild>
+    <CustomBuild Include="Psx\mpl1.pal">
+      <FileType>Document</FileType>
+    </CustomBuild>
+    <CustomBuild Include="Psx\mpl2.pal">
+      <FileType>Document</FileType>
+    </CustomBuild>
+    <CustomBuild Include="Psx\mpl3.pal">
+      <FileType>Document</FileType>
+    </CustomBuild>
+    <CustomBuild Include="Psx\mpl4.pal">
+      <FileType>Document</FileType>
+    </CustomBuild>
+    <CustomBuild Include="Psx\mpl5.pal">
+      <FileType>Document</FileType>
+    </CustomBuild>
+    <CustomBuild Include="Psx\mpl6.pal">
+      <FileType>Document</FileType>
+    </CustomBuild>
+    <CustomBuild Include="Psx\mpl7.pal">
+      <FileType>Document</FileType>
+    </CustomBuild>
+    <CustomBuild Include="Psx\pinkbaby.pal">
+      <FileType>Document</FileType>
+    </CustomBuild>
+    <CustomBuild Include="X:\TeamSpirit\pcversion\reactive.txt" />
+    <CustomBuild Include="Psx\redbaby.pal">
+      <FileType>Document</FileType>
+    </CustomBuild>
+    <CustomBuild Include="Psx\Code\Saveicon.tim">
+      <FileType>Document</FileType>
+    </CustomBuild>
+    <CustomBuild Include="X:\TeamSpirit\sonofbuglist.txt" />
+    <CustomBuild Include="todo.txt" />
+    <CustomBuild Include="Psx\yellowbaby.pal">
+      <FileType>Document</FileType>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="resource.rc" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

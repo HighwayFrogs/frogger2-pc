@@ -227,8 +227,21 @@ long StartVideoPlayback(int num)
 	DWORD id;
 	HANDLE videoThread = CreateThread(0, 0, VideoThreadProc, 0, 0, &id);
 
-	while (WaitForSingleObject(videoThread, 1000) == WAIT_TIMEOUT)
+
+	MSG msg;
+	while (WaitForSingleObject(videoThread, 100) == WAIT_TIMEOUT)
 	{
+		while(PeekMessage(&msg,NULL,0,0,PM_REMOVE))
+		{
+			if(msg.message == WM_QUIT || msg.message == WM_CLOSE)
+			{
+				ExitProcess(0);
+				return 1;
+			}
+
+			TranslateMessage(&msg); 
+			DispatchMessage(&msg);
+		}
 		// do nothing, every second, until the thread is finished.		
 	}
 

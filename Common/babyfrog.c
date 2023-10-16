@@ -204,7 +204,7 @@ int PickupBabyFrog( ACTOR2 *baby, GAMETILE *tile )
 	babyFlash->height = babyIcons[n]->height;		
 
 	babyList[i].isSaved	= 1;
-	babyList[i].collect = 40;
+	babyList[i].collect = 40 << 12;
 
 	lastBabySaved = i;
 
@@ -331,7 +331,7 @@ void UpdateBabies( )
 		dist = MagnitudeF(&frogV)>>12;
 
 		if( babyList[i].idle > 0 )
-			babyList[i].idle -= gameSpeed>>12;
+			babyList[i].idle -= FRoundRandomHack(gameSpeed);
 
 		if( dist < BABY_ACTIVE_RADIUS ) // Play attract animations when frog is close
 		{
@@ -347,7 +347,7 @@ void UpdateBabies( )
 
 			// Decrease twice as fast if very close
 			if( dist < BABY_ACTIVE_RADIUS/2 )
-				babyList[i].idle -= gameSpeed>>12;
+				babyList[i].idle -= FRoundRandomHack(gameSpeed);
 
 			if( babyList[i].idle < 1 )
 			{
@@ -426,9 +426,9 @@ void RunBabyCollect( int bby )
 	fixedRotateVectorByRotation( &fwd, &inVec, &q );
 	Orientate( &act->qRot, &fwd, &up );
 
-	babyList[bby].collect -= max( gameSpeed>>12, 1 );
+	babyList[bby].collect -= gameSpeed;
 
-	if( babyList[bby].collect < 1 )
+	if( babyList[bby].collect < 0 )
 	{
 		SPECFX *fx;
 		if( (fx = CreateSpecialEffectDirect( FXTYPE_SPARKLYTRAIL, &act->position, &up, 204800, 12288, 0, 20480 )) )
@@ -464,5 +464,6 @@ void RunBabyCollect( int bby )
 	}
 
 	ScaleVectorFF( &up, gameSpeed*30 );
+	RoundVectorRandF(&up);
 	AddToVectorSF( &act->position, &up );
 }
