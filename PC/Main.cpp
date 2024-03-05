@@ -20,6 +20,7 @@
 
 #include <anim.h>
 #include <stdio.h>
+#include <winuser.h>
 
 #include "game.h"
 #include "types2d.h"
@@ -45,6 +46,7 @@
 #include "E3_Demo.h"
 #include "menus.h"
 #include "editor.h"
+#include "editdefs.h"
 #include "drawloop.h"
 #include "fadeout.h"
 #include "pcsprite.h"
@@ -501,6 +503,23 @@ LRESULT CALLBACK MyInitProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 						MessageBox(NULL, "This will crash if you don't have .bmp files inside sub-directories of Textures.\n"
 							"You should read the debug log if the game crashes to see what textures were missing.", "Frogger2",
 							MB_ICONEXCLAMATION|MB_OK);
+					}
+					return FALSE;
+				}
+				case IDC_DEBUGMODE:
+				{
+					debugMode = SendMessage(GetDlgItem(hWnd, IDC_DEBUGMODE), BM_GETCHECK, 0, 0);	
+					if (debugMode && !CheckEditIcons())
+					{
+						const char baseMessage[] = "There are missing .bmp files needed for the built-in editor. You will not see these icons! The following editor .bmp files are missing:\r\n";
+						char texturePaths[(sizeof(baseMessage)/sizeof(char))+(MAX_PATH+3) * EDITORTEXTURES];
+						sprintf(texturePaths, baseMessage);
+						for (int i = 0; i < EDITORTEXTURES; i++)
+						{
+							if (editicons[i].surface == NULL)
+								sprintf(texturePaths, "%s\n - " TEXTURE_BASE "editor\\editor%d.bmp", texturePaths, i+1);
+						}
+						MessageBox(NULL, texturePaths, "Frogger2", MB_ICONEXCLAMATION|MB_OK);
 					}
 					return FALSE;
 				}

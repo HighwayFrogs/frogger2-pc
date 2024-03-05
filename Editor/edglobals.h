@@ -69,7 +69,7 @@ extern GAMETILE *editTile;
 extern EDITPATHNODE *editFlag;
 extern EDVECTOR	editCameraRot;
 extern TOOLBAR_SUBMENU submenu;
-extern char	savePath[80], scriptPath[80];
+extern char	savePath[MAX_PATH], scriptPath[MAX_PATH];
 extern SELECTFUNC selectFunc;
 extern EDITGROUP *selectionList;
 extern EDITTEXT editText;
@@ -79,9 +79,8 @@ extern short copyFlag;
 extern short helpScreen;
 extern short addTiles;
 
-#define EDITOR_SAVE_BASE	"c:\\work\\froggerii\\leveldump\\"
+#define EDITOR_SAVE_BASE	"maps\\"
 #define ENTITY_DUMP_FILE	"entity-%d-%d.dat"
-#define EDITOR_STATE_FILE	"c:\\frogedit.dat"
 
 #ifdef __cplusplus
 }

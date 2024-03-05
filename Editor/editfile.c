@@ -105,7 +105,7 @@ int FindPtrIndex(void *i, void** list, int num)
 
 void MakeBackup(const char* filename)
 {
-	char s[80];
+	char s[MAX_PATH];
 	SYSTEMTIME currTime;
 
 	GetLocalTime(&currTime);

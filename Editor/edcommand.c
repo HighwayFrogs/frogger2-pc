@@ -1709,7 +1709,7 @@ void DeleteFlags( )
 
 void EditorSave(const char* path)
 {
-	char filename[80];
+	char filename[MAX_PATH];
 	int i, worldID, levelID;
 
 	strcpy(savePath, path);
@@ -1726,9 +1726,11 @@ void EditorSave(const char* path)
 	sprintf(filename, "%s" ENTITY_DUMP_FILE, savePath, worldID, levelID);
 	if (SaveCreateList(filename, createList))
 	{
+		utilPrintf("Saving Editor data to: %s" ENTITY_DUMP_FILE, savePath, worldID, levelID);
 		sprintf(statusMessage, "Saved editor file %s", filename);
 	}
 	else
+		utilPrintf("Error saving Editor data to: %s" ENTITY_DUMP_FILE, savePath, worldID, levelID);
 		sprintf(statusMessage, "Error saving to %s", filename);
 }
 
@@ -1740,7 +1742,7 @@ void EditorSave(const char* path)
 
 void EditorLoad(const char* path)
 {
-	char filename[80];
+	char filename[MAX_PATH];
 	int i, worldID, levelID;
 
 	strcpy(savePath, path);
