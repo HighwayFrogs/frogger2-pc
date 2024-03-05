@@ -148,6 +148,7 @@ void InitArcadeHUD(void)
 		arcadeHud.timeBar->draw = 0;
 		arcadeHud.timeBak->draw = 0;
 		arcadeHud.timeBarText->draw = 0;
+		arcadeHud.speedrunTimer->draw = 0;
 	}
 
 #ifdef PSX_VERSION
