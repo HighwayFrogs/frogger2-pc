@@ -179,7 +179,9 @@ void GameProcessController(long pl)
 	
 	// check if frog is using extended hop ability
 	if(player[pl].isSuperHopping)
+	{
 		player[pl].canJump = 0;
+	}
 
 	if(player[pl].hasDoubleJumped)
 	{

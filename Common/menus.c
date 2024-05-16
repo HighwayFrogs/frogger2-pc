@@ -837,7 +837,7 @@ unsigned long cWorld;
 fixed fadeSpeed = ToFixed(10);
 
 long globalSoundVol = 100;
-long globalMusicVol = 70;
+long globalMusicVol = 100; //This somehow doesn't make the music less loud as hell.
 
 long reachedPoint = 0;
 

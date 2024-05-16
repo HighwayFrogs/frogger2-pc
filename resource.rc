@@ -52,7 +52,7 @@ END
 // Dialog
 //
 
-IDD_VIDEODEVICE DIALOGEX 0, 0, 269, 133
+IDD_VIDEODEVICE DIALOGEX 0, 0, 271, 133
 STYLE DS_MODALFRAME | DS_CENTER | DS_CENTERMOUSE | WS_POPUP | 
     WS_CLIPSIBLINGS | WS_CLIPCHILDREN | WS_CAPTION | WS_SYSMENU
 CAPTION "Frogger2 - Swampy's Revenge"
@@ -198,7 +198,7 @@ BEGIN
     IDD_VIDEODEVICE, DIALOG
     BEGIN
         LEFTMARGIN, 5
-        RIGHTMARGIN, 263
+        RIGHTMARGIN, 265
         TOPMARGIN, 6
         BOTTOMMARGIN, 127
     END
@@ -303,7 +303,7 @@ BEGIN
             VALUE "FileDescription", "Frogger2 - Swampy's Revenge\0"
             VALUE "FileVersion", "1, 0, 0, 1\0"
             VALUE "InternalName", "Frogger2\0"
-            VALUE "LegalCopyright", "Copyright � 2000 Hasbro Interactive\0"
+            VALUE "LegalCopyright", "Copyright   2000 Hasbro Interactive\0"
             VALUE "LegalTrademarks", "KONAMI and FROGGER is a trademark of KONAMI CO, LTD (c) All Rights Reserved\0"
             VALUE "OriginalFilename", "Frogger2.exe\0"
             VALUE "PrivateBuild", "\0"

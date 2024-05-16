@@ -131,11 +131,11 @@ typedef struct TAGSCRIPT_EFFECT_PARAMS
 
 //bb
 //fixed volTest = ToFixed(0.5);
-fixed volTest = 2048;
+fixed volTest = 2048; //Maybe changing this around could fix it.
 
 fixed ChangeVolume(int a, fixed delta)
 {
-	volTest += FMul(delta,gameSpeed);
+	volTest += FMul(delta,gameSpeed); //Same base issue as the chute launch, maybe?
 	return volTest;
 }
 
@@ -1048,6 +1048,7 @@ BOOL ExecuteCommand(UBYTE **p)
 			player[fNum].frogState &= ~FROGSTATUS_ALLHOPFLAGS;
 			player[fNum].frogState |= FROGSTATUS_ISTELEPORTING;	// clear ALL other flags
 			player[fNum].canJump = 0;
+			utilPrintf("camJump set to 0 by EV_TELEPORT_P");
 			FrogLeavePlatform(fNum);	// bah
 
 #ifdef PC_VERSION

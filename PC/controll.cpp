@@ -907,6 +907,11 @@ void ProcessKeyboardInput()
 
 		if(KEYPRESS(DIK_F12))
 			PostMessage(mdxWinInfo.hWndMain,WM_QUIT, 0, 0);
+
+		if(KEYPRESS(DIK_F9))
+		{
+			utilPrintf("globalMusicVol: %d\nCD Volume: %d\n", globalMusicVol, GetCDVolume());
+		}
 	}
 }
 

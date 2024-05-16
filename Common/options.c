@@ -3129,7 +3129,7 @@ void FMVBack(void)
 void SetMusicVolume()
 {
 #ifdef PC_VERSION
-	SetCDVolume((globalMusicVol * 65535)/MAX_SOUND_VOL);
+	ResetMusicVolume();
 #elif PSX_VERSION
 	SpuSetCommonCDVolume((0x7fff*globalMusicVol)/MAX_SOUND_VOL, (0x7fff*globalMusicVol)/MAX_SOUND_VOL);
 	xaFileData[0]->vol = xaFileData[1]->vol = globalMusicVol;

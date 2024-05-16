@@ -85,7 +85,7 @@ void SetupDefaultPixelFormat()
 
 BOOL WINAPI  EnumDDDevices(GUID FAR* lpGUID, LPSTR lpDriverDesc, LPSTR lpDriverName, LPVOID lpContext, HMONITOR mon)
 {
-    LPDIRECTDRAW7	lpDD;
+	LPDIRECTDRAW7	lpDD;
     DDCAPS			ddCaps;
 	DDDEVICEIDENTIFIER2 ddId;
 
@@ -122,13 +122,13 @@ BOOL WINAPI  EnumDDDevices(GUID FAR* lpGUID, LPSTR lpDriverDesc, LPSTR lpDriverN
 
 	lpDD->GetDeviceIdentifier(&ddId,0);
 
-	dxDeviceList[dxNumDevices].desc = (char *) AllocMem(sizeof(char)*strlen (ddId.szDescription)+1);
-	dxDeviceList[dxNumDevices].name = (char *) AllocMem(sizeof(char)*strlen (ddId.szDriver)+1);
+	const char * placehold = "Primary Display Adapter";
+
+	dxDeviceList[dxNumDevices].desc = (char *) AllocMem(sizeof(char)*((strlen(ddId.szDescription) > strlen(placehold)) ? strlen(ddId.szDescription)+14 : strlen(placehold)+1)); //In case of very small graphics card names
+	dxDeviceList[dxNumDevices].name = (char *) AllocMem(sizeof(char)*((strlen(ddId.szDriver) > strlen(placehold)) ? strlen(ddId.szDriver)+14 : strlen(placehold)+1)); //Wouldn't want a buffer overflow here
 	
 	strcpy(dxDeviceList[dxNumDevices].desc, ddId.szDescription);
 	strcpy(dxDeviceList[dxNumDevices].name, ddId.szDriver);
-
-	dxDeviceList[dxNumDevices].caps = ddCaps;						// Implicit structure copy.
 
 //	if (!_CrtCheckMemory())
 //	{
@@ -139,10 +139,15 @@ BOOL WINAPI  EnumDDDevices(GUID FAR* lpGUID, LPSTR lpDriverDesc, LPSTR lpDriverN
     if (lpGUID)													// This is NULL for the primary display device
 	{
 	    dxDeviceList[dxNumDevices].guid = (GUID *) AllocMem(sizeof(GUID));
-		memcpy(dxDeviceList[dxNumDevices].guid, lpGUID, sizeof(GUID));		
+		memcpy(dxDeviceList[dxNumDevices].guid, lpGUID, sizeof(GUID));
 	}
 	else
+	{
 		dxDeviceList[dxNumDevices].guid = NULL;
+		strcpy(dxDeviceList[dxNumDevices].desc, placehold);
+	}
+
+	dxDeviceList[dxNumDevices].caps = ddCaps;						// Implicit structure copy.
 
 	dxNumDevices++;
 
@@ -207,7 +212,7 @@ BOOL FillVideoModes(HWND hdlg, GUID *lpGUID, DWORD resolution)
 	if (lpGUID == (GUID*)-1)
 		lpGUID = NULL;
 
-	dp("--- Enumerating video modes ---\n");
+	dp("****--- Enumerating video modes ---****\n");
 
 	SendMessage(hctrl, CB_RESETCONTENT, 0, 0);
 
@@ -508,6 +513,38 @@ unsigned long DDrawInitObject (DWORD resolution)
 
 		dxDeviceList[dxNumDevices++].guid = (GUID *)-1;
 	}
+
+	bool * checked = (bool *) calloc(dxNumDevices, sizeof(bool)); //To avoid repeats when appending display numbers
+
+	//It is advisable to check if checked isn't null here
+
+	for (int k=0; k < dxNumDevices; k++)
+	{
+		if (checked[k] == 0) //If it hasn't already been assigned a monitor number
+		{
+			int dispno = 1; //This should be the first one with its name
+			for (int j=k+1; j<dxNumDevices; j++) //Check the rest of the list
+			{
+				if (strncmp(dxDeviceList[j].desc, dxDeviceList[k].desc, sizeof(dxDeviceList[j].desc)) == 0) //If they are the same device for a different display
+				{
+					char displayct[14]; //Could cause issues if someone has 10 or more monitors
+					if (dispno == 1) //This can probably be done less clunkily, but it's late.
+					{
+						sprintf(displayct, " (Display %d)", dispno); //THIS COULD BE A SECURITY FLAW. Better practices should be used to mitigate the overflow possibility.
+						strcat(dxDeviceList[k].desc, displayct);
+					}
+					dispno++;
+					sprintf(displayct, " (Display %d)", dispno); //THIS COULD BE A SECURITY FLAW. Better practices should be used to mitigate the overflow possibility.
+					strcat(dxDeviceList[j].desc, displayct);
+					checked[j] = 1;
+				}
+			}
+		}
+	}
+
+	free(checked);
+	checked = NULL;
+
 
 	for (i=0; i<=dxNumDevices; i++)
 		dp("Device #%d: %s (Driver: %s)\n", i + 1, dxDeviceList[i].desc, dxDeviceList[i].name);

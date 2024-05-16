@@ -466,7 +466,7 @@ void ShowSounds(void)
 
 			me = dispSample;
 
-			SetTextColor(hdc, RGB(255,255,255));
+			SetTextColor(hdc, 0x00ffffff); //Accomodating for RGB bug
 			sprintf(tText,"Number of Sounds: %i",soundList.numEntries);
 			TextOut(hdc, r.left+70, r.top, tText, strlen(tText));
 			r.top += 50;
@@ -479,7 +479,7 @@ void ShowSounds(void)
 				// If we're displaying the selected sound, hilight.
 				if( !count )
 				{
-					SetTextColor(hdc, RGB(255,255,255));
+					SetTextColor(hdc, 0x00ffffff);
 
 					if( siPlaySound )
 						PlaySample( me, NULL, 0, SAMPLE_VOLUME, -1 );
@@ -487,7 +487,7 @@ void ShowSounds(void)
 				}
 				else
 				{
-					SetTextColor(hdc, RGB(230,100,100));
+					SetTextColor(hdc, 0x006464e6);
 				}
 				
 //				sprintf(tText,"%s",me->idName);

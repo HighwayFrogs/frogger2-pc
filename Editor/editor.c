@@ -1111,7 +1111,7 @@ void DrawStatusInfo(void)
 	if (res == DD_OK)
 	{
 		SetBkMode(hdc, TRANSPARENT);
-		SetTextColor(hdc, RGB(255,255,255));
+		SetTextColor(hdc, 0x00ffffff); //Color of status window text
 		TextOut(hdc, statusRect.left+5, statusRect.top+5, statusWin.text, strlen(statusWin.text));
 		TextOut(hdc, statusRect.left+5, statusRect.top+20, statusWin.currentSelection, strlen(statusWin.currentSelection));
 		TextOut(hdc, statusRect.left+5, toolbarRect.bottom-20, statusMessage, strlen(statusMessage));
@@ -1126,15 +1126,21 @@ void DrawStatusInfo(void)
 			SetTextAlign( hdc, TA_RIGHT );
 	
 			if( command != -1 )
+			{
+				SetTextColor(hdc, 0x00ffffff); //Congratulations. We now have readable tooltips.
 				TextOut( hdc, statusRect.right,
 						toolbarRect.bottom-20, 
 						tooltips[command],
 						strlen(tooltips[command]) );
+			}
 			else
+			{
+				SetTextColor(hdc, 0x00ffffff); //Ditto to the above comment.
 				TextOut( hdc, statusRect.right,
 						toolbarRect.bottom-20, 
 						"Press H for help",
 						16 );
+			}
 		}
 
 		if( helpScreen )
@@ -1149,7 +1155,7 @@ void DrawStatusInfo(void)
 			r.bottom = half*22;
 			SetTextAlign( hdc, TA_LEFT );
 			SetBkMode(hdc, TRANSPARENT);
-			SetTextColor(hdc, RGB(255,255,255));
+			SetTextColor(hdc, 0x00ffffff);
 			for( --i; (i+1); i-- ) // Oh yeah baby!
 				TextOut(hdc, (i<half)?r.left+5:r.left+((r.right-r.left)/2)+5,
 						(i<half)?r.top+5+(i*20):r.top+5+((i-half)*20),

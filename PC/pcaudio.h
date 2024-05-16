@@ -204,12 +204,16 @@ extern void SetSampleFormat ( SAMPLE *sample );
 
 
 extern int PlaySample(SAMPLE *sample,SVECTOR *pos,long radius,short volume,short pitch);
+extern int PlaySampleMusic( SAMPLE *sample, SVECTOR *pos, long radius, short volume, short pitch );
 int StopSample( SAMPLE *sample );
 void PlaySfxMappedSample( MDX_ACTOR *act );
 extern void UpdateAmbientSounds();
 
 extern void InitVoices( char *path, int len );
 #define PlayVoice(pl, sound) PlaySample(FindVoice(UpdateCRC(sound),pl), NULL, 0, SAMPLE_VOLUME, -1)
+
+extern int MusicLoudness(int origVol);
+extern void ResetMusicVolume();
 
 extern void PrepareSong(short num, short loop);
 extern void LoopSong();

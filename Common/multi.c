@@ -1437,7 +1437,7 @@ void CalcRaceCircuitCamera( FVECTOR *target )
 		if( mpl[i].lap == bestLap && mpl[i].check == bestCheck )
 		{
 			num++;
-			if( player[i].jumpTime > 0 )	// jumping; calculate linear position
+			if( player[i].jumpTime > 0 )	// jumping; calculate linear position. = is a change that might cause problems.
 			{
 				FVECTOR v;
 				SetVectorFF(&v, &player[i].jumpFwdVector);
@@ -1492,7 +1492,7 @@ void CalcRaceStraightCamera( FVECTOR *target )
 
 	for( i=0; i<NUM_FROGS; i++ )
 	{
-		if( player[i].jumpTime > 0 )	// jumping; calculate linear position
+		if( player[i].jumpTime > 0 )	// jumping; calculate linear position. = is a change
 		{
 			FVECTOR v;
 			SetVectorFF(&v, &player[i].jumpFwdVector);
@@ -1567,7 +1567,7 @@ void CalcCollectCamera( FVECTOR *target )
 	{
 		if( !(player[i].frogState & FROGSTATUS_ISDEAD) )
 		{
-			if( player[i].jumpTime > 0 )	// jumping; calculate linear position
+			if( player[i].jumpTime > 0 )	// jumping; calculate linear position. = is a change
 			{
 				SetVectorFF(&v, &player[i].jumpFwdVector);
 				ScaleVectorFF(&v, player[i].jumpTime);
@@ -1634,7 +1634,7 @@ void CalcBattleCamera( FVECTOR *target )
 	{
 		if( !(player[i].frogState & FROGSTATUS_ISDEAD) )
 		{
-			if( player[i].jumpTime > 0 )	// jumping; calculate linear position
+			if( player[i].jumpTime > 0 )	// jumping; calculate linear position. = is a change
 			{
 				SetVectorFF(&v, &player[i].jumpFwdVector);
 				ScaleVectorFF(&v, player[i].jumpTime);

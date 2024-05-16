@@ -78,6 +78,7 @@ static DWORD	volumecontrolid, cdaudiovalid;
 int cdTrack = 0;	// cd is not playing
 short trackLoop = 0;
 int playingMusic = 0;
+int BGMBuff = 0;
 SAMPLE *musicFileSample = NULL;
 
 static char		errStr[128];
@@ -370,6 +371,99 @@ int PlaySample( SAMPLE *sample, SVECTOR *pos, long radius, short volume, short p
 	MDX_VECTOR mdxPos,scrPos;
 
 	if(!lpDS || !sample || !vol) return FALSE;	// No DirectSound object!
+
+/*	if( sample->flags & SFXFLAGS_3D_SAMPLE )
+	{
+		if( sample->lpds3DBuffer )
+		{
+			sample->lpds3DBuffer->lpVtbl->SetMode ( sample->lpds3DBuffer, DS3DMODE_NORMAL, DS3D_IMMEDIATE );
+			Set3DPosition ( sample->lpds3DBuffer, pos->vx, pos->vy, pos->vz );
+		}
+	}
+	else*/ 
+	if( pos )
+	{
+		att = (radius)?radius:DEFAULT_SFX_DIST;
+//		att *= 2;
+//		SetVectorSS( &check, currPlatform[0]?&currPlatform[0]->pltActor->actor->position:&currTile[0]->centre );
+
+//		SubVectorSSS( &diff, pos, &check );
+
+		SubVectorSSF(&diff, pos, &currCamSource);
+
+		// Volume attenuation - check also for radius != 0 and use instead of default
+		dist = (float)MagnitudeS( &diff )/4096.0;
+		if( dist > att )
+			return FALSE;
+
+		vol *= (att-dist)/att;
+
+		//work out pan
+		mdxPos.vx = (float)pos->vx/10.0;
+		mdxPos.vy = (float)pos->vy/10.0;
+		mdxPos.vz = (float)pos->vz/10.0;
+		guMtxXFMF(vMatrix.matrix,mdxPos.vx,mdxPos.vy,mdxPos.vz,&scrPos.vx,&scrPos.vy,&scrPos.vz);
+
+		dist = mdxMagnitude(&scrPos);
+		if(dist)
+			pan = (scrPos.vx*255)/dist;
+		else
+			pan = 0;
+	}
+
+	if( sample->flags & SFXFLAGS_LOOP )
+		flags |= DSBPLAY_LOOPING;
+
+
+	//	What we need to do here is create an instance of the buffer and store it in the buffer list.
+	//	Have a clean buffer function that will go though and check if the sample is playing or not,
+	//	if the sample is not playing then remove it from the list.
+	if( !(bufSample = (BUFSAMPLE *)MALLOC0(sizeof(BUFSAMPLE))) )
+		return 0;
+
+	lpDS->lpVtbl->DuplicateSoundBuffer( lpDS, sample->lpdsBuffer, &(bufSample->lpdsBuffer) );
+
+	AddBufSample( bufSample );
+	lpdsBuffer = bufSample->lpdsBuffer;
+	bufSample->uid = sample->uid;
+
+	lpdsBuffer->lpVtbl->Play( lpdsBuffer, 0, 0, flags );
+	lpdsBuffer->lpVtbl->SetFrequency( lpdsBuffer, (pitch==-1)?(DSBFREQUENCY_ORIGINAL):(pitch*PITCH_STEP) );
+
+	lpdsBuffer->lpVtbl->SetVolume( lpdsBuffer, bytetoDB[vol] );
+	if(pan <= 0)
+		lpdsBuffer->lpVtbl->SetPan( lpdsBuffer, -bytetoDB[255+pan] );
+	else
+		lpdsBuffer->lpVtbl->SetPan( lpdsBuffer, bytetoDB[255-pan] );
+	// HAAACCK! Bwahahahahahah!
+	return (int)lpdsBuffer;
+}
+
+/*	--------------------------------------------------------------------------------
+	Function		: PlaySampleMusic
+	Purpose			: plays a sample with the music volume as the base coefficient
+	Parameters		: ID, position, radius, volume, pitch
+	Returns			: success?
+	Info			: Pass in a valid vector to get attenuation, and a radius to override the default
+*/
+
+int PlaySampleMusic( SAMPLE *sample, SVECTOR *pos, long radius, short volume, short pitch )
+{
+	BUFSAMPLE *bufSample=NULL;
+	long vol = (volume*globalMusicVol)/MAX_SOUND_VOL;
+	int pan = 0;
+	float att, dist;
+	SVECTOR diff;
+	unsigned long flags=0;
+	LPDIRECTSOUNDBUFFER lpdsBuffer;
+	MDX_VECTOR mdxPos,scrPos;
+
+	if (vol < 0)
+	{
+		vol = 0; //We actually want the music to play at 0 volume so that there is a buffer that the volume slider can set the volume of
+	}
+
+	if(!lpDS || !sample) return FALSE;	// No DirectSound object!
 
 /*	if( sample->flags & SFXFLAGS_3D_SAMPLE )
 	{
@@ -969,6 +1063,7 @@ int InitCDaudio()
 			utilPrintf("mixerGetLineControls failed\n");
 		}
 
+	SetCDVolume(0x3fff);
 	oldVolume = auxVolume = GetCDVolume();
 	return 0;
 }
@@ -998,12 +1093,45 @@ int ShutdownMusic()
 }
 
 /*	--------------------------------------------------------------------------------
+	FUNCTION:	MusicLoudness
+	PURPOSE:	Calculates how loud the music should be based on the music volume in settings
+	PARAMETERS:	intended volume (int)
+	RETURNS:	new volume (int)
+	INFO:		
+*/
+
+int MusicLoudness(int origVol)
+{
+	return 0x100; //Let's see if this works
+}
+
+/*	--------------------------------------------------------------------------------
+	FUNCTION:	ResetMusicVolume
+	PURPOSE:	Adjusts the volume of the sample currently being played
+	PARAMETERS:	
+	RETURNS:	
+	INFO:		
+*/
+
+void ResetMusicVolume()
+{
+	int vol = globalMusicVol < 0 ? 0 : globalMusicVol;
+	//if (BGMBuff)
+	//{
+		LPDIRECTSOUNDBUFFER BGM = (LPDIRECTSOUNDBUFFER) BGMBuff;
+		BGM->lpVtbl->SetVolume( BGM, bytetoDB[(0x100*vol)/MAX_SOUND_VOL] );
+	//}
+	return;
+}
+
+/*	--------------------------------------------------------------------------------
 	Function		: playCDTrackFromFile
 	Purpose			: Attempts to play a CD track from a .wav file.
 	Parameters		: char
 	Returns			: 1 if the track is playing from the file, 0 if it could not be played.
 	Info			: 
 */
+
 int playCDTrackFromFile(int track, long loop)
 {
 	SAMPLE* sample;
@@ -1017,7 +1145,7 @@ int playCDTrackFromFile(int track, long loop)
 		if (cdTrack == track)
 		{
 			AddSample(musicFileSample);
-			PlaySample(musicFileSample, NULL, 0, oldVolume, -1);
+			BGMBuff = PlaySampleMusic(musicFileSample, NULL, 0, MusicLoudness(oldVolume), -1);
 			return 1; // success.
 		}
 		else
@@ -1045,7 +1173,7 @@ int playCDTrackFromFile(int track, long loop)
 
 	musicFileSample = sample;
 	AddSample(sample);
-	PlaySample(sample, NULL, 0, oldVolume, -1);
+	BGMBuff = PlaySampleMusic(sample, NULL, 0, MusicLoudness(oldVolume), -1);
 	return 1;
 }
 
@@ -1340,7 +1468,7 @@ void SetCDVolume(int vol)
 	if (vol<0) vol=0;
 	oldVolume = vol;
 
-	details[0] = vol;
+	details[0] = vol; //Dividing here seems to have solved the problem. We can negotiate the exact factor to use.
 	controldetails.cbStruct = sizeof(MIXERCONTROLDETAILS);
 	controldetails.dwControlID = volumecontrolid;
 	controldetails.cChannels = 1;
