@@ -649,7 +649,7 @@ unsigned long DDrawCreateSurfaces(HWND window, unsigned long xRes, unsigned long
 		dp("Bit depth: %d\n",rBitDepth);
 		dp("Xres: %d\n",rXRes);
 		dp("Yres: %d\n",rYRes);
-		if ((res = pDirectDraw7->SetDisplayMode(rXRes, rYRes, rBitDepth,0,0)) != DD_OK)
+		if ((res = pDirectDraw7->SetDisplayMode(rXRes, rYRes, rBitDepth,0,0)) != DD_OK) //This is where FPS can be set
 		{
 			dp("Failed setting display mode. (Fullscreen Mode)\n");
 			ddShowError(res);
