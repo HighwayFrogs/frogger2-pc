@@ -93,12 +93,24 @@ long RunVideoPlayback()
 			}
 			else
 			{
-				r.right = rXRes;
 				r.bottom = (rXRes*5)/8;
 
-				r.left = 0;
-				r.top = (rYRes-r.bottom)/2;
-				r.bottom += r.top;
+				if (r.bottom > rYRes) //This prevents integer underflow that prevents cutscenes from showing in fullscreen mode
+				{
+					r.bottom = rYRes;
+					r.right = (rYRes*8)/5;
+					r.top = 0;
+					r.left = (rXRes - r.right)/2;
+					r.right += r.left;
+				}
+
+				else
+				{
+					r.right = rXRes;
+					r.left = 0;
+					r.top = (rYRes-r.bottom)/2;
+					r.bottom += r.top;
+				}
 			}
 
 			if ((res = tmpSrf->Lock(NULL, &ddsd, DDLOCK_WAIT|DDLOCK_SURFACEMEMORYPTR|DDLOCK_WRITEONLY, 0)) != DD_OK)
@@ -213,7 +225,10 @@ long StartVideoPlayback(int num)
 	surfacetype = BinkDDSurfaceType(videoSurface);
 
 	if (!rFullscreen || !(rXRes == 640 && rYRes == 480))
+	{
 		blitVideo = 1;
+		utilPrintf("blitVideo set to %d\n", blitVideo); //Debugging. Remove later.
+	}
 
 	DDBLTFX bltfx;
 	bltfx.dwSize = sizeof(DDBLTFX);
