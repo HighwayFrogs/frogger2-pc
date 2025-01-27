@@ -122,7 +122,7 @@ BOOL WINAPI  EnumDDDevices(GUID FAR* lpGUID, LPSTR lpDriverDesc, LPSTR lpDriverN
 
 	lpDD->GetDeviceIdentifier(&ddId,0);
 
-	const char * placehold = "Primary Display Adapter";
+	const char * placehold = "Primary Display Adaptor";
 
 	dxDeviceList[dxNumDevices].desc = (char *) AllocMem(sizeof(char)*((strlen(ddId.szDescription) > strlen(placehold)) ? strlen(ddId.szDescription)+14 : strlen(placehold)+1)); //In case of very small graphics card names
 	dxDeviceList[dxNumDevices].name = (char *) AllocMem(sizeof(char)*((strlen(ddId.szDriver) > strlen(placehold)) ? strlen(ddId.szDriver)+14 : strlen(placehold)+1)); //Wouldn't want a buffer overflow here

@@ -960,7 +960,7 @@ int GameStartup()
 
 	/*SetPriorityClass(GetCurrentProcess(),REALTIME_PRIORITY_CLASS);
 	SetThreadPriority(GetCurrentThread(),THREAD_PRIORITY_TIME_CRITICAL);*/
-	InitTiming(60);
+	InitTiming(60); //Is it possible to make the argument match the refresh rate selected in the menu?
 
 #ifndef FINAL_MASTER
 	InitEditor();

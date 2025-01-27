@@ -50,7 +50,13 @@ void InitTiming(float frameSpeed)
 void UpdateTiming(void)
 {
 	float mult = (timeInfo.frameSpeed/1000.0F);
+	//Maybe waiting here will help?
+
 	unsigned long currentTicks = (timeGetTime()+timeInfo.tickModifier) - timeInfo.firstTicks;
+	while (currentTicks == timeInfo.tickCount)
+	{
+		currentTicks = (timeGetTime()+timeInfo.tickModifier) - timeInfo.firstTicks;
+	}
 	unsigned long intervalTicks = currentTicks - timeInfo.tickCount;
 
 	// limit maximum clock increment

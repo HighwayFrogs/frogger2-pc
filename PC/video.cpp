@@ -227,7 +227,6 @@ long StartVideoPlayback(int num)
 	if (!rFullscreen || !(rXRes == 640 && rYRes == 480))
 	{
 		blitVideo = 1;
-		utilPrintf("blitVideo set to %d\n", blitVideo); //Debugging. Remove later.
 	}
 
 	DDBLTFX bltfx;

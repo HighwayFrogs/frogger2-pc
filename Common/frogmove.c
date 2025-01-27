@@ -500,10 +500,7 @@ void FroggerHop(int pl)
 
 	if (player[pl].jumpTime < 0) return;
 
-	if(gameSpeed > 0)
-		delta = FMul(player[pl].jumpSpeed, gameSpeed);
-	else
-		delta = 1; //This is just a temporary solution
+	delta = FMul(player[pl].jumpSpeed, gameSpeed);
 
 	if (player[pl].frogState & FROGSTATUS_ISFLOATING)
 		delta = FMul(delta, floatMultiply);
