@@ -592,6 +592,14 @@ SOURCE=.\Pc\banks.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\PC\CDAudioManager.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\PC\CDAudioManager.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\Pc\controll.cpp
 # End Source File
 # Begin Source File

@@ -84,6 +84,25 @@ enum
 	NUM_VOICES
 };
 
+enum
+{
+	NOTRACK = 0,
+	GARDEN_CDAUDIO			= 2,
+	ANCIENTS_CDAUDIO,
+	SPACE_CDAUDIO,
+//	CITY_CDAUDIO,
+	SUBTERRANEAN_CDAUDIO,
+	LABORATORY_CDAUDIO,
+	HALLOWEEN_CDAUDIO,
+	SUPERRETRO_CDAUDIO,
+	FRONTEND_CDAUDIO,
+	LEVELCOMPLETE_CDAUDIO,
+	GAMEOVER_CDAUDIO,
+	LEVELCOMPLETELOOP_CDAUDIO,
+
+	NUM_CD_TRACKS,
+};
+
 #define AUDIOTRK_GAMEOVER		100
 #define AUDIOTRK_LEVELCOMPLETE	101
 #define AUDIOTRK_LEVELCOMPLETELOOP 102
@@ -171,6 +190,9 @@ typedef struct
 } SAMPLE_HEADER;
 
 
+// These are the original file-names determined from the backups. ~Knee.
+extern const char *gCDAMTrackFolder;
+extern const char *gCDAMTrackFilenames[NUM_CD_TRACKS];
 extern SAMPLE *genSfx[];
 extern SAMPLE voices[4];
 
@@ -217,17 +239,18 @@ extern void ResetMusicVolume();
 
 extern void PrepareSong(short num, short loop);
 extern void LoopSong();
-extern void StopSong( );
+extern void StopSong();
 extern int IsSongPlaying();
 
-extern void PauseAudio( );
-extern void UnPauseAudio( );
+extern void PauseAudio();
+extern void UnPauseAudio();
 
 int InitCDaudio();
 int ShutdownMusic();
 int GetCDVolume();
 void SetCDVolume(int vol);
 
+DWORD PlayCDTrackFromFile(int track, long loop);
 
 #ifdef __cplusplus
 }

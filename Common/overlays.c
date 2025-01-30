@@ -119,7 +119,11 @@ void InitSpriteOverlayLinkedList()
 */
 void FreeSpriteOverlayLinkedList()
 {
-	FREE(spriteOverlayList.block);
+    if (spriteOverlayList.block != NULL)
+    {
+	    FREE(spriteOverlayList.block);
+        spriteOverlayList.block = NULL;
+    }
 	InitSpriteOverlayLinkedList();
 }
 

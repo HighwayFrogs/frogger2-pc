@@ -14,7 +14,7 @@
 #include <ddraw.h>
 #include <d3d.h>
 #include <stdio.h>
-#include <fstream.h>
+#include <fstream>
 #include <islutil.h>
 #include <dplay.h>
 #include <dplobby.h>
@@ -293,6 +293,7 @@ void KeyboardDump(HKEY hkey, bool write)
 	unsigned char* buffer[56*3];
 	unsigned char* p = (unsigned char*)buffer;
 	DWORD len;
+	int b = 0;
 
 	if (write)
 	{
@@ -300,7 +301,7 @@ void KeyboardDump(HKEY hkey, bool write)
 		{
 			*(p++) = keymap[i].player;
 			
-			for (int b=0;b<16;b++)
+			for (b=0;b<16;b++)
 				if ((1<<b) == keymap[i].button) break;
 
 			*(p++) = b;
@@ -329,8 +330,6 @@ void KeyboardDump(HKEY hkey, bool write)
 				}
 				success = true;
 			}
-
-			RegCloseKey(hkey);
 		}
 
 		if (!success)
@@ -383,10 +382,8 @@ int GetControllerSetup(void)
 				}
 				else
 				{
-					controllers[pl] = KEYBOARD;					
+					controllers[pl] = KEYBOARD;
 				}
-
-				RegCloseKey(hkey);
 			}
 
 			KeyboardDump(hkey, 0);
@@ -1350,8 +1347,8 @@ BOOL CALLBACK DLGKeyMapDialogue(HWND hDlg,UINT msg,WPARAM wParam,LPARAM lParam)
 
 				case IDCANCEL:
 				{
-					ifstream in;
-					in.open( keyFileName, ios::nocreate, filebuf::sh_read );
+					std::ifstream in;
+					in.open(keyFileName, std::ifstream::in);
 					if( in.is_open() )
 					{
 						for( i=0; i<56; i++ )
@@ -1382,8 +1379,8 @@ BOOL CALLBACK DLGKeyMapDialogue(HWND hDlg,UINT msg,WPARAM wParam,LPARAM lParam)
 
 				case IDOK:
 				{
-					ofstream out;
-					out.open( keyFileName, ios::out, filebuf::sh_read );
+					std::ofstream out;
+					out.open(keyFileName, std::ofstream::out);
 					if( out.is_open() )
 					{
 						for( i=0; i<56; i++ )

@@ -25,12 +25,19 @@
 #include "layout.h"
 #include "define.h"
 #include "game.h"
+#include "menus.h"
 #include "training.h"
 
 #ifdef PC_VERSION
 #include <mdx.h>
 #include <pcmisc.h>
 #endif
+
+//>>
+// [ANDYE]
+TEXTOVERLAY *pTxtOvrCDAMInfo = NULL;
+char szCDAMInfo[32] = { 0 };
+//>>
 
 long grabToTexture = 0;
 
@@ -329,6 +336,19 @@ void InitTextOverlayLinkedList(long num)
 	textOverlayList.numEntries = 0;
 	textOverlayList.alloc = num;
 	textOverlayList.block = MALLOC0(sizeof(TEXTOVERLAY)*textOverlayList.alloc);
+
+    //>>
+    // [ANDYE]
+	if (debugMode && !showIGT)
+	{
+	    pTxtOvrCDAMInfo = CreateAndAddTextOverlay(32, 0, szCDAMInfo, NO, 255, fontSmall, TEXTOVERLAY_NORMAL | TEXTOVERLAY_PAUSED);
+		if (pTxtOvrCDAMInfo)
+		{
+			pTxtOvrCDAMInfo->b = 0;
+			pTxtOvrCDAMInfo->scale = 4096;
+		}
+	}
+    //>>
 }
 
 /*	--------------------------------------------------------------------------------
@@ -340,9 +360,17 @@ void InitTextOverlayLinkedList(long num)
 */
 void FreeTextOverlayLinkedList()
 {
-	FREE(textOverlayList.block);
-	textOverlayList.block = NULL;
+    if (textOverlayList.block != NULL)
+    {
+        FREE(textOverlayList.block);
+        textOverlayList.block = NULL;
+    }
 	//InitTextOverlayLinkedList();
+
+    //>>
+    // [ANDYE]
+    pTxtOvrCDAMInfo = NULL;
+    //>>
 }
 
 /*	--------------------------------------------------------------------------------

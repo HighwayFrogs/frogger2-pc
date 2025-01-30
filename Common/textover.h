@@ -66,6 +66,12 @@ long StringWrap(const char* str, long maxWidth, char* buffer, long bufferSize, c
 extern int fontFitToWidth(psFont *font, int width, char *text, char *buffer);
 #endif
 
+//>>
+// [ANDYE]
+extern TEXTOVERLAY *pTxtOvrCDAMInfo;
+extern char szCDAMInfo[32];
+//>>
+
 #ifdef __cplusplus
 }
 #endif

@@ -1,0 +1,39 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FroggerProject", "FroggerProject.vcxproj", "{1381EF02-E96C-54B5-9898-C8FE418B4832}"
+	ProjectSection(ProjectDependencies) = postProject
+		{7C37B8E9-CB6F-C286-4C15-C1E91268476F} = {7C37B8E9-CB6F-C286-4C15-C1E91268476F}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MDX", "MDX\MDX.vcxproj", "{7C37B8E9-CB6F-C286-4C15-C1E91268476F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug with Bink Video|Win32 = Debug with Bink Video|Win32
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+		Template|Win32 = Template|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1381EF02-E96C-54B5-9898-C8FE418B4832}.Debug with Bink Video|Win32.ActiveCfg = Debug with Bink Video|Win32
+		{1381EF02-E96C-54B5-9898-C8FE418B4832}.Debug with Bink Video|Win32.Build.0 = Debug with Bink Video|Win32
+		{1381EF02-E96C-54B5-9898-C8FE418B4832}.Debug|Win32.ActiveCfg = Debug|Win32
+		{1381EF02-E96C-54B5-9898-C8FE418B4832}.Debug|Win32.Build.0 = Debug|Win32
+		{1381EF02-E96C-54B5-9898-C8FE418B4832}.Release|Win32.ActiveCfg = Release|Win32
+		{1381EF02-E96C-54B5-9898-C8FE418B4832}.Release|Win32.Build.0 = Release|Win32
+		{1381EF02-E96C-54B5-9898-C8FE418B4832}.Template|Win32.ActiveCfg = Template|Win32
+		{1381EF02-E96C-54B5-9898-C8FE418B4832}.Template|Win32.Build.0 = Template|Win32
+		{7C37B8E9-CB6F-C286-4C15-C1E91268476F}.Debug with Bink Video|Win32.ActiveCfg = Debug|Win32
+		{7C37B8E9-CB6F-C286-4C15-C1E91268476F}.Debug with Bink Video|Win32.Build.0 = Debug|Win32
+		{7C37B8E9-CB6F-C286-4C15-C1E91268476F}.Debug|Win32.ActiveCfg = Debug|Win32
+		{7C37B8E9-CB6F-C286-4C15-C1E91268476F}.Debug|Win32.Build.0 = Debug|Win32
+		{7C37B8E9-CB6F-C286-4C15-C1E91268476F}.Release|Win32.ActiveCfg = Release|Win32
+		{7C37B8E9-CB6F-C286-4C15-C1E91268476F}.Release|Win32.Build.0 = Release|Win32
+		{7C37B8E9-CB6F-C286-4C15-C1E91268476F}.Template|Win32.ActiveCfg = Template|Win32
+		{7C37B8E9-CB6F-C286-4C15-C1E91268476F}.Template|Win32.Build.0 = Template|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
