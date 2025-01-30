@@ -234,7 +234,6 @@ extern void UpdateAmbientSounds();
 extern void InitVoices( char *path, int len );
 #define PlayVoice(pl, sound) PlaySample(FindVoice(UpdateCRC(sound),pl), NULL, 0, SAMPLE_VOLUME, -1)
 
-extern int MusicLoudness(int origVol);
 extern void ResetMusicVolume();
 
 extern void PrepareSong(short num, short loop);

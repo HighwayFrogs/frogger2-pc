@@ -1059,19 +1059,6 @@ int ShutdownMusic()
 }
 
 /*	--------------------------------------------------------------------------------
-	FUNCTION:	MusicLoudness
-	PURPOSE:	Calculates how loud the music should be based on the music volume in settings
-	PARAMETERS:	intended volume (int)
-	RETURNS:	new volume (int)
-	INFO:		
-*/
-
-int MusicLoudness(int origVol)
-{
-	return 0x100; //Let's see if this works
-}
-
-/*	--------------------------------------------------------------------------------
 	FUNCTION:	ResetMusicVolume
 	PURPOSE:	Adjusts the volume of the sample currently being played
 	PARAMETERS:	
@@ -1111,7 +1098,7 @@ DWORD PlayCDTrackFromFile(int track, long loop)
 		if (cdTrack == track)
 		{
 			AddSample(musicFileSample);
-			g_DSMusicBuffer = PlaySampleMusic(musicFileSample, NULL, 0, MusicLoudness(oldVolume), -1);
+			g_DSMusicBuffer = PlaySampleMusic(musicFileSample, NULL, 0, 0x100, -1);
 			return 0; // success.
 		}
 		else
@@ -1139,7 +1126,7 @@ DWORD PlayCDTrackFromFile(int track, long loop)
 
 	musicFileSample = sample;
 	AddSample(sample);
-	g_DSMusicBuffer = PlaySampleMusic(sample, NULL, 0, MusicLoudness(oldVolume), -1);
+	g_DSMusicBuffer = PlaySampleMusic(sample, NULL, 0, 0x100, -1);
 	return 0;
 }
 
