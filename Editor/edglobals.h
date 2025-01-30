@@ -79,7 +79,7 @@ extern short copyFlag;
 extern short helpScreen;
 extern short addTiles;
 
-#define EDITOR_SAVE_BASE	"maps\\"
+#define EDITOR_SAVE_BASE	"saved-entity-data\\"
 #define ENTITY_DUMP_FILE	"entity-%d-%d.dat"
 
 #ifdef __cplusplus
