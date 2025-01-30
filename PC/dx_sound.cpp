@@ -466,7 +466,7 @@ void ShowSounds(void)
 
 			me = dispSample;
 
-			SetTextColor(hdc, 0x00ffffff); //Accomodating for RGB bug
+			SetTextColor(hdc, 0x00ffffff);
 			sprintf(tText,"Number of Sounds: %i",soundList.numEntries);
 			TextOut(hdc, r.left+70, r.top, tText, strlen(tText));
 			r.top += 50;

@@ -262,7 +262,6 @@ void NetgameGameloop()
 			FroggerHop(i);
 			if (player[i].jumpTime > 4096)
 			{
-				//if (gameSpeed > 0)
 				player[i].jumpTime = -1;
 				SetVectorSS(&frog[i]->actor->position, &currTile[i]->centre);
 				actorAnimate(frog[i]->actor, FROG_ANIM_BREATHE, YES, YES, FROG_BREATHE_SPEED, NO);

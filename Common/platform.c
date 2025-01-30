@@ -1064,7 +1064,7 @@ void SetPlatformMoving(PLATFORM *plt, int moving)
 			plt->isWaiting = 0;
 			//plt->path->toNode = plt->path->fromNode; -- ? clearly this ain't gonna woik
 			plt->path->startFrame = actFrameCount;
-			plt->path->endFrame = actFrameCount + ((60*plt->currSpeed)>>12); //Lowering this amount does NOT fix the chute bug
+			plt->path->endFrame = actFrameCount + ((60*plt->currSpeed)>>12);
 		}
 		
 		if (plt->Update) plt->Update(plt);

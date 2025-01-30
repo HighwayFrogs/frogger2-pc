@@ -33,8 +33,8 @@
 #include "lang.h"
 #include "frogger.h"
 
-COLORREF systemColor = 0x00008000;	// green. Accomodating for RGB bug.
-COLORREF errorColor = 0x000000ff;		// red. Accomodating for RGB bug.
+COLORREF systemColor = 0x00008000;	// green
+COLORREF errorColor = 0x000000ff;		// red
 HWND hwndChat, hwndChatEdit;
 HICON chatIcon, bigChatIcon;
 

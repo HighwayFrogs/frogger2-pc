@@ -41,7 +41,7 @@ DDDEVICELIST devices;
 
 static BOOL FAR PASCAL EnumDDDevices(GUID FAR* lpGUID, LPSTR lpDriverDesc, LPSTR lpDriverName, LPVOID lpContext)
 {
-	LPDIRECTDRAW	lpDD;
+    LPDIRECTDRAW	lpDD;
     DDCAPS			ddCaps;
 	LPDIRECTDRAW4	lpDD4;
 	DDDEVICEIDENTIFIER ddId;

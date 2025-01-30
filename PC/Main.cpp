@@ -511,7 +511,7 @@ LRESULT CALLBACK MyInitProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 					debugMode = SendMessage(GetDlgItem(hWnd, IDC_DEBUGMODE), BM_GETCHECK, 0, 0);	
 					if (debugMode && !CheckEditIcons())
 					{
-						const char baseMessage[] = "There are missing .bmp files needed for the built-in editor. You will not see these icons! The following editor .bmp files are missing:\r\n"; //This did not successfully warn me when I was missing those .bmps.
+						const char baseMessage[] = "There are missing .bmp files needed for the built-in editor. You will not see these icons! The following editor .bmp files are missing:\r\n";
 						char texturePaths[(sizeof(baseMessage)/sizeof(char))+(MAX_PATH+3) * EDITORTEXTURES];
 						sprintf(texturePaths, baseMessage);
 						for (int i = 0; i < EDITORTEXTURES; i++)
@@ -825,7 +825,7 @@ long LoopFunc(void)
 	{
 		lastActFrameCount = actFrameCount;
 		
-		actFrameCount = (timeInfo.frameCount-(pFrameModifier)) * (float)(turbo/4096); //turbo/4096 should be 1
+		actFrameCount = (timeInfo.frameCount-(pFrameModifier)) * (float)(turbo/4096);
 
 		gameSpeed = 4096*timeInfo.speed * (float)(turbo/4096);
 		lastFrames = timeInfo.frameCount;
@@ -960,7 +960,7 @@ int GameStartup()
 
 	/*SetPriorityClass(GetCurrentProcess(),REALTIME_PRIORITY_CLASS);
 	SetThreadPriority(GetCurrentThread(),THREAD_PRIORITY_TIME_CRITICAL);*/
-	InitTiming(60); //Is it possible to make the argument match the refresh rate selected in the menu?
+	InitTiming(60);
 
 #ifndef FINAL_MASTER
 	InitEditor();

@@ -1234,6 +1234,7 @@ void TeleportActorToTile(ACTOR2 *act,GAMETILE *tile,long pl)
 	SetVectorSS(&act->actor->position,&tile->centre);
 	player[pl].frogState &= ~FROGSTATUS_ISTELEPORTING;
 	player[pl].canJump = 1;
+
 	player[pl].frogon = -1;
 	player[pl].frogunder = -1;
 

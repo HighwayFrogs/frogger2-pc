@@ -505,7 +505,6 @@ void FroggerHop(int pl)
 	if (player[pl].frogState & FROGSTATUS_ISFLOATING)
 		delta = FMul(delta, floatMultiply);
 
-	//if (delta >= 0) //This should never be false
 	player[pl].jumpTime += delta;
 
 	t = player[pl].jumpTime;
@@ -854,9 +853,7 @@ void UpdateFroggerPos(long pl)
 	}
 	
 	if (cameoMode || !UpdateFroggerControls(pl))
-	{
 		CheckForFroggerLanding(pl);
-	}
 }
 
 /*	--------------------------------------------------------------------------------
@@ -1256,7 +1253,6 @@ void CheckForFroggerLanding(long pl)
 	player[pl].isSuperHopping = 0;
 	player[pl].hasDoubleJumped = 0;
 	player[pl].jumpTime = ToFixed(-1);
-	//utilPrintf("jumpTime set to %d by ToFixed(-1) in CheckForFroggerLanding\n", player[pl].jumpTime);
 	doubleQueue[pl] = 0;
 
 #ifdef PC_VERSION
@@ -1494,10 +1490,7 @@ void CheckForFroggerLanding(long pl)
 				}
 			}
 			if (state == TILESTATE_FALL)
-			{
 				player[pl].jumpTime = overrun;
-				utilPrintf("jumpTime set to %d by TILESTATE_FAIL condition in CheckForFroggerLanding\n", player[pl].jumpTime);
-			}
 //			else if (destTile[pl] && (state & TILESTATE_CONVEYOR || state == TILESTATE_ICE))
 //				player[pl].jumpTime = overrun-4096;
 		}
@@ -1953,14 +1946,14 @@ void SpringFrogToTile(GAMETILE *tile, fixed height, fixed time, long pl)
 
 	player[pl].frogState |= FROGSTATUS_ISJUMPINGTOTILE;
 	player[pl].canJump = 0;
-	//destTile[pl] = tile;
+	destTile[pl] = tile;
+
 	if (currPlatform[pl])
 	{
 		currPlatform[pl]->carrying = NULL;
 		currPlatform[pl]->flags &= ~PLATFORM_NEW_CARRYINGFROG;
 		currPlatform[pl] = NULL;
 	}
-	destTile[pl] = tile; //Why does this get assigned twice?
 	
 
 	CalculateFrogJumpS(
