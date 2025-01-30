@@ -25,6 +25,7 @@
 #include "layout.h"
 #include "define.h"
 #include "game.h"
+#include "menus.h"
 #include "training.h"
 
 #ifdef PC_VERSION
@@ -338,12 +339,15 @@ void InitTextOverlayLinkedList(long num)
 
     //>>
     // [ANDYE]
-    pTxtOvrCDAMInfo = CreateAndAddTextOverlay(32, 0, szCDAMInfo, NO, 255, fontSmall, TEXTOVERLAY_NORMAL | TEXTOVERLAY_PAUSED);
-    if (pTxtOvrCDAMInfo)
-    {
-        pTxtOvrCDAMInfo->b = 0;
-        pTxtOvrCDAMInfo->scale = 4096;
-    }
+	if (debugMode && !showIGT)
+	{
+	    pTxtOvrCDAMInfo = CreateAndAddTextOverlay(32, 0, szCDAMInfo, NO, 255, fontSmall, TEXTOVERLAY_NORMAL | TEXTOVERLAY_PAUSED);
+		if (pTxtOvrCDAMInfo)
+		{
+			pTxtOvrCDAMInfo->b = 0;
+			pTxtOvrCDAMInfo->scale = 4096;
+		}
+	}
     //>>
 }
 

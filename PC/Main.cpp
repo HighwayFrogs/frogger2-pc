@@ -876,18 +876,20 @@ long LoopFunc(void)
         {
             if (gCDAMTrackInfo[gCDAMData->currTrackNum]->hasAudioFile)
             {
-                sprintf(szCDAMInfo, "TRACK %02d (%02d:%02d) - WAV FILE",
-                    gCDAMData->currTrackNum,
-                    gCDAMTrackInfo[gCDAMData->currTrackNum]->length.minute, gCDAMTrackInfo[gCDAMData->currTrackNum]->length.second);
+                sprintf(szCDAMInfo, "%s", gCDAMTrackInfo[gCDAMData->currTrackNum]->szAudioFile);
             }
             else
             {
-                sprintf(szCDAMInfo, "TRACK %02d (%02d:%02d) - %02d:%02d",
+                sprintf(szCDAMInfo, "CD TRACK %02d (%02d:%02d) - %02d:%02d",
                     gCDAMData->currTrackPosTMSF.track,
                     gCDAMTrackInfo[gCDAMData->currTrackPosTMSF.track]->length.minute, gCDAMTrackInfo[gCDAMData->currTrackPosTMSF.track]->length.second,
                     gCDAMData->currTrackPosTMSF.minute, gCDAMData->currTrackPosTMSF.second);
             }
         }
+		else
+		{
+			sprintf(szCDAMInfo, "Music Not Found");
+		}
     }
     //>>
 

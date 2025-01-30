@@ -128,43 +128,6 @@ long bytetoDB[256] =
 	-87,-81,-75,-70,-64,-58,-52,-46,-40,-34,-28,-22,-17,-11,-5,0
 };
 
-enum
-{
-	NOTRACK = 0,
-	GARDEN_CDAUDIO			= 2,
-	ANCIENTS_CDAUDIO,
-	SPACE_CDAUDIO,
-//	CITY_CDAUDIO,
-	SUBTERRANEAN_CDAUDIO,
-	LABORATORY_CDAUDIO,
-	HALLOWEEN_CDAUDIO,
-	SUPERRETRO_CDAUDIO,
-	FRONTEND_CDAUDIO,
-	LEVELCOMPLETE_CDAUDIO,
-	GAMEOVER_CDAUDIO,
-	LEVELCOMPLETELOOP_CDAUDIO,
-
-	NUM_CD_TRACKS,
-};
-
-// These are the original file-names determined from the backups. ~Knee.
-char* CdTrackFileNames[NUM_CD_TRACKS] =
-{
-	NULL, // NOTRACK (0)
-	NULL, // 1
-	"01 Garden.wav", // GARDEN_CDAUDIO (2)
-	"02 Ancients.wav", // ANCIENTS_CDAUDIO (3)
-	"03 Space.wav", // SPACE_CDAUDIO (4)
-	"04 Subterranean.wav", // SUBTERRANEAN_CDAUDIO (5)
-	"05 Laboratory.wav", // LABORATORY_CDAUDIO (6)
-	"06 Halloween.wav", // HALLOWEEN_CDAUDIO (7)
-	"07 retro.wav", // SUPERRETRO_CDAUDIO (8)
-	"08 Title.wav", // FRONTEND_CDAUDIO (9)
-	"09 level complete.wav", // LEVELCOMPLETE_CDAUDIO (10)
-	"10 gameover.wav", // GAMEOVER_CDAUDIO (11)
-	"11 EOL.wav" // LEVELCOMPLETELOOP_CDAUDIO (12)
-};
-
 /*	--------------------------------------------------------------------------------
 	Function		: LoadSfx
 	Purpose			: 
@@ -1031,13 +994,13 @@ DWORD PlayCDTrackFromFile(int track, long loop)
 		}
 	}
 
-	wavFileName = CdTrackFileNames[track];
+	wavFileName = gCDAMTrackFilenames[track];
 	if (!wavFileName)
 		return 1;
 
 	ZeroMemory(path, MAX_PATH);
 	strcat( path, baseDirectory );
-	strcat( path, "music\\" );
+	strcat( path, gCDAMTrackFolder );
 
 	sample = CreateSampleFromWavFile(path, wavFileName, loop);
 	if( !sample )

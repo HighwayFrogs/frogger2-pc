@@ -36,6 +36,13 @@ DWORD CDAudioManager_StopMCI();
 DWORD CDAudioManager_PauseMCI();
 DWORD CDAudioManager_ResumeMCI();
 
+// Compatibility. (Unsure if this will work in more recent MSVC.)
+typedef DWORD DWORD_PTR;
+
+#ifndef INVALID_FILE_ATTRIBUTES
+#define INVALID_FILE_ATTRIBUTES ((DWORD)-1)
+#endif
+
 
 //
 // CDAudioManager data
@@ -131,10 +138,10 @@ void CDAudioManager_FreeRequestList()
 
 BOOL CDAudioManager_FileExists(const char* baseDir, const char* filename)
 {
-    char fullPath[512];
+    char fullPath[MAX_PATH];
     DWORD fileAttributes = 0;
 
-    ZeroMemory(fullPath, 512);
+    ZeroMemory(fullPath, MAX_PATH);
 	strcat(fullPath, baseDir);
 	strcat(fullPath, gCDAMTrackFolder);
 	strcat(fullPath, filename);
@@ -192,11 +199,15 @@ BOOL CDAudioManager_Startup()
     }
 
     // Create the critical section(s) to control cross-thread shared data access
+#if (_WIN32_WINNT >= 0x0403)
     if (!InitializeCriticalSectionAndSpinCount(&gCDAMRequestListCriticalSection, 0x00000400))
     {
         utilPrintf("CDAudioManager_Initialise() - Unable to initialize CD audio worker thread access control object!\n");
         return FALSE;
     }
+#else
+	InitializeCriticalSection(&gCDAMRequestListCriticalSection);
+#endif
 
     // Setup and init shared data
     CDAudioManager_InitRequestList();
@@ -579,7 +590,7 @@ DWORD WINAPI CDAudioManager_AudioThreadFunction(void *pData)
             
             //>>
             // [ANDYE] Hack to avoid end of CD audio glitching! Not sure how robust this is...
-            if (i == 12)
+            if (i == LEVELCOMPLETELOOP_CDAUDIO)
             {
                 frameDelta = MCI_CD_FRAMES_PER_SECOND / (1000 / gCDAMAudioIdlePeriod);
                 if ((gCDAMTrackInfo[i]->length.frame - frameDelta) < 0)
@@ -693,7 +704,7 @@ DWORD WINAPI CDAudioManager_AudioThreadFunction(void *pData)
             /////////////////////////////////////////////////////////////////>>
             /////////////////////////////////////////////////////////////////>>
 
-            if ((pCDAMData->requestedTrack < 2) || pCDAMData->isPaused)
+            if ((pCDAMData->requestedTrack < GARDEN_CDAUDIO) || pCDAMData->isPaused)
             {
                 Sleep(gCDAMAudioIdlePeriod);
                 continue;

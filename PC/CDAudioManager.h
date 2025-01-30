@@ -23,7 +23,7 @@ extern "C"
 {
 #endif
 
-#define CDAM_NUM_TRACKS             13
+#define CDAM_NUM_TRACKS             NUM_CD_TRACKS
 
 #define CDAM_ERR_BASE               0
 
