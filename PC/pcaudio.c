@@ -77,7 +77,7 @@ static DWORD	volumecontrolid, cdaudiovalid;
 int cdTrack = 0;	// cd is not playing
 short trackLoop = 0;
 int playingMusic = 0;
-int BGMBuff = 0;
+LPDIRECTSOUNDBUFFER g_DSMusicBuffer = NULL;
 SAMPLE *musicFileSample = NULL;
 
 static char		errStr[128];
@@ -409,7 +409,7 @@ int PlaySample( SAMPLE *sample, SVECTOR *pos, long radius, short volume, short p
 	Info			: Pass in a valid vector to get attenuation, and a radius to override the default
 */
 
-int PlaySampleMusic( SAMPLE *sample, SVECTOR *pos, long radius, short volume, short pitch )
+LPDIRECTSOUNDBUFFER PlaySampleMusic( SAMPLE *sample, SVECTOR *pos, long radius, short volume, short pitch )
 {
 	BUFSAMPLE *bufSample=NULL;
 	long vol = (volume*globalMusicVol)/MAX_SOUND_VOL;
@@ -491,7 +491,7 @@ int PlaySampleMusic( SAMPLE *sample, SVECTOR *pos, long radius, short volume, sh
 	else
 		lpdsBuffer->lpVtbl->SetPan( lpdsBuffer, bytetoDB[255-pan] );
 	// HAAACCK! Bwahahahahahah!
-	return (int)lpdsBuffer;
+	return lpdsBuffer;
 }
 
 
@@ -1059,7 +1059,6 @@ int ShutdownMusic()
 }
 
 /*	--------------------------------------------------------------------------------
-<<<<<<< HEAD
 	FUNCTION:	MusicLoudness
 	PURPOSE:	Calculates how loud the music should be based on the music volume in settings
 	PARAMETERS:	intended volume (int)
@@ -1083,11 +1082,11 @@ int MusicLoudness(int origVol)
 void ResetMusicVolume()
 {
 	int vol = globalMusicVol < 0 ? 0 : globalMusicVol;
-	//if (BGMBuff)
-	//{
-		LPDIRECTSOUNDBUFFER BGM = (LPDIRECTSOUNDBUFFER) BGMBuff;
-		BGM->lpVtbl->SetVolume( BGM, bytetoDB[(0x100*vol)/MAX_SOUND_VOL] );
-	//}
+	if (g_DSMusicBuffer)
+		g_DSMusicBuffer->lpVtbl->SetVolume( g_DSMusicBuffer, bytetoDB[(0x100*vol)/MAX_SOUND_VOL] );
+	
+	SetCDVolume((vol * 65535)/MAX_SOUND_VOL);
+
 	return;
 }
 
@@ -1112,7 +1111,7 @@ DWORD PlayCDTrackFromFile(int track, long loop)
 		if (cdTrack == track)
 		{
 			AddSample(musicFileSample);
-			BGMBuff = PlaySampleMusic(musicFileSample, NULL, 0, MusicLoudness(oldVolume), -1);
+			g_DSMusicBuffer = PlaySampleMusic(musicFileSample, NULL, 0, MusicLoudness(oldVolume), -1);
 			return 0; // success.
 		}
 		else
@@ -1140,7 +1139,7 @@ DWORD PlayCDTrackFromFile(int track, long loop)
 
 	musicFileSample = sample;
 	AddSample(sample);
-	BGMBuff = PlaySampleMusic(sample, NULL, 0, MusicLoudness(oldVolume), -1);
+	g_DSMusicBuffer = PlaySampleMusic(sample, NULL, 0, MusicLoudness(oldVolume), -1);
 	return 0;
 }
 
@@ -1353,7 +1352,7 @@ void SetCDVolume(int vol)
 	if (vol<0) vol=0;
 	oldVolume = vol;
 
-	details[0] = vol; //Dividing here seems to have solved the problem. We can negotiate the exact factor to use.
+	details[0] = vol;
 	controldetails.cbStruct = sizeof(MIXERCONTROLDETAILS);
 	controldetails.dwControlID = volumecontrolid;
 	controldetails.cChannels = 1;

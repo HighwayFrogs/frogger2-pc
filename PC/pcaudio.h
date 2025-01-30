@@ -226,7 +226,7 @@ extern void SetSampleFormat ( SAMPLE *sample );
 
 
 extern int PlaySample(SAMPLE *sample,SVECTOR *pos,long radius,short volume,short pitch);
-extern int PlaySampleMusic( SAMPLE *sample, SVECTOR *pos, long radius, short volume, short pitch );
+extern LPDIRECTSOUNDBUFFER PlaySampleMusic( SAMPLE *sample, SVECTOR *pos, long radius, short volume, short pitch );
 int StopSample( SAMPLE *sample );
 void PlaySfxMappedSample( MDX_ACTOR *act );
 extern void UpdateAmbientSounds();
