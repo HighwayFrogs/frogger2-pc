@@ -193,7 +193,16 @@ long StartVideoPlayback(int num)
 	{
 		utilPrintf("StartVideoPlayback(): Bink failed opening '%s'\n", path);
 		ZeroMemory(path, MAX_PATH);
-		sprintf(path, "%s" VIDEOPATH "%s.bik", cdromDrive, fmv[num].name);
+
+		if (cdromDrive[0])
+		{
+			sprintf(path, "%s" VIDEOPATH "%s.bik", cdromDrive, fmv[num].name);
+			bink = BinkOpen(path, 0);
+		}
+		else
+		{
+			utilPrintf("No Frogger2 CD-ROM detected; skipping CD video playback\n");
+		}
 	}
 	
 

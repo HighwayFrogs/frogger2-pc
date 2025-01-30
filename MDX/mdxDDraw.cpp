@@ -178,12 +178,12 @@ HRESULT WINAPI VideoModeCallback(LPDDSURFACEDESC2 desc, LPVOID context)
 
 	DWORD rgbBitCount = desc->ddpfPixelFormat.dwRGBBitCount;
 	DWORD bytes = (desc->dwHeight * desc->lPitch);
-	dp("%d x %d (%d-bit, %dHz), ~%d bytes (%0.3fMB)\n", desc->dwWidth, desc->dwHeight, rgbBitCount, desc->dwRefreshRate, bytes, bytes * ONE_OVER_1K_X_1K);
+	dp("%d x %d (%d-bit, %dHz), ~%d bytes (%0.3fMB)\n", desc->dwWidth, desc->dwHeight, rgbBitCount, bytes, bytes * ONE_OVER_1K_X_1K);
 
 	if (bytes < info->totalVidMem)
 	{
-		sprintf(mode, "%dx%d (%d-bit, %dHz)", desc->dwWidth, desc->dwHeight, desc->ddpfPixelFormat.dwRGBBitCount, desc->dwRefreshRate);
-		videomode = (desc->dwWidth << 16)|(desc->dwHeight);
+		sprintf(mode, "%dx%d (%d-bit)", desc->dwWidth, desc->dwHeight, desc->ddpfPixelFormat.dwRGBBitCount);
+		videomode = (desc->dwWidth << 16)|(desc->dwHeight); // TODO: Doesn't this imply everything else is pointless?
 
 		index = SendMessage(hcmb, CB_ADDSTRING, 0, (LPARAM)mode);
 		SendMessage(hcmb, CB_SETITEMDATA, (WPARAM)index, (LPARAM)videomode);
@@ -232,7 +232,7 @@ BOOL FillVideoModes(HWND hdlg, GUID *lpGUID, DWORD resolution)
 		}
 	}
 
-	lpDD->EnumDisplayModes(DDEDM_REFRESHRATES, NULL, (LPVOID)&info, VideoModeCallback);
+	lpDD->EnumDisplayModes(0, NULL, (LPVOID)&info, VideoModeCallback);
 
 	// Check if ini specified res is compatible with users display
 	// by checking if the desired resolution
@@ -240,7 +240,7 @@ BOOL FillVideoModes(HWND hdlg, GUID *lpGUID, DWORD resolution)
 	if (SendMessage(hctrl, CB_GETCURSEL, 0, 0) == CB_ERR)
 	{
 		char mode[32];
-		sprintf(mode, "%dx%d (incompatible)", (resolution >> 16) & 0xFFFF, (resolution & 0xFFFF));
+		sprintf(mode, "%dx%d (may not work?)", (resolution >> 16) & 0xFFFF, (resolution & 0xFFFF));
 		DWORD videomode = resolution;
 
 		int index = SendMessage(hctrl, CB_ADDSTRING, 0, (LPARAM)mode);
@@ -412,12 +412,6 @@ BOOL CALLBACK HardwareProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lPara
 					for (i=0; (long)i<SendMessage(GetDlgItem(hwndDlg,IDC_LIST2),LVM_GETITEMCOUNT,0,0); i++)
 						if (SendMessage (GetDlgItem(hwndDlg,IDC_LIST2),LVM_GETITEMSTATE,i,LVIS_SELECTED))
 							selIdx = i;
-
-					if (SendMessage (GetDlgItem(hwndDlg,IDC_WINDOW),BM_GETCHECK,0,0) == BST_CHECKED)
-					{
-						dp("Running Windowed!\n");
-						rFullscreen = 0;
-					}
 
 					EndDialog ( hwndDlg, TRUE );
 					break;
