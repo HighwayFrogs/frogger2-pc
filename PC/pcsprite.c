@@ -291,7 +291,9 @@ void PrintSprite(SPRITE *sprite)
 {
 	MDX_VECTOR sc, s = {1,1,0};
 	float distx,disty;
+	const float defaultAspectRatio = .75; // 4:3
 	MDX_TEXENTRY *tEntry;
+	float aspectRatioScale = defaultAspectRatio / aspectRatio;
 
 	if((!sprite->texture) || (sprite->scaleX == 0) || (sprite->scaleY == 0))
 		return;
@@ -326,12 +328,14 @@ void PrintSprite(SPRITE *sprite)
 			else if( sprite->angle < 0 ) 
 				sprite->angle += 4096;
 
-			DrawAlphaSpriteRotating( &sc,(float)sprite->angle*FIXED_TO_RADS,sc.vx+sprite->offsetX*distx,sc.vy+sprite->offsetY*disty,sc.vz*0.00025,32*distx,32*disty,
+			DrawAlphaSpriteRotating( &sc,(float)sprite->angle*FIXED_TO_RADS,sc.vx+sprite->offsetX*distx,sc.vy+sprite->offsetY*disty,sc.vz*0.00025,
+				32*distx*aspectRatioScale,32*disty*aspectRatioScale,
 				0,0,1,1,tEntry,D3DRGBA(sprite->r/255.0,sprite->g/255.0,sprite->b/255.0,sprite->a/255.0) );
 		}
 		else
 		{
-			DrawAlphaSprite(sc.vx+sprite->offsetX*distx,sc.vy+sprite->offsetY*disty,sc.vz*0.00025,32*distx,32*disty,
+			DrawAlphaSprite(sc.vx+sprite->offsetX*distx,sc.vy+sprite->offsetY*disty,sc.vz*0.00025,
+				32*distx*aspectRatioScale,32*disty*aspectRatioScale,
 				0,0,1,1,tEntry,D3DRGBA(sprite->r/255.0,sprite->g/255.0,sprite->b/255.0,sprite->a/255.0) );
 		}
 
