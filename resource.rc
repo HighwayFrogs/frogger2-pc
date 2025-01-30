@@ -303,7 +303,7 @@ BEGIN
             VALUE "FileDescription", "Frogger2 - Swampy's Revenge\0"
             VALUE "FileVersion", "1, 0, 0, 1\0"
             VALUE "InternalName", "Frogger2\0"
-            VALUE "LegalCopyright", "Copyright   2000 Hasbro Interactive\0"
+            VALUE "LegalCopyright", "Copyright © 2000 Hasbro Interactive\0"
             VALUE "LegalTrademarks", "KONAMI and FROGGER is a trademark of KONAMI CO, LTD (c) All Rights Reserved\0"
             VALUE "OriginalFilename", "Frogger2.exe\0"
             VALUE "PrivateBuild", "\0"
