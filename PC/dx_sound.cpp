@@ -331,15 +331,15 @@ int LoadWavFile( SAMPLE *sample, char *name )
 	// copy last section of circular buffer
 	memcpy(audio_ptr_2, (snd_buffer+audio_length_1),audio_length_2);
 
+	// release the temp buffer
+	FreeMem(snd_buffer);
+
 	// unlock the buffer
 	if (sample->lpdsBuffer->Unlock(audio_ptr_1, 
 											audio_length_1, 
 											audio_ptr_2, 
 											audio_length_2)!=DS_OK)
  									 return(0);
-
-	// release the temp buffer
-	FreeMem(snd_buffer);
 
 	return 1;
 }

@@ -205,7 +205,7 @@ void LoadSfxSet( char *path )
 
 void LoadSfx( unsigned long worldID )
 {
-	char path[128];
+	char path[MAX_PATH];
 	int len, load=1;
 	
 	len = strlen(baseDirectory) + strlen(SFX_BASE);
@@ -1114,8 +1114,6 @@ void StopSong()
 	{
 		StopSample(musicFileSample);
 		RemoveSample(musicFileSample);
-		if (playingMusic)
-			soundList.numEntries--;
 	}
 
 	playingMusic = 0;
@@ -1415,6 +1413,9 @@ void FreeSample(SAMPLE* sample)
 	if( sample->data )
 		FREE( sample->data );
 
+	if (sample == musicFileSample)
+		musicFileSample = NULL;
+
 	FREE( sample );
 }
 
@@ -1427,6 +1428,7 @@ void RemoveSample( SAMPLE *sample )
 	sample->next->prev	= sample->prev;
 	sample->next		= NULL;
 	sample->prev		= NULL;
+	soundList.numEntries--;
 
 	if (musicFileSample == sample)
 		return; // The music is managed separately.
@@ -1472,7 +1474,6 @@ void FreeSampleList( void )
 	{
 		StopSample( soundList.head.next );
 		RemoveSample( soundList.head.next );
-		soundList.numEntries--;
 	}
 
 	for( i=0; i<NUM_FROGS; i++ )
