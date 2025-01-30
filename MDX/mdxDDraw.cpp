@@ -122,10 +122,11 @@ BOOL WINAPI  EnumDDDevices(GUID FAR* lpGUID, LPSTR lpDriverDesc, LPSTR lpDriverN
 
 	lpDD->GetDeviceIdentifier(&ddId,0);
 
-	const char * placehold = "Primary Display Adaptor";
+	const char * placehold = "Primary Display Adapter";
 
-	dxDeviceList[dxNumDevices].desc = (char *) AllocMem(sizeof(char)*((strlen(ddId.szDescription) > strlen(placehold)) ? strlen(ddId.szDescription)+14 : strlen(placehold)+1)); //In case of very small graphics card names
-	dxDeviceList[dxNumDevices].name = (char *) AllocMem(sizeof(char)*((strlen(ddId.szDriver) > strlen(placehold)) ? strlen(ddId.szDriver)+14 : strlen(placehold)+1)); //Wouldn't want a buffer overflow here
+	// 32 characters added to make room for the (Display %d) suffix.
+	dxDeviceList[dxNumDevices].desc = (char *) AllocMem(sizeof(char)*(max(strlen(ddId.szDescription), strlen(placehold)) + 32)); //In case of very small graphics card names
+	dxDeviceList[dxNumDevices].name = (char *) AllocMem(sizeof(char)*(max(strlen(ddId.szDriver), strlen(placehold)) + 1));
 	
 	strcpy(dxDeviceList[dxNumDevices].desc, ddId.szDescription);
 	strcpy(dxDeviceList[dxNumDevices].name, ddId.szDriver);
@@ -508,36 +509,28 @@ unsigned long DDrawInitObject (DWORD resolution)
 		dxDeviceList[dxNumDevices++].guid = (GUID *)-1;
 	}
 
-	bool * checked = (bool *) calloc(dxNumDevices, sizeof(bool)); //To avoid repeats when appending display numbers
-
-	//It is advisable to check if checked isn't null here
-
+	bool * devicesChecked = (bool *) calloc(dxNumDevices, sizeof(bool)); //To avoid repeats when appending display numbers
 	for (int k=0; k < dxNumDevices; k++)
 	{
-		if (checked[k] == 0) //If it hasn't already been assigned a monitor number
+		if (devicesChecked[k]) //If it hasn't already been assigned a monitor number
+			continue;
+		
+		int displaysFound = 0;
+		for (int j=k+1; j<dxNumDevices; j++) //Check the rest of the list
 		{
-			int dispno = 1; //This should be the first one with its name
-			for (int j=k+1; j<dxNumDevices; j++) //Check the rest of the list
+			if (strncmp(dxDeviceList[j].desc, dxDeviceList[k].desc, sizeof(dxDeviceList[j].desc)) == 0) //If they are the same device for a different display
 			{
-				if (strncmp(dxDeviceList[j].desc, dxDeviceList[k].desc, sizeof(dxDeviceList[j].desc)) == 0) //If they are the same device for a different display
-				{
-					char displayct[14]; //Could cause issues if someone has 10 or more monitors
-					if (dispno == 1) //This can probably be done less clunkily, but it's late.
-					{
-						sprintf(displayct, " (Display %d)", dispno); //THIS COULD BE A SECURITY FLAW. Better practices should be used to mitigate the overflow possibility.
-						strcat(dxDeviceList[k].desc, displayct);
-					}
-					dispno++;
-					sprintf(displayct, " (Display %d)", dispno); //THIS COULD BE A SECURITY FLAW. Better practices should be used to mitigate the overflow possibility.
-					strcat(dxDeviceList[j].desc, displayct);
-					checked[j] = 1;
-				}
+				devicesChecked[j] = 1;
+				sprintf(dxDeviceList[j].desc + strlen(dxDeviceList[j].desc), " (Display %d)", displaysFound++ + 2);
 			}
 		}
+
+		if (displaysFound)
+			sprintf(dxDeviceList[k].desc + strlen(dxDeviceList[k].desc), " (Display 1)");
 	}
 
-	free(checked);
-	checked = NULL;
+	free(devicesChecked);
+	devicesChecked = NULL;
 
 
 	for (i=0; i<=dxNumDevices; i++)
@@ -643,7 +636,7 @@ unsigned long DDrawCreateSurfaces(HWND window, unsigned long xRes, unsigned long
 		dp("Bit depth: %d\n",rBitDepth);
 		dp("Xres: %d\n",rXRes);
 		dp("Yres: %d\n",rYRes);
-		if ((res = pDirectDraw7->SetDisplayMode(rXRes, rYRes, rBitDepth,0,0)) != DD_OK) //This is where FPS can be set
+		if ((res = pDirectDraw7->SetDisplayMode(rXRes, rYRes, rBitDepth,0,0)) != DD_OK)
 		{
 			dp("Failed setting display mode. (Fullscreen Mode)\n");
 			ddShowError(res);
