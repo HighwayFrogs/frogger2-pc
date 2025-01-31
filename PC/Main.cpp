@@ -1104,7 +1104,7 @@ int PASCAL WinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance,LPSTR lpCmdLine,i
 	InitCommonControls();
 
 	// Init windows
-	if (!WindowsInitialise(hInstance,"Frogger2",1))
+	if (!WindowsInitialise(hInstance,"Frogger2 Enhanced",1))
 		return 1;
 
 	// Init network game, then do a weirdass check - ds
@@ -1183,7 +1183,7 @@ int PASCAL WinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance,LPSTR lpCmdLine,i
 		ShowWindow(mdxWinInfo.hWndMain, 0);
 
 		MessageBox(NULL,
-			GAMESTRING(STR_PCSETUP_BADVIDEO), "Frogger2",
+			GAMESTRING(STR_PCSETUP_BADVIDEO), "Frogger2 Enhanced",
 			MB_ICONEXCLAMATION|MB_OK);
 	}
 
