@@ -1,5 +1,5 @@
 ![Frogger 2 Logo](/_repo/Frogger2Logo.png)
-# Frogger 2 Enhanced (PC Mod)
+# Frogger 2 Enhanced (PC Mod) v1.0.0
 Frogger 2 Enhanced is a Frogger 2 mod which improves the PC port to resolve bugs, fix compatibility issues, and add enhancements to the Frogger 2 PC port.
 
 ## Core Features
@@ -67,6 +67,18 @@ The game should now be possible to run just by running `Frogger2.exe` in your ga
 Support is provided by the [Highway Frogs](https://highwayfrogs.net/) community by joining the discord server.  
 
 ## Known Issues
-**CD Audio Playback:**  
-Music playback from CD cannot fully be fixed due to a Windows problem. The specific issues include music not repeating and end of level music not playing.  
-The recommendation is to use .wav playback instead, as detailed in the setup guide, because playback from .wav files does not have this issue.  
+These issues may be fixed in a later release, but for know are known.  
+All of these issues also exist in the normal game as well.  
+ - At high frame-rates in Windowed mode, gliding lasts noticeably longer.
+ - Particle effects display in likely unintentional ways, such as having more particles displayed than intended.
+ - On the last level, the player can get stuck after being shot out of a vacuum tube.
+ - Software rendering mode uses only half of the screen space, and looks purple/green.
+ - Running the game after a DirectX failure can cause some of the user's settings (such as fullscreen) to not apply correctly.
+ - Sometimes the game will handle keyboard inputs when not in focus.
+ - Sometimes the game will play a FMV after the window is closed before actually stopping.
+ - On rare occassions, the book on the main menu will draw a corrupted sprite.
+ - The debug menu (F10) doesn't work very well at resolutions other than 640x480.
+ - Sometimes, a user is unable to start the game when a high resolution is selected.
+ - Audio Sliders move too fast at high framerates.
+ - There's no good warning if DirectX5 isn't installed.
+ - If a multiplayer level is started from the arcade machine instead of the multiplayer menu, no music will be played.
