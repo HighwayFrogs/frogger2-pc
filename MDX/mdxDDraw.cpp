@@ -183,8 +183,8 @@ HRESULT WINAPI VideoModeCallback(LPDDSURFACEDESC2 desc, LPVOID context)
 
 	if (bytes < info->totalVidMem)
 	{
-		sprintf(mode, "%dx%d (%d-bit)", desc->dwWidth, desc->dwHeight, desc->ddpfPixelFormat.dwRGBBitCount);
-		videomode = (desc->dwWidth << 16)|(desc->dwHeight); // TODO: Doesn't this imply everything else is pointless?
+		sprintf(mode, "%dx%d", desc->dwWidth, desc->dwHeight, desc->ddpfPixelFormat);
+		videomode = (desc->dwWidth << 16)|(desc->dwHeight);
 
 		index = SendMessage(hcmb, CB_ADDSTRING, 0, (LPARAM)mode);
 		SendMessage(hcmb, CB_SETITEMDATA, (WPARAM)index, (LPARAM)videomode);
@@ -518,6 +518,9 @@ unsigned long DDrawInitObject (DWORD resolution)
 		int displaysFound = 0;
 		for (int j=k+1; j<dxNumDevices; j++) //Check the rest of the list
 		{
+			if (strstr(dxDeviceList[j].desc, " (Display "))
+				continue; // Prefix already present.
+
 			if (strncmp(dxDeviceList[j].desc, dxDeviceList[k].desc, sizeof(dxDeviceList[j].desc)) == 0) //If they are the same device for a different display
 			{
 				devicesChecked[j] = 1;
