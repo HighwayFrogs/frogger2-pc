@@ -1,5 +1,6 @@
 # Compilation Process
 This document details the process of starting with the unmodified data as part of the Frogger 2 Development Archives and putting together a workspace which can build the Frogger 2 PC version.  
+This is **NOT** the guide for compiling the PC version, but instead the documentation for how this repository was created.  
 
 ## Terminology
 **Frogger 2 Development Archives:**  
