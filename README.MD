@@ -1,7 +1,7 @@
 ![Frogger 2 Logo](/_repo/Frogger2Logo.png)
 # Frogger 2: Swampy's Revenge (PC)  
 This is a backup of Frogger 2's official PC source code from the [VSS repository](https://github.com/HighwayFrogs/frogger2-vss).  
-It does not build a byte for byte match of the retail PC version because 
+Unfortunately, only 'Debug' builds can be built because no 'Release' variant of SoftStation.lib has been found.  
 **Developer:** Blitz Games  
 
 ## How was this repository created?  
